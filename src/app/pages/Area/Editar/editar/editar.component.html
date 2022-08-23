@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-md-10">
+  
+      <form [formGroup]="areaForm" (ngSubmit)="editar()">
+        <nb-card>
+          <nb-card-header>Editar áreas</nb-card-header>
+          <nb-card-body>
+            <nb-alert status="danger"
+              *ngIf="areaForm.get('desArea').hasError('required') && areaForm.get('desArea').touched">Debe de ingresar una
+              descripción menor a 512 carácteres</nb-alert>
+            <textarea rows="5" formControlName="desArea" nbInput fullWidth shape="round"
+              placeholder="Descripción del área"></textarea>
+  
+  
+            <div class="full-name-inputs">
+               
+              <div class="row">
+                <label for="">Modificado por</label>
+                <input type="text" formControlName="usuarioModificacion" nbInput fullWidth 
+                  disabled />
+              </div>
+              <div class="row">
+                <label for="">Fecha de modificación</label>
+                <input type="datetime" formControlName="fechaModificacion" nbInput fullWidth 
+                  disabled />
+              </div>
+            </div>
+          </nb-card-body>
+  
+  
+        </nb-card>
+        <button type="submit" [disabled]="areaForm.invalid" nbButton status="success">Guardar</button>
+      </form>
+  
+  
+    </div>
+  </div>
