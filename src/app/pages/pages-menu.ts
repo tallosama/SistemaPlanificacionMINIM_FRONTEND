@@ -14,12 +14,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
   }, 
    {
     title: 'Catálogos',
-    icon: 'home-outline',
+    icon: 'book-open-outline',
     link: '/pages',
     children: [
       {
         title: 'Areas',
-        icon: 'home-outline',
+        icon: 'grid-outline',
         link: '/pages/Area',
         children: [
           {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   NbGlobalPhysicalPosition,
@@ -17,12 +17,11 @@ import { AreaService } from '../../area.service';
 export class EditarComponent implements OnInit {
   fecha = new Date().toISOString().slice(0, 10);
   usuario = 1;
-  areaForm: UntypedFormGroup;
+  areaForm: FormGroup;
   id: number;
-
   //inicializadores del mensaje toast
   config: NbToastrConfig;
-  constructor(public fb: UntypedFormBuilder, private router: Router, public areaServices: AreaService, private route: ActivatedRoute, private toastrService: NbToastrService) { }
+  constructor(public fb: FormBuilder, private router: Router, public areaServices: AreaService, private route: ActivatedRoute, private toastrService: NbToastrService) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
@@ -32,19 +31,18 @@ export class EditarComponent implements OnInit {
           desArea: [res.desArea, Validators.compose([Validators.required, Validators.maxLength(512)])],
           usuarioModificacion: [this.usuario, Validators.required],
           fechaModificacion: [this.fecha, Validators.required],
-
         }
       );
-    });
-
-
+    },
+      error => { console.error(error) }
+    );
   }
-  api:ApiServe;
+  api: ApiServe;
   public editar(): void {
     this.areaServices.editar(this.id, this.areaForm.value).subscribe(resp => { },
       error => { console.error(error) }
     )
-    this.router.navigate(['/', 'ListarAreas']);
+    this.router.navigate(['../../ListarAreas'], { relativeTo: this.route }); 
     this.showToast();
   }
   //construccion del mensaje
