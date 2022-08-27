@@ -6,7 +6,7 @@ import { Value } from 'sass';
 import { DialogNamePromptComponent } from '../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component';
 import { AreaService } from '../../area.service';
 import { Subject } from 'rxjs';
-import { DataTableDirective } from 'angular-datatables'; 
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'ngx-listado',
@@ -14,38 +14,30 @@ import { DataTableDirective } from 'angular-datatables';
   styleUrls: ['./listado.component.scss']
 })
 
-export class ListadoComponent implements OnDestroy, OnInit {
-  @ViewChild(DataTableDirective, {static: false})
+export class ListadoComponent implements OnInit {
+  @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
+  constructor(private areaService: AreaService, private router: Router, private dialogService: NbDialogService, private toastrService: NbToastrService) {
+    this.construir();
 
-  //dtElement: DataTableDirective;
-  //dtInstance: DataTables.Api;
-
-  constructor(private areaService: AreaService, private router: Router, private dialogService: NbDialogService, private toastrService: NbToastrService) { }
-  data: any;
+  }
 
   //para datatables
- 
+  data: any;
   construir(): void {
     //carga de datos
     this.areaService.listar().subscribe((resp: any) => {
       this.data = resp;
-     
+
       this.dtTrigger.next();
     },
       error => { console.error(error) }
     );
 
   }
-  
-  rerender(): void {  
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.draw();
-    });
-      }
-   
+
   ngOnInit(): void {
     //datatables
     this.dtOptions = {
@@ -56,11 +48,9 @@ export class ListadoComponent implements OnDestroy, OnInit {
         url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json'
       }
     };
-    this.construir();
-
   }
 
-  eliminar(id):void {
+  eliminar(id): void {
 
     this.areaService.eliminar(id).subscribe(res => {
       if (res) {
@@ -69,7 +59,7 @@ export class ListadoComponent implements OnDestroy, OnInit {
         this.showToast('warning', 'Atención', 'No se ha encontrado el registro');
       }
     });
-   this.rerender();
+    location.reload();
   }
 
   confirmacion(id): void {
@@ -78,15 +68,7 @@ export class ListadoComponent implements OnDestroy, OnInit {
         this.eliminar(id);
       }
     });
-
-
   }
-
-
-  ngOnDestroy(): void {
-    $.fn['dataTable'].ext.search.pop();
-  }
-   
   //construccion del mensaje
   private showToast(estado: string, titulo: string, cuerpo: string) {
     const config = {
