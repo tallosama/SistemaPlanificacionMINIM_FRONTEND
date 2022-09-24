@@ -20,11 +20,13 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme'; 
-
+// Import the module from the SDK
+import { AuthModule } from '@auth0/auth0-angular';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -39,7 +41,14 @@ import {
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
     CoreModule.forRoot(),
-    ThemeModule.forRoot() 
+    ThemeModule.forRoot(),
+
+     // Import the module into the application, with configuration
+     AuthModule.forRoot({
+      domain: 'dev-rihfinoz.us.auth0.com',
+      clientId: 'TtA9WRaMVPxzQDXsT4WaSXK2hzh6ZBIa'
+    }),
+
   ],
   bootstrap: [AppComponent],
 })

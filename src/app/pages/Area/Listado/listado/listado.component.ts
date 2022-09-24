@@ -5,8 +5,9 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { Value } from 'sass';
 import { DialogNamePromptComponent } from '../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component';
 import { AreaService } from '../../area.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
+import { ApiServe } from '../../../../ApiServe';
 
 @Component({
   selector: 'ngx-listado',
@@ -14,31 +15,29 @@ import { DataTableDirective } from 'angular-datatables';
   styleUrls: ['./listado.component.scss']
 })
 
-export class ListadoComponent implements OnInit {
+export class ListadoComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
+  subscripciones: Array<Subscription> = [];
   constructor(private areaService: AreaService, private router: Router, private dialogService: NbDialogService, private toastrService: NbToastrService) {
-    this.construir();
-
-  }
-
+  } 
   //para datatables
   data: any;
   construir(): void {
     //carga de datos
-    this.areaService.listar().subscribe((resp: any) => {
-      this.data = resp;
-
-      this.dtTrigger.next();
-    },
-      error => { console.error(error) }
-    );
-
+    this.listar();
+    this.subscripciones.push(this.areaService.refresh.subscribe(() => {
+      this.listar();
+    }));
   }
-
+  listar(): void {
+    this.subscripciones.push(this.areaService.listar().subscribe((resp: any) => { this.data = resp }));
+  }
   ngOnInit(): void {
+    this.construir();
+
     //datatables
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -50,27 +49,20 @@ export class ListadoComponent implements OnInit {
     };
   }
 
+  ngOnDestroy(): void {
+    this.subscripciones.forEach(o => o.unsubscribe());
+  }
   eliminar(id): void {
 
-    this.areaService.eliminar(id).subscribe(res => {
+    this.subscripciones.push(this.areaService.eliminar(id).subscribe(res => {
       if (res) {
-        this.showToast('success', 'Acción realizada', 'Se ha eliminado el registro');
+        this.toast('success', 'Acción realizada', 'Se ha eliminado el registro');
       } else {
-        this.showToast('warning', 'Atención', 'No se ha encontrado el registro');
+        this.toast('warning', 'Atención', 'No se ha encontrado el registro');
       }
-    });
-    location.reload();
+    }));
   }
-
-  confirmacion(id): void {
-    this.dialogService.open(DialogNamePromptComponent).onClose.subscribe(res => {
-      if (res) {
-        this.eliminar(id);
-      }
-    });
-  }
-  //construccion del mensaje
-  private showToast(estado: string, titulo: string, cuerpo: string) {
+  public toast(estado: string, titulo: string, cuerpo: string) {
     const config = {
       status: estado,
       destroyByClick: true,
@@ -79,12 +71,19 @@ export class ListadoComponent implements OnInit {
       position: NbGlobalPhysicalPosition.TOP_RIGHT,
       preventDuplicates: false,
     };
-    const titleContent = titulo;
 
     this.toastrService.show(
       cuerpo,
-      `${titleContent}`,
+      `${titulo}`,
       config);
   }
+  confirmacion(id): void {
+    this.subscripciones.push(this.dialogService.open(DialogNamePromptComponent).onClose.subscribe(res => {
+      if (res) {
+        this.eliminar(id);
+      }
+    }));
+  }
+  //construccion del mensaje
 
 }

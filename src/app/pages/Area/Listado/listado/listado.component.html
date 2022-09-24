@@ -1,5 +1,9 @@
 <div class="container">
-  <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+
+  <!-- <div class="col-lg-12">            
+    <button id="btnNuevo" type="button" class="btn btn-info" data-toggle="modal"><i class="material-icons">library_add</i></button>    
+    </div>     -->
+  <table id="datatable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
     class="table table-hover table table-striped table-dark row-border hover">
     <thead class="thead-dark">
       <tr>
@@ -14,15 +18,15 @@
         <td>{{ d.desArea }}</td>
 
         <td>
-          <a role="button" [routerLink]= "['../EditarArea', d.idArea]">
+          <!-- <a role="button" [routerLink]="['../EditarArea', d.idArea]">
             <i class="nb-compose"></i>
-            
-          </a>
-          <a  name="borrar" role="button" (click)="confirmacion(d.idArea)">
+          </a> -->
+          <button type="button" class="btn btn-info" [routerLink]="['../EditarArea', d.idArea]"> <i class="nb-compose" ></i></button>
+          <!-- <a role="button" (click)="confirmacion(d.idArea)">
             <i class="nb-trash"></i>
-          </a>
-          
-   
+          </a> -->
+          <button type="button" (click)="confirmacion(d.idArea)" class="btn btn-info" >           <i class="nb-trash"></i></button>
+
         </td>
       </tr>
     </tbody>
