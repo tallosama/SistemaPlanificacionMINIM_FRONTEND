@@ -20,8 +20,13 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme'; 
+
+
 // Import the module from the SDK
-import { AuthModule } from '@auth0/auth0-angular';
+//import { AuthModule } from '@auth0/auth0-angular';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -44,11 +49,13 @@ import { AuthModule } from '@auth0/auth0-angular';
     ThemeModule.forRoot(),
 
      // Import the module into the application, with configuration
-     AuthModule.forRoot({
-      domain: 'dev-rihfinoz.us.auth0.com',
-      clientId: 'TtA9WRaMVPxzQDXsT4WaSXK2hzh6ZBIa'
-    }),
+    //  AuthModule.forRoot({
+    //   domain: 'dev-rihfinoz.us.auth0.com',
+    //   clientId: 'TtA9WRaMVPxzQDXsT4WaSXK2hzh6ZBIa'
+    // }),
 
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    //AngularFirestoreModule
   ],
   bootstrap: [AppComponent],
 })

@@ -5,7 +5,7 @@ import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
-import { AuthService } from '@auth0/auth0-angular';
+//import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'ngx-header',
@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    private auth: AuthService,
+    //private auth: AuthService,
 
     //private userService: UserData,
     private layoutService: LayoutService,
@@ -53,21 +53,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.users$ = this.auth.getUser().subscribe(x => {
-      this.users = x;
-      console.log(x);
+    // this.users$ = this.auth.getUser().subscribe(x => {
+    //   this.users = x;
+    //   console.log(x);
       
-    });
+    //});
 
 
-    this.menuService.onItemClick().subscribe((event) => {
-      if (event.item.title == "Cerrar sesión"){
-        this.auth.logout();
-        console.log("Cerrando...");
+    // this.menuService.onItemClick().subscribe((event) => {
+    //   if (event.item.title == "Cerrar sesión"){
+    //     this.auth.logout();
+    //     console.log("Cerrando...");
         
-      }
+    //   }
         
-    })
+    // })
 
     //     this.userService.getUsers()
     //       .pipe(takeUntil(this.destroy$))
