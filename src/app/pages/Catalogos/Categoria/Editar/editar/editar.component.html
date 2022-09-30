@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Editar categorías
+      </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="editarCategoriaForm" *ngIf="editarCategoriaForm" (ngSubmit)="editar()">
+          <div class="row">
+            <div class="col-md-12">
+              <nb-alert status="danger"
+                *ngIf="editarCategoriaForm.get('descripCategoria').hasError('required') && editarCategoriaForm.get('descripCategoria').touched">
+                Debe de ingresar una descripción menor a 100 carácteres
+              </nb-alert>
+              <label class="label">Descripción de categoria</label>
+              <textarea rows="3" formControlName="descripCategoria" nbInput fullWidth></textarea>
+            </div>
+          </div>
+
+          <button id="b1" class="b1" type="submit" [disabled]="editarCategoriaForm.invalid" nbButton
+            status="primary">Editar</button>
+        </form>
+      </nb-card-body>
+
+      <nb-card-footer>
+        <button [routerLink]="['../../ListarCategoria']" nbButton status="success"> Atrás</button>
+      </nb-card-footer>
+
+    </nb-card>
+  </div>
+</div>

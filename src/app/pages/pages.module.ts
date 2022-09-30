@@ -7,7 +7,11 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
-import { AreaModule } from './Area/area.module';
+import { AreaModule } from './Catalogos/Area/area.module';
+import { CategoriaModule } from './Catalogos/Categoria/categoria.module';
+import { SectorModule } from './Catalogos/Sector/sector.module';
+import { MedidaModule } from './Catalogos/UnidadMedida/medida.module';
+import { ProductoModule } from './Catalogos/Producto/producto.module';
 
 @NgModule({
   imports: [
@@ -17,7 +21,12 @@ import { AreaModule } from './Area/area.module';
     DashboardModule,
     ECommerceModule,
     MiscellaneousModule,
+    
     AreaModule,
+    CategoriaModule,
+    SectorModule,
+    MedidaModule,
+    ProductoModule,
   ],
   declarations: [
     PagesComponent,

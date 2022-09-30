@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>Registrar áreas</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="areaForm" (ngSubmit)="guardar()">
+          <nb-alert status="danger"
+            *ngIf="areaForm.get('desArea').hasError('required') && areaForm.get('desArea').touched">Debe de ingresar una
+            descripción menor a 512 carácteres</nb-alert>
+          <textarea rows="5" formControlName="desArea" nbInput fullWidth shape="round"
+            placeholder="Descripción del área"></textarea>
+          <!-- <div class="full-name-inputs">
+            <div class="row">
+              <label for="">Registrado por</label>
+              <input type="number" formControlName="usuarioCreacion" nbInput fullWidth disabled />
+            </div>
+            <div class="row">
+              <label for="">Fecha de registro</label>
+              <input type="datetime" formControlName="fechaCreacion" nbInput fullWidth disabled />
+            </div>
+            <div class="row">
+              <label for="">Modificado por</label>
+              <input type="text" formControlName="usuarioModificacion" nbInput fullWidth 
+                disabled />
+            </div>
+            <div class="row">
+              <label for="">Fecha de modificación</label>
+              <input type="datetime" formControlName="fechaModificacion" nbInput fullWidth 
+                disabled />
+            </div>
+          </div> -->
+          <button type="submit" [disabled]="areaForm.invalid" nbButton status="success">Guardar</button>
+        </form>
+      </nb-card-body>
+
+      <nb-card-footer>
+        <button (click)="limpiar()" nbButton status="danger">Cancelar</button>
+        <button [routerLink]="['../ListarAreas']" nbButton status="success"> Atras</button>
+      </nb-card-footer>
+
+    </nb-card>
+  </div>
+</div>

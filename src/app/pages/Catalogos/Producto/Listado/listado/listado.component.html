@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Lista De Producto
+        <button size="small" id="b3" [routerLink]="['../RegistrarProducto']" nbButton status="primary" class="b3"> Nuevo
+        </button>
+      </nb-card-header>
+      <nb-card-body>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+          class="table table-hover table table-striped table-dark row-border hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Descripción</th>
+              <th scope="col">Cantidad mínima</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Tipo de material</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of data">
+              <td>{{ p.descripcion }}</td>
+              <td>{{ p.cantMinima }}</td>
+              <td>{{ p.cantStock }}</td>
+              <td>{{ p.tipoMaterial }}</td>
+              <td>
+
+                <button type="button" class="btn btn-info" [routerLink]="['../EditarProducto', p.idProducto]"> <i
+                    class="nb-compose"></i></button>
+
+                <button type="button" (click)="confirmacion(p)" class="btn btn-danger"> <i
+                    class="nb-trash"></i></button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

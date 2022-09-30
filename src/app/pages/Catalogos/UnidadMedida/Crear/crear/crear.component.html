@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Registro Unidad De Medida
+      </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="registrarMedidaForm" (ngSubmit)="guardar()">
+          <div class="row">
+            <div class="col-md-12">
+              <nb-alert status="danger"
+                *ngIf="registrarMedidaForm.get('descripUnidadMedida').hasError('descripUnidadMedida') && registrarMedidaForm.get('desSector').touched">
+                Debe de ingresar una descripción menor a 60 carácteres
+              </nb-alert>
+              <label class="label">Descripción de unidad de medida</label>
+              <textarea rows="3" formControlName="descripUnidadMedida" nbInput fullWidth></textarea>
+            </div>
+          </div>
+          <button type="submit" [disabled]="registrarMedidaForm.invalid" nbButton status="primary">Guardar</button>
+        </form>
+      </nb-card-body>
+
+      <nb-card-footer>
+        <button (click)="limpiar()" nbButton status="danger">Cancelar</button>
+        <button [routerLink]="['../ListarUnidadMedida']" nbButton status="success"> Atrás</button>
+      </nb-card-footer>
+
+    </nb-card>
+  </div>
+</div>

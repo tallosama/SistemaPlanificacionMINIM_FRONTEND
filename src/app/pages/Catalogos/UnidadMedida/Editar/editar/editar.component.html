@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Editar unidad de medida
+      </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="editarMedidaForm" *ngIf="editarMedidaForm" (ngSubmit)="editar()">
+          <div class="row">
+            <div class="col-md-12">
+              <nb-alert status="danger"
+                *ngIf="editarMedidaForm.get('descripUnidadMedida').hasError('required') && editarMedidaForm.get('descripUnidadMedida').touched">
+                Debe de ingresar una descripción menor a 60 carácteres
+              </nb-alert>
+              <label class="label">Descripción de unidad de medida</label>
+              <textarea rows="3" formControlName="descripUnidadMedida" nbInput fullWidth></textarea>
+            </div>
+          </div>
+
+          <button id="b1" class="b1" type="submit" [disabled]="editarMedidaForm.invalid" nbButton
+            status="primary">Editar</button>
+        </form>
+      </nb-card-body>
+
+      <nb-card-footer>
+        <button [routerLink]="['../../ListarUnidadMedida']" nbButton status="success"> Atrás</button>
+      </nb-card-footer>
+ 
+    </nb-card>
+  </div>
+</div>

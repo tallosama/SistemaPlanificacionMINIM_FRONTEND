@@ -4,13 +4,13 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
-import { NotFoundComponent } from './miscellaneous/not-found/not-found.component'; 
+import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
-  
+
     {
       path: 'dashboard',
       component: ECommerceComponent,
@@ -26,8 +26,28 @@ const routes: Routes = [{
     },
     {
       path: 'Area',
-      loadChildren: () => import('./Area/area.module')
+      loadChildren: () => import('./Catalogos/Area/area.module')
         .then(a => a.AreaModule),
+    },
+    {
+      path: 'Categoria',
+      loadChildren: () => import('./Catalogos/Categoria/categoria.module')
+        .then(a => a.CategoriaModule),
+    },
+    {
+      path: 'Sector',
+      loadChildren: () => import('./Catalogos/Sector/sector.module')
+        .then(a => a.SectorModule),
+    },
+    {
+      path: 'UnidadMedida',
+      loadChildren: () => import('./Catalogos/UnidadMedida/medida.module')
+        .then(a => a.MedidaModule),
+    },
+    {
+      path: 'Producto',
+      loadChildren: () => import('./Catalogos/Producto/producto.module')
+        .then(a => a.ProductoModule),
     },
     {
       path: 'forms',

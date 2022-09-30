@@ -32,26 +32,72 @@ export const MENU_ITEMS: NbMenuItem[] = [
             link: '/pages/Area/ListarAreas',
           }
         ]
-    },
+    },   
     {
-      title: 'Areas',
-      icon: 'home-outline',
-      link: '/pages/Area',
+      title: 'Categorías',
+      icon: 'folder-add-outline',
+      link: '/pages/Categoria',
       children: [
         {
           title: 'Registrar',
-          link: '/pages/Area/RegistrarArea',
+          link: '/pages/Categoria/RegistrarCategoria',
         },
-         {
-          title: 'Editar',
-          link: '/pages/Area/EditarArea',
-        },
+
         {
           title: 'Listar',
-          link: '/pages/Area/ListarAreas',
+          link: '/pages/Categoria/ListarCategoria',
         }
       ]
   },
+  {
+    title: 'Sector',
+    icon: 'globe-outline',
+    link: '/pages/Sector',
+    children: [
+      {
+        title: 'Registrar',
+        link: '/pages/Sector/RegistrarSector',
+      },
+
+      {
+        title: 'Listar',
+        link: '/pages/Sector/ListarSector',
+      }
+    ]
+},
+{
+  title: 'Unidad de medida',
+  icon: 'pantone-outline',
+  link: '/pages/UnidadMedida',
+  children: [
+    {
+      title: 'Registrar',
+      link: '/pages/UnidadMedida/RegistrarUnidadMedida',
+    },
+
+    {
+      title: 'Listar',
+      link: '/pages/UnidadMedida/ListarUnidadMedida',
+    }
+  ]
+},
+{
+  title: 'Productos',
+  icon: 'map-outline',
+  link: '/pages/Producto',
+  children: [
+    {
+      title: 'Registrar',
+      link: '/pages/Producto/RegistrarProducto',
+    },
+
+    {
+      title: 'Listar',
+      link: '/pages/Producto/ListarProducto',
+    }
+  ]
+},
+   
  
   ]
    }, 

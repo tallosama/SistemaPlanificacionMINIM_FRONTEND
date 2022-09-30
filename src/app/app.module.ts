@@ -25,7 +25,7 @@ import {
 // Import the module from the SDK
 //import { AuthModule } from '@auth0/auth0-angular';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+//import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from '../environments/environment';
 
 @NgModule({

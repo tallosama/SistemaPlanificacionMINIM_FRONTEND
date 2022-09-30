@@ -1,0 +1,52 @@
+<h1 id="title" class="title">Inicio de sesión</h1>
+<p class="sub-title">Logueate con tu correo institucional y tu clave asignada.</p>
+
+<form  *ngIf="loginForm" [formGroup]="loginForm" (ngSubmit)="login()">
+
+  <div class="form-control-group">
+    <label class="label">Correo:</label>
+    <input nbInput fullWidth shape="round" formControlName="correo" placeholder="Correo" autocomplete="on"
+      pattern=".+@.+\..+" fieldSize="large" />
+
+    <!-- Control de errores para el correo -->
+    <div *ngIf="loginForm.get('correo').invalid && loginForm.get('correo').touched">
+
+      <p class="caption status-danger" *ngIf="loginForm.get('correo').errors?.required">
+        El correo es requerido
+      </p>
+
+      <p class="caption status-danger"
+        *ngIf="loginForm.get('correo').errors?.email && loginForm.get('correo').errors?.pattern">
+        Debe ingresar un correo real
+      </p>
+
+    </div>
+  </div>
+
+
+  <div class="form-control-group">
+
+    <span class="label-with-link">
+      <label class="label">clave:</label>
+      <a class="forgot-password caption-2">¿Olividó su clave?</a>
+    </span>
+
+    <input nbInput fullWidth shape="round" formControlName="clave" placeholder="clave" autocomplete="on" type="password"
+      fieldSize="large" />
+
+    <!-- Control de errores para la clave -->
+    <p class="caption status-danger" *ngIf="loginForm.get('clave').errors?.required && loginForm.get('clave').touched">
+      La clave es requerida
+    </p>
+  </div>
+
+  <!-- 
+  <div class="form-control-group accept-group">
+    <nb-checkbox name="rememberMe" [(ngModel)]="user.rememberMe" *ngIf="rememberMe">Remember me</nb-checkbox>
+  </div> -->
+
+
+
+  <button type="submit" [disabled]="loginForm.invalid" nbButton status="success">Login</button>
+
+</form>

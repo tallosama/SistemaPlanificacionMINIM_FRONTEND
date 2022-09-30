@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Listado de sectores
+        <button size="small" id="b3" mat-button class="b3" [routerLink]="['../RegistrarSector']" nbButton
+          status="primary">Nuevo</button>
+      </nb-card-header>
+      <nb-card-body>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+          class="table table-hover table table-striped table-dark row-border hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Descripción</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of data">
+              <td>{{ s.desSector }}</td>
+              <td>
+
+                <button type="button" class="btn btn-info" [routerLink]="['../EditarSector', s.idSector]"><i
+                    class="nb-compose"></i></button>
+
+                <button type="button" (click)="confirmacion(s)" class="btn btn-danger"> <i
+                    class="nb-trash"></i></button>
+
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
