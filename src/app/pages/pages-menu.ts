@@ -11,8 +11,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'IoT Dashboard',
     icon: 'home-outline',
     link: '/pages/iot-dashboard',
-  }, 
-   {
+  },
+  {
     title: 'Catálogos',
     icon: 'book-open-outline',
     link: '/pages',
@@ -26,81 +26,113 @@ export const MENU_ITEMS: NbMenuItem[] = [
             title: 'Registrar',
             link: '/pages/Area/RegistrarArea',
           },
-  
+
           {
             title: 'Listar',
             link: '/pages/Area/ListarAreas',
           }
         ]
-    },   
-    {
-      title: 'Categorías',
-      icon: 'folder-add-outline',
-      link: '/pages/Categoria',
-      children: [
-        {
-          title: 'Registrar',
-          link: '/pages/Categoria/RegistrarCategoria',
-        },
-
-        {
-          title: 'Listar',
-          link: '/pages/Categoria/ListarCategoria',
-        }
-      ]
-  },
-  {
-    title: 'Sector',
-    icon: 'globe-outline',
-    link: '/pages/Sector',
-    children: [
+      },
       {
-        title: 'Registrar',
-        link: '/pages/Sector/RegistrarSector',
+        title: 'Categorías',
+        icon: 'folder-add-outline',
+        link: '/pages/Categoria',
+        children: [
+          {
+            title: 'Registrar',
+            link: '/pages/Categoria/RegistrarCategoria',
+          },
+
+          {
+            title: 'Listar',
+            link: '/pages/Categoria/ListarCategoria',
+          }
+        ]
+      },
+      {
+        title: 'Sector',
+        icon: 'globe-outline',
+        link: '/pages/Sector',
+        children: [
+          {
+            title: 'Registrar',
+            link: '/pages/Sector/RegistrarSector',
+          },
+
+          {
+            title: 'Listar',
+            link: '/pages/Sector/ListarSector',
+          }
+        ]
+      },
+      {
+        title: 'Unidad de medida',
+        icon: 'pantone-outline',
+        link: '/pages/UnidadMedida',
+        children: [
+          {
+            title: 'Registrar',
+            link: '/pages/UnidadMedida/RegistrarUnidadMedida',
+          },
+
+          {
+            title: 'Listar',
+            link: '/pages/UnidadMedida/ListarUnidadMedida',
+          }
+        ]
+      },
+      {
+        title: 'Productos',
+        icon: 'map-outline',
+        link: '/pages/Producto',
+        children: [
+          {
+            title: 'Registrar',
+            link: '/pages/Producto/RegistrarProducto',
+          },
+
+          {
+            title: 'Listar',
+            link: '/pages/Producto/ListarProducto',
+          }
+        ]
+      },
+      {
+        title: 'Persona',
+        icon: 'people-outline',
+        link: '/pages/Persona',
+        children: [
+          {
+            title: 'Registrar',
+            link: '/pages/Persona/RegistrarPersona',
+          },
+
+          {
+            title: 'Listar',
+            link: '/pages/Persona/ListarPersona',
+          }
+        ]
+      },
+      {
+        title: 'Vehículo',
+        icon: 'car-outline',
+        link: '/pages/Vehiculo',
+        children: [
+          {
+            title: 'Registrar',
+            link: '/pages/Vehiculo/RegistrarVehiculo',
+          },
+
+          {
+            title: 'Listar',
+            link: '/pages/Vehiculo/ListarVehiculo',
+          }
+        ]
       },
 
-      {
-        title: 'Listar',
-        link: '/pages/Sector/ListarSector',
-      }
+
     ]
-},
-{
-  title: 'Unidad de medida',
-  icon: 'pantone-outline',
-  link: '/pages/UnidadMedida',
-  children: [
-    {
-      title: 'Registrar',
-      link: '/pages/UnidadMedida/RegistrarUnidadMedida',
-    },
-
-    {
-      title: 'Listar',
-      link: '/pages/UnidadMedida/ListarUnidadMedida',
-    }
-  ]
-},
-{
-  title: 'Productos',
-  icon: 'map-outline',
-  link: '/pages/Producto',
-  children: [
-    {
-      title: 'Registrar',
-      link: '/pages/Producto/RegistrarProducto',
-    },
-
-    {
-      title: 'Listar',
-      link: '/pages/Producto/ListarProducto',
-    }
-  ]
-},
-   
- 
-  ]
-   }, 
+  },
   {
     title: 'FEATURES',
     group: true,

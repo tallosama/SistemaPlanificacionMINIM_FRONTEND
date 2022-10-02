@@ -9,13 +9,16 @@ import { ApiServe } from '../../../ApiServe';
 export class AreaService {
   constructor(public httpclient: HttpClient) { }
 
-
-  //En tiempo real
-  // guardar(area:any): Observable<any> {
-  //   return this.httpclient.post(ApiServe.API_SERVER+"area/",area).pipe(tap(()=>{
-  //     this.refresh$.next();
-  //   }));
-  // }
+// refresh$=new Subject();
+// get refresh(){
+//   return this.refresh$.next();
+// }
+//   //En tiempo real
+//   guardar(area:any): Observable<any> {
+//     return this.httpclient.post(ApiServe.API_SERVER+"area/",area).pipe(tap(()=>{
+//       this.refresh$.next();
+//     }));
+//   }
 
   guardar(area: any): Observable<any> {
     return this.httpclient.post(ApiServe.API_SERVER + "area/", area);

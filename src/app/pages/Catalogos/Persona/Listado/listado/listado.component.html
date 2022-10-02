@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Lista De Personas
+        <button size="small" id="b3" [routerLink]="['../RegistrarPersona']" nbButton status="primary" class="b3"> Nuevo
+        </button>
+      </nb-card-header>
+      <nb-card-body>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+          class="table table-hover table table-striped table-dark row-border hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Cedula</th>
+              <th scope="col">Primer Nombre</th>
+              <th scope="col">Segundo Nombre</th>
+              <th scope="col">Primer Apellido</th>
+              <th scope="col">Segundo Apellido</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of data">
+              <td>{{ p.cedula }}</td>
+              <td>{{ p.pNombre }}</td>
+              <td>{{ p.sNombre }}</td>
+              <td>{{ p.pApellido }}</td>
+              <td>{{ p.sApellido }}</td>
+              <td>{{ p.tipo }}</td>
+              <td>{{ p.estado?"Activo":"Inactivo" }}</td>
+              <td>
+                <button type="button" class="btn btn-info" [routerLink]="['../EditarPersona', p.idPersona]"> <i
+                    class="nb-compose"></i></button>
+
+                <button type="button" (click)="confirmacion(p)" class="btn btn-danger"> <i
+                    class="nb-trash"></i></button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

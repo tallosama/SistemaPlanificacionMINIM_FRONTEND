@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Listado De Vehiculo
+        <button size="small" id="b3" class="b3" [routerLink]="['../RegistrarVehiculo']" nbButton
+          status="primary">Nuevo</button>
+      </nb-card-header>
+      <nb-card-body>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+          class="table table-hover table table-striped table-dark row-border hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Descripcion</th>
+              <th scope="col">Placa</th>
+              <th scope="col">Modelo</th>
+              <th scope="col">Marca</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let l of data">
+              <td>{{ l.desVehiculo }}</td>
+              <td>{{ l.placa }}</td>
+              <td>{{ l.modelo }}</td>
+              <td>{{ l.marca }}</td>
+              <td>{{ l.estado }}</td>
+              <td>
+
+                <button type="button" class="btn btn-info" [routerLink]="['../EditarVehiculo', l.idVehiculo]"> <i
+                    class="nb-compose"></i></button>
+
+                <button type="button" (click)="confirmacion(l)" class="btn btn-danger"> <i
+                    class="nb-trash"></i></button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

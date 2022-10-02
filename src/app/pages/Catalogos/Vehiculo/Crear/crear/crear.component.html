@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Registrar Vehiculo
+      </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="vehiculoForm" (ngSubmit)="guardar()">
+          <div class="row">
+            <div class="col-md-12">
+              <nb-alert status="danger"
+                *ngIf="vehiculoForm.get('desVehiculo').hasError('required') && vehiculoForm.get('desVehiculo').touched">
+                Debe de ingresar una descripción menor a 512 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Descripcion</label>
+                <textarea formControlName="desVehiculo" nbInput fullWidth rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <nb-alert status="danger"
+                *ngIf="vehiculoForm.get('placa').hasError('required') && vehiculoForm.get('placa').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Numero De Placa</label>
+                <input type="text" formControlName="placa" nbInput fullWidth>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <nb-alert status="danger"
+                *ngIf="vehiculoForm.get('modelo').hasError('required') && vehiculoForm.get('modelo').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Modelo</label>
+                <input type="text" formControlName="modelo" nbInput fullWidth>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <nb-alert status="danger"
+                *ngIf="vehiculoForm.get('marca').hasError('required') && vehiculoForm.get('marca').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Marca</label>
+                <input type="text" formControlName="marca" nbInput fullWidth>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <nb-alert status="danger"
+                *ngIf="vehiculoForm.get('estado').hasError('required') && vehiculoForm.get('estado').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Estado</label>
+                <input type="text" formControlName="estado" nbInput fullWidth>
+              </div>
+            </div>
+          </div>
+          <button id="b1" class="b1" type="submit" [disabled]="vehiculoForm.invalid" nbButton
+            status="primary">Guardar</button>
+        </form>
+      </nb-card-body>
+      <nb-card-footer>
+        <button (click)="limpiar()" nbButton status="danger">Cancelar</button>
+        <button [routerLink]="['../ListarVehiculo']" nbButton status="success"> Atrás</button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>

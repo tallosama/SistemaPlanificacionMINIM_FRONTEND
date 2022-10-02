@@ -1,12 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { PersonaService } from '../../persona.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbGlobalPhysicalPosition, NbToastrService, NbToastrConfig, } from '@nebular/theme';
-import { ProductoService } from '../../producto.service';
-import { CategoriaService } from '../../../Categoria/categoria.service';
-import { MedidaService } from '../../../UnidadMedida/medida.service';
+import { AreaService } from '../../../Area/area.service';
 import { Subscription } from 'rxjs';
-
 
 @Component({
   selector: 'ngx-editar',
@@ -17,63 +15,51 @@ export class EditarComponent implements OnInit, OnDestroy {
 
   fecha = new Date().toISOString().slice(0, 10);
   usuario = 1;
-  editarProductoForm: FormGroup;
+  editarPersonaForm: FormGroup;
   id: number;
   //inicializadores del mensaje toast
   config: NbToastrConfig;
-  tipoMaterial = [
-    { tipoM: "Bien de uso" },
-    { tipoM: "Consumible" }
-  ];
-  categoria: any;
-  unidadMedida: any;
+  estado = [
+    { esActivo: true, Estado: "Activo" },
+    { esActivo: false, Estado: "Inactivo" }
+  ]
+  areas: any;
   subscripciones: Array<Subscription> = [];
   constructor(public fb: FormBuilder,
     private router: Router,
-    public productoService: ProductoService,
+    public personaService: PersonaService,
     private route: ActivatedRoute,
     private toastrService: NbToastrService,
-    public categoriaService: CategoriaService,
-    public unidadMedidaService: MedidaService,) {}
+    public areaService: AreaService) { }
 
 
   private llenadoCombobox(): void {
-    this.subscripciones.push(this.categoriaService.listar().subscribe(resp => {
-      this.categoria = resp;
+    this.subscripciones.push(this.areaService.listar().subscribe(resp => {
+      this.areas = resp;
     },
       error => {
         console.error(error);
-        this.showToast('danger', 'Error ' + error.status, 'Mientras se listaban categorías ' + error.message, 0);
+        this.showToast('danger', 'Error ' + error.status, 'Mientras se listaban áreas ' + error.message, 0);
       }
     ));
-
-    this.subscripciones.push(this.unidadMedidaService.listar().subscribe(resp => {
-      this.unidadMedida = resp;
-    },
-      error => {
-        console.error(error);
-        this.showToast('danger', 'Error ' + error.status, 'Mientras se listaban unidades de medida ' + error.message, 0);
-      }
-    )
-    );
   }
-
   ngOnInit(): void {
     this.llenadoCombobox();
 
     this.id = this.route.snapshot.params['id'];
-    this.subscripciones.push(this.productoService.buscar(this.id).subscribe(res => {
-      
-      this.editarProductoForm = this.fb.group(
+    this.subscripciones.push(this.personaService.buscar(this.id).subscribe(res => {
+
+      this.editarPersonaForm = this.fb.group(
         {
-          descripcion: [res.descripcion, Validators.compose([Validators.required, Validators.maxLength(128)])],
-          cantMinima: [res.cantMinima, Validators.required],
-          cantStock: [res.cantStock, Validators.required],
-          tipoMaterial: [res.tipoMaterial, Validators.compose([Validators.required, Validators.maxLength(50)])],
-          unidadMedidaId:[ '', Validators.required],
-          categoriaId: ['', Validators.required],
+          cedula: [res.cedula, Validators.compose([Validators.required, Validators.minLength(16), Validators.maxLength(50)])],
+          pNombre: [res.pNombre, Validators.compose([Validators.required, Validators.maxLength(32)])],
+          sNombre: [res.sNombre,  Validators.maxLength(32)],
+          pApellido: [res.pApellido, Validators.compose([Validators.required, Validators.maxLength(32)])],
+          sApellido: [res.sApellido, Validators.maxLength(32)],
+          tipo: [res.tipo, Validators.compose([Validators.required, Validators.maxLength(32)])],
+          estado: [res.estado, Validators.required],
           usuarioModificacion: [this.usuario, Validators.required],
-          fechaModificacion: [this.fecha, Validators.required]
+          fechaModificacion: [this.fecha, Validators.required],
         }
       );
     },
@@ -83,16 +69,15 @@ export class EditarComponent implements OnInit, OnDestroy {
       }
     ));
 
-
-
   }
   ngOnDestroy(): void {
     this.subscripciones.forEach(s => s.unsubscribe());
   }
-  public editar(): void {
-    this.subscripciones.push(this.productoService.editar(this.id, this.editarProductoForm.value).subscribe(resp => {
 
-      this.router.navigate(['../../ListarProducto'], { relativeTo: this.route });
+  public editar(): void {
+    this.subscripciones.push(this.personaService.editar(this.id, this.editarPersonaForm.value).subscribe(resp => {
+
+      this.router.navigate(['../../ListarPersona'], { relativeTo: this.route });
       this.showToast('success', 'Acción realizada', 'Se ha editado el registro', 4000);
     },
       error => {

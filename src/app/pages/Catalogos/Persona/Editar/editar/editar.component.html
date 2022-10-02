@@ -1,0 +1,104 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Editar Persona
+      </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="editarPersonaForm" (ngSubmit)="editar()" *ngIf="editarPersonaForm">
+          <div class="row">
+            <div class="col-md-12">
+
+              <nb-alert status="danger"
+                *ngIf="editarPersonaForm.get('cedula').hasError('required') && editarPersonaForm.get('cedula').touched">
+                La identificación tiene que ser de 16 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Cedula</label>
+                <input type="text" formControlName="cedula" placeholder="000-000000-0000A" nbInput fullWidth>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <nb-alert status="danger"
+                *ngIf="editarPersonaForm.get('pNombre').hasError('required') && editarPersonaForm.get('pNombre').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Primer nombre</label>
+                <input type="text" formControlName="pNombre" nbInput fullWidth>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <nb-alert status="danger"
+                *ngIf="editarPersonaForm.get('sNombre').hasError('maxlength') && editarPersonaForm.get('sNombre').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Segundo nombre</label>
+                <input type="text" formControlName="sNombre" nbInput fullWidth>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <nb-alert status="danger"
+                *ngIf="editarPersonaForm.get('pApellido').hasError('required') && editarPersonaForm.get('pApellido').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Primer Apellido</label>
+                <input type="text" formControlName="pApellido" nbInput fullWidth>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <nb-alert status="danger"
+                *ngIf="editarPersonaForm.get('sApellido').hasError('maxlength') && editarPersonaForm.get('sApellido').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Segundo Apellido</label>
+                <input type="text" formControlName="sApellido" nbInput fullWidth>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <nb-alert status="danger"
+                *ngIf="editarPersonaForm.get('tipo').hasError('required') && editarPersonaForm.get('tipo').touched">
+                Debe de seleccionar una opción
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Tipo</label>
+                <select class="form-control" formControlName="tipo">
+                  <option value="">Seleccione</option>
+                  <option [value]="item.desArea" *ngFor="let item of areas">{{item.desArea}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <nb-alert status="danger"
+                *ngIf="editarPersonaForm.get('estado').hasError('required') && editarPersonaForm.get('estado').touched">
+                Debe de seleccionar una opción
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Estado</label>
+                <select class="form-control" formControlName="estado">
+                  <option value="">Seleccione</option>
+                  <option *ngFor="let estado of estado" [value]="estado.esActivo">{{estado.Estado}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button id="b1" class="b1" type="submit" [routerLink]="['../ListarPersona']"
+            [disabled]="editarPersonaForm.invalid" nbButton status="primary">Editar</button>
+        </form>
+      </nb-card-body>
+      <nb-card-footer>
+        <button [routerLink]="['../../ListarPersona']" nbButton status="success"> Atrás</button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Registro De Persona
+      </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="registrarPersonaForm" (ngSubmit)="guardar()">
+          <div class="row">
+            <div class="col-md-12">
+              <nb-alert status="danger"
+                *ngIf="registrarPersonaForm.get('cedula').hasError('required') && registrarPersonaForm.get('cedula').touched">
+                La identificación tiene que ser de 16 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Cedula</label>
+                <input type="text" formControlName="cedula" placeholder="000-000000-0000A" nbInput fullWidth>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <nb-alert status="danger"
+                *ngIf="registrarPersonaForm.get('pNombre').hasError('required') && registrarPersonaForm.get('pNombre').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Primer Nombre</label>
+                <input type="text" formControlName="pNombre" nbInput fullWidth>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <nb-alert status="danger"
+                *ngIf="registrarPersonaForm.get('sNombre').hasError('required') && registrarPersonaForm.get('sNombre').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Segundo Nombre</label>
+                <input type="text" formControlName="sNombre" nbInput fullWidth>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <nb-alert status="danger"
+                *ngIf="registrarPersonaForm.get('pApellido').hasError('required') && registrarPersonaForm.get('pApellido').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Primer Apellido</label>
+                <input type="text" formControlName="pApellido" nbInput fullWidth>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <nb-alert status="danger"
+                *ngIf="registrarPersonaForm.get('sApellido').hasError('required') && registrarPersonaForm.get('sApellido').touched">
+                Debe de ingresar un dato menor a 32 carácteres
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Segundo Apellido</label>
+                <input type="text" formControlName="sApellido" nbInput fullWidth>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <nb-alert status="danger"
+                *ngIf="registrarPersonaForm.get('tipo').hasError('required') && registrarPersonaForm.get('tipo').touched">
+                Debe de seleccionar una opción
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Tipo</label>
+                <select class="form-control" formControlName="tipo">
+                  <option value="">Seleccione</option>
+                  <option [value]="item.desArea" *ngFor="let item of areas">{{item.desArea}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <nb-alert status="danger"
+                *ngIf="registrarPersonaForm.get('estado').hasError('required') && registrarPersonaForm.get('estado').touched">
+                Debe de seleccionar una opción
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Estado</label>
+                <select class="form-control" formControlName="estado">
+                  <option value="">Seleccione</option>
+                  <option *ngFor="let estado of estado" [value]="estado.esActivo">{{estado.Estado}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+<!-- 
+          <button id="b1" class="b1" type="submit" [routerLink]="['../ListarPersona']"
+            [disabled]="registrarPersonaForm.invalid" nbButton status="primary">Guardar</button>
+             -->
+          <button type="submit" [disabled]="registrarPersonaForm.invalid" nbButton status="primary">Guardar</button>
+        </form>
+      </nb-card-body>
+      <nb-card-footer>
+
+        <button (click)="limpiar()" nbButton status="danger">Cancelar</button>
+        <button [routerLink]="['../ListarPersona']" nbButton status="success"> Atrás</button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>

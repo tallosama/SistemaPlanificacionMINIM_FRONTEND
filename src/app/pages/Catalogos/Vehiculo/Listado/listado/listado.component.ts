@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild,OnDestroy } from '@angular/core'; 
-import { NbDialogService, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { VehiculoService } from '../../vehiculo.service';
 import { Subject, Subscription } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-import { ProductoService } from '../../producto.service';
+import { NbDialogService, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { DialogNamePromptComponent } from '../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component';
 
 @Component({
@@ -10,7 +10,7 @@ import { DialogNamePromptComponent } from '../../../../modal-overlays/dialog/dia
   templateUrl: './listado.component.html',
   styleUrls: ['./listado.component.scss']
 })
-export class ListadoComponent implements OnInit, OnDestroy {
+export class ListadoComponent implements OnInit {
 
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
@@ -18,12 +18,13 @@ export class ListadoComponent implements OnInit, OnDestroy {
   dtTrigger = new Subject();
   subscripciones: Array<Subscription> = [];
   data: any;
-  constructor(private productoService: ProductoService,
-    private dialogService: NbDialogService,
-    private toastrService: NbToastrService) { }
+  constructor(private dialogService: NbDialogService,
+    private toastrService: NbToastrService,
+    public vehiculoService: VehiculoService) { }
+
 
   construir(): void {
-    this.subscripciones.push(this.productoService.listar().subscribe((resp: any) => {
+    this.subscripciones.push(this.vehiculoService.listar().subscribe((resp: any) => {
       this.data = resp;
       this.dtTrigger.next();
     }, error => {
@@ -32,7 +33,6 @@ export class ListadoComponent implements OnInit, OnDestroy {
 
     }));
   }
-
   reconstruir(id: any): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       // Primero destruimos la instancia de la datatable
@@ -44,7 +44,6 @@ export class ListadoComponent implements OnInit, OnDestroy {
 
     });
   }
-
   ngOnInit(): void {
     this.construir();
     //datatables
@@ -68,8 +67,9 @@ export class ListadoComponent implements OnInit, OnDestroy {
       }
     }));
   }
+
   eliminar(id): void {
-    this.subscripciones.push(this.productoService.eliminar(id.idProducto).subscribe(res => {
+    this.subscripciones.push(this.vehiculoService.eliminar(id.idVehiculo).subscribe(res => {
       if (res) {
         this.showToast('success', 'Acción realizada', 'Se ha eliminado el registro', 4000);
 

@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild,OnDestroy } from '@angular/core'; 
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NbDialogService, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { Subject, Subscription } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-import { ProductoService } from '../../producto.service';
+import { PersonaService } from '../../persona.service';
 import { DialogNamePromptComponent } from '../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component';
 
 @Component({
@@ -18,12 +18,12 @@ export class ListadoComponent implements OnInit, OnDestroy {
   dtTrigger = new Subject();
   subscripciones: Array<Subscription> = [];
   data: any;
-  constructor(private productoService: ProductoService,
+  constructor(private personaService: PersonaService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService) { }
 
   construir(): void {
-    this.subscripciones.push(this.productoService.listar().subscribe((resp: any) => {
+    this.subscripciones.push(this.personaService.listar().subscribe((resp: any) => {
       this.data = resp;
       this.dtTrigger.next();
     }, error => {
@@ -46,6 +46,7 @@ export class ListadoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this.construir();
     //datatables
     this.dtOptions = {
@@ -57,10 +58,12 @@ export class ListadoComponent implements OnInit, OnDestroy {
       }
     };
   }
+
   ngOnDestroy(): void {
     this.subscripciones.forEach(subs => subs.unsubscribe());
     this.dtTrigger.unsubscribe();
   }
+
   confirmacion(id): void {
     this.subscripciones.push(this.dialogService.open(DialogNamePromptComponent).onClose.subscribe(res => {
       if (res) {
@@ -69,7 +72,7 @@ export class ListadoComponent implements OnInit, OnDestroy {
     }));
   }
   eliminar(id): void {
-    this.subscripciones.push(this.productoService.eliminar(id.idProducto).subscribe(res => {
+    this.subscripciones.push(this.personaService.eliminar(id.idPersona).subscribe(res => {
       if (res) {
         this.showToast('success', 'Acción realizada', 'Se ha eliminado el registro', 4000);
 
