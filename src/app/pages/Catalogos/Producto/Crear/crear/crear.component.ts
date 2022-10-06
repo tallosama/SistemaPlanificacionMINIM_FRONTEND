@@ -91,7 +91,7 @@ export class CrearComponent implements OnInit, OnDestroy {
     },
       error => {
         console.error(error);
-        this.showToast('danger', 'Error ' + error.status, 'Mientras se ingresaba un registro ' + error.message, 0);
+        this.showToast('danger', 'Error ' + error.status, 'Verifique que no exista un registro con el mismo nombre ' + error.message, 0);
       }
     ));
   }

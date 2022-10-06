@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Editar rol
+      </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="editarRolForm" *ngIf="editarRolForm" (ngSubmit)="editar()">
+          <div class="row">
+            <div class="col-md-12">
+              <nb-alert status="danger"
+                *ngIf="editarRolForm.get('desRol').hasError('required') && editarRolForm.get('desRol').touched">
+                Debe de ingresar una descripción menor a 512 carácteres
+              </nb-alert>
+              <label class="label">Descripción del rol</label>
+              <textarea rows="3" formControlName="desRol" nbInput fullWidth></textarea>
+            </div>
+          </div>
+    
+          <button type="submit" [disabled]="editarRolForm.invalid" nbButton status="primary">Guardar</button>
+
+        </form>
+      </nb-card-body>
+      <nb-card-footer>
+        <button [routerLink]="['../../ListarRol']" nbButton status="success"> Atrás</button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>

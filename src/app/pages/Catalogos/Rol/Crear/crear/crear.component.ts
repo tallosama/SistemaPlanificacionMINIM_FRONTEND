@@ -1,50 +1,49 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-  NbToastrConfig,
-} from '@nebular/theme';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { NbGlobalPhysicalPosition, NbToastrService, NbToastrConfig, } from '@nebular/theme';
+import { RolService } from '../../rol.service'; 
 import { Subscription } from 'rxjs';
-import { AreaService } from '../../area.service';
 
 @Component({
   selector: 'ngx-crear',
   templateUrl: './crear.component.html',
   styleUrls: ['./crear.component.scss']
 })
-
 export class CrearComponent implements OnInit, OnDestroy {
 
   fecha = new Date().toISOString().slice(0, 10);
   usuario = 1;
-  areaForm: FormGroup;
-  //inicializadores del mensaje toast
+  registrarRolForm: UntypedFormGroup;
+  //inicializadores del mensaje toast 
   config: NbToastrConfig;
   subscripcion: Array<Subscription> = [];
-  constructor(public fb: FormBuilder, public areaServices: AreaService, private toastrService: NbToastrService) { }
+
+  constructor(public fb: UntypedFormBuilder,
+    public rolService: RolService,
+    private toastrService: NbToastrService) { }
 
   ngOnInit(): void {
-    this.areaForm = this.fb.group(
+    this.registrarRolForm = this.fb.group(
       {
-        desArea: ['', Validators.compose([Validators.required, Validators.maxLength(512)])],
+        desRol: ['', Validators.compose([Validators.required, Validators.maxLength(512)])],
         usuarioCreacion: [this.usuario, Validators.required],
         fechaCreacion: [this.fecha, Validators.required],
         usuarioModificacion: [this.usuario, Validators.required],
         fechaModificacion: [this.fecha, Validators.required],
-
       }
     );
   }
+
   ngOnDestroy(): void {
     this.subscripcion.forEach(s => s.unsubscribe());
   }
   limpiar(): void {
-    this.areaForm.get('desArea').reset();
+    this.registrarRolForm.get('desRol').reset();
   }
+
   guardar(): void {
     this.subscripcion.push(
-      this.areaServices.guardar(this.areaForm.value).subscribe(resp => {
+      this.rolService.guardar(this.registrarRolForm.value).subscribe(resp => {
         this.showToast('success', 'Acción realizada', 'Se ha ingresado el registro', 4000);
         this.limpiar();
       },

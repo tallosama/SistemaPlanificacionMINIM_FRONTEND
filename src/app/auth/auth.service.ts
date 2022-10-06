@@ -6,13 +6,19 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class authService {
 
-  constructor(private authFire:AngularFireAuth) { }
+  constructor(private authFire: AngularFireAuth) { }
 
-  public login(credenciales:any){
-    return this.authFire.signInWithEmailAndPassword(credenciales.correo,credenciales.clave);
+  public login(credenciales: any) {
+    return this.authFire.signInWithEmailAndPassword(credenciales.correo, credenciales.clave);
+  }
+  public sigin(credenciales: any) {
+    return this.authFire.createUserWithEmailAndPassword(credenciales.correo, credenciales.clave);
   }
 
-  public user(){
+  public getUser() {
     return this.authFire.currentUser;
+  }
+  public logout() {
+    return this.authFire.signOut();
   }
 }

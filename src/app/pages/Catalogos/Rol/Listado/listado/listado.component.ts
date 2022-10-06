@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { RolService } from '../../rol.service';
 import { Subject, Subscription } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-import { Router } from '@angular/router';
 import { NbDialogService, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { MedidaService } from '../../medida.service';
 import { DialogNamePromptComponent } from '../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component';
 
 @Component({
@@ -19,14 +18,14 @@ export class ListadoComponent implements OnInit, OnDestroy {
   dtTrigger = new Subject();
   subscripciones: Array<Subscription> = [];
   data: any;
-  constructor(private medidaService: MedidaService,
-    private dialogService: NbDialogService,
-    private toastrService: NbToastrService) {
+
+  constructor(private dialogService: NbDialogService,
+    private toastrService: NbToastrService,
+    private rolService: RolService) {
   }
-
-
+  //para datatables
   construir(): void {
-    this.subscripciones.push(this.medidaService.listar().subscribe((resp: any) => {
+    this.subscripciones.push(this.rolService.listar().subscribe((resp: any) => {
       this.data = resp;
       this.dtTrigger.next();
     }, error => {
@@ -73,7 +72,8 @@ export class ListadoComponent implements OnInit, OnDestroy {
   }
 
   eliminar(id): void {
-    this.subscripciones.push(this.medidaService.eliminar(id.idUnidadMedida).subscribe(res => {
+
+    this.subscripciones.push(this.rolService.eliminar(id.idRol).subscribe(res => {
       if (res) {
         this.showToast('success', 'Acción realizada', 'Se ha eliminado el registro', 4000);
 
@@ -86,7 +86,6 @@ export class ListadoComponent implements OnInit, OnDestroy {
       this.showToast('danger', 'Error ' + error.status, 'Mientras se eliminaba el registro ' + error.message, 0);
 
     }));
-
 
   }
 

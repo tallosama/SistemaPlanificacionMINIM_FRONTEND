@@ -1,6 +1,7 @@
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-
+import { AuthGuard,redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+import { AngularFireAuthGuard } from '@angular/fire/compat/auth-guard';
 //import { AuthGuard } from '@auth0/auth0-angular';
 
 export const routes: Routes = [
@@ -13,9 +14,9 @@ export const routes: Routes = [
 
       path: 'pages' ,
       loadChildren: () => import('./pages/pages.module')
-        .then(m => m.PagesModule),
-      
-  },
+        .then(m => m.PagesModule)
+       
+      },
   {
 
   

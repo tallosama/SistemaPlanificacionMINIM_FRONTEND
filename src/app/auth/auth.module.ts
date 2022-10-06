@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core'; 
 import { RouterModule } from '@angular/router';
-
 import { NgxAuthRoutingModule } from './auth-routing.module';
-import { NbAuthModule } from '@nebular/auth';
 import { NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbInputModule } from '@nebular/theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxLoginComponent } from './login/login.component'; // <---

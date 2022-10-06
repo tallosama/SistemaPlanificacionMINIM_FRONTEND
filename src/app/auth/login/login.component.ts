@@ -9,42 +9,67 @@ import { authService } from '../../auth/auth.service';
 })
 export class NgxLoginComponent implements OnInit {
   loginForm: FormGroup;
+  respuesta: string = "";
   constructor(public fb: FormBuilder, private authService: authService, private router: Router,
-    private route: ActivatedRoute,private toastrService: NbToastrService) {}
-  ngOnInit(): void {
+    private route: ActivatedRoute, private toastrService: NbToastrService) { }
+ 
+    ngOnInit(): void {
     this.loginForm = this.fb.group(
       {
         correo: ['', Validators.compose([Validators.required, Validators.email])],
-        clave: ['', Validators.required], 
+        clave: ['', Validators.required],
       }
     );
   }
-
-  async login() {
-    const res = await this.authService.login(this.loginForm.value).catch(e=>console.error(e));
-    if (res) {
-      this.showToast('success', 'Bienvenido', 'Se ha iniciado sesión');
-      this.router.navigate(['/'], { relativeTo: this.route });
-    }else{
-      this.showToast('danger', 'Error al intentar iniciar sesión', 'No se han confirmado sus credenciales');
+  private errores(code: any) {
+    if (code === "auth/invalid-email") {
+      return "Correo no válido";
     }
+    if (code === "auth/user-disabled") {
+      return "El correo ha sido deshabilitado";
+    }
+    if (code === "auth/user-not-found") {
+      return "No se ha encontrado una cuenta vinculada a ese correo";
+    }
+    if (code === "auth/wrong-password") {
+      return "Contraseña errónea";
+    }
+    if(code==="auth/too-many-requests")
+    {
+      return "La cuenta ha sido suspendida porque se ha intentado acceder varias veces"
+    }
+    return "Error desconocido " + code;
+  }
+  async login() {
+    await this.authService.login(this.loginForm.value).then(r => {
+    
+      this.showToast('success', 'Bienvenido', 'Se ha iniciado sesión ', 4000);
+      
+      this.router.navigate(['/'], { relativeTo: this.route });
+      
+    }).catch(e => {
+      console.error(e);
+     
+      this.respuesta = this.errores(e.code);
+    });
+    
   }
 
-    //construccion del mensaje
-    public showToast(estado: string, titulo: string, cuerpo: string) {
-      const config = {
-        status: estado,
-        destroyByClick: true,
-        duration: 4000,
-        hasIcon: true,
-        position: NbGlobalPhysicalPosition.TOP_RIGHT,
-        preventDuplicates: false,
-      };
-  
-      this.toastrService.show(
-        cuerpo,
-        `${titulo}`,
-        config);
-    }
+  //construccion del mensaje
+  public showToast(estado: string, titulo: string, cuerpo: string, duracion: number) {
+    const config = {
+      status: estado,
+      destroyByClick: true,
+      duration: duracion,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: false,
+    };
+
+    this.toastrService.show(
+      cuerpo,
+      `${titulo}`,
+      config);
+  }
 
 }

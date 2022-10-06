@@ -14,6 +14,7 @@ import { MedidaModule } from './Catalogos/UnidadMedida/medida.module';
 import { ProductoModule } from './Catalogos/Producto/producto.module';
 import { PersonaModule } from './Catalogos/Persona/persona.module';
 import { VehiculoModule } from './Catalogos/Vehiculo/vehiculo.module';
+import { RolModule } from './Catalogos/Rol/rol.module';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { VehiculoModule } from './Catalogos/Vehiculo/vehiculo.module';
     MedidaModule,
     ProductoModule,
     PersonaModule,
-    VehiculoModule
+    VehiculoModule,
+    RolModule
   ],
   declarations: [
     PagesComponent,

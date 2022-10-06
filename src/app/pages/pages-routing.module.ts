@@ -1,16 +1,18 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
-import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import { NotFoundComponent } from './miscellaneous/not-found/not-found.component'; 
+import { canActivate ,redirectUnauthorizedTo} from '@angular/fire/compat/auth-guard';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth/login']);
+
 
 const routes: Routes = [{
   path: '',
-  component: PagesComponent,
+  component: PagesComponent,...canActivate(redirectUnauthorizedToLogin) ,
   children: [
-
     {
       path: 'dashboard',
       component: ECommerceComponent,
@@ -58,6 +60,11 @@ const routes: Routes = [{
       path: 'Vehiculo',
       loadChildren: () => import('./Catalogos/Vehiculo/Vehiculo.module')
         .then(a => a.VehiculoModule),
+    },
+    {
+      path: 'Rol',
+      loadChildren: () => import('./Catalogos/Rol/rol.module')
+        .then(a => a.RolModule),
     },
     {
       path: 'forms',

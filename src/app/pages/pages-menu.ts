@@ -129,6 +129,22 @@ export const MENU_ITEMS: NbMenuItem[] = [
           }
         ]
       },
+      {
+        title: 'Rol',
+        icon: 'award-outline',
+        link: '/pages/Rol',
+        children: [
+          {
+            title: 'Registrar',
+            link: '/pages/Rol/RegistrarRol',
+          },
+
+          {
+            title: 'Listar',
+            link: '/pages/Rol/ListarRol',
+          }
+        ]
+      },
 
 
     ]

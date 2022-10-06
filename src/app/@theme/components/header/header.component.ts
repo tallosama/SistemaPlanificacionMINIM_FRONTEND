@@ -6,6 +6,7 @@ import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { authService } from '../../../auth/auth.service';
+import { Router } from '@angular/router';
 //import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
-  users$: Subscription;
+  menu$: Subscription;
   themes = [
     {
       value: 'default',
@@ -49,26 +50,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     //private userService: UserData,
     private layoutService: LayoutService,
-    private breakpointService: NbMediaBreakpointsService) {
+    private breakpointService: NbMediaBreakpointsService ) {
   }
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.auth.user().then(u => this.user = u).catch(error => {
+    this.auth.getUser().then(u => this.user = u).catch(error => {
 
-      console.log(error);
+      console.error(error);
 
     });
 
 
-    // this.menuService.onItemClick().subscribe((event) => {
-    //   if (event.item.title == "Cerrar sesión"){
-    //     this.auth.logout();
-    //     console.log("Cerrando...");
+    this.menu$= this.menuService.onItemClick().subscribe((event) => {
+      if (event.item.title == "Cerrar sesión"){
+        this.auth.logout().then(resp=>{
+          console.log(resp);
+          
+          window.location.reload();
+        }    
+        ).catch(e=>console.error(e)
+        );
+        
 
-    //   }
-
-    // })
+      }
+    })
 
     //     this.userService.getUsers()
     //       .pipe(takeUntil(this.destroy$))
@@ -94,7 +100,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.users$.unsubscribe();
+    this.menu$.unsubscribe();
   }
 
   changeTheme(themeName: string) {
