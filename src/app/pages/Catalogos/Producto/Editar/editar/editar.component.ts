@@ -34,7 +34,7 @@ export class EditarComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastrService: NbToastrService,
     public categoriaService: CategoriaService,
-    public unidadMedidaService: MedidaService,) {}
+    public unidadMedidaService: MedidaService,) { }
 
 
   private llenadoCombobox(): void {
@@ -63,15 +63,15 @@ export class EditarComponent implements OnInit, OnDestroy {
 
     this.id = this.route.snapshot.params['id'];
     this.subscripciones.push(this.productoService.buscar(this.id).subscribe(res => {
-      
+
       this.editarProductoForm = this.fb.group(
         {
           descripcion: [res.descripcion, Validators.compose([Validators.required, Validators.maxLength(128)])],
           cantMinima: [res.cantMinima, Validators.required],
           cantStock: [res.cantStock, Validators.required],
           tipoMaterial: [res.tipoMaterial, Validators.compose([Validators.required, Validators.maxLength(50)])],
-          unidadMedidaId:[ '', Validators.required],
-          categoriaId: ['', Validators.required],
+          unidadMedidaId: [this.unidadMedida.find(u => u.idUnidadMedida == res.unidadMedidaId.idUnidadMedida), Validators.required],
+          categoriaId: [this.categoria.find(c => c.idCategoria == res.categoriaId.idCategoria), Validators.required],
           usuarioModificacion: [this.usuario, Validators.required],
           fechaModificacion: [this.fecha, Validators.required]
         }
