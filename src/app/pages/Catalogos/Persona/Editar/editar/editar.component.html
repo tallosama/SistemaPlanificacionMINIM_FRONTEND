@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <nb-card>
       <nb-card-header>
-        Editar Persona
+        Editar personal
       </nb-card-header>
       <nb-card-body>
         <form [formGroup]="editarPersonaForm" (ngSubmit)="editar()" *ngIf="editarPersonaForm">
@@ -49,7 +49,7 @@
                 Debe de ingresar un dato menor a 32 carácteres
               </nb-alert>
               <div class="form-group">
-                <label class="label">Primer Apellido</label>
+                <label class="label">Primer apellido</label>
                 <input type="text" formControlName="pApellido" nbInput fullWidth>
               </div>
             </div>
@@ -60,7 +60,7 @@
                 Debe de ingresar un dato menor a 32 carácteres
               </nb-alert>
               <div class="form-group">
-                <label class="label">Segundo Apellido</label>
+                <label class="label">Segundo apellido</label>
                 <input type="text" formControlName="sApellido" nbInput fullWidth>
               </div>
             </div>

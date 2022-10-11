@@ -2,40 +2,57 @@
   <div class="col-md-12">
     <nb-card>
       <nb-card-header>
-        Registro De Persona
+        Registro del personal
       </nb-card-header>
       <nb-card-body>
         <form [formGroup]="registrarPersonaForm" (ngSubmit)="guardar()">
           <div class="row">
             <div class="col-md-12">
-              <nb-alert status="danger"
-                *ngIf="registrarPersonaForm.get('cedula').hasError('required') && registrarPersonaForm.get('cedula').touched">
-                La identificación tiene que ser de 16 carácteres
-              </nb-alert>
+
+              <div *ngIf="registrarPersonaForm.get('cedula').invalid && registrarPersonaForm.get('cedula').touched">
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('cedula').hasError('required')">
+                  La identificación es requerida
+                </nb-alert>
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('cedula').hasError('maxlength')">
+                  La identificación tiene que tener máximo 60 carácteres
+                </nb-alert>
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('cedula').hasError('minlength')">
+                  La identificación tiene que poseere mínimo 16 carácteres
+                </nb-alert>
+              </div>
+
               <div class="form-group">
-                <label class="label">Cedula</label>
+                <label class="label">Cédula</label>
                 <input type="text" formControlName="cedula" placeholder="000-000000-0000A" nbInput fullWidth>
               </div>
             </div>
 
             <div class="col-md-4">
-              <nb-alert status="danger"
-                *ngIf="registrarPersonaForm.get('pNombre').hasError('required') && registrarPersonaForm.get('pNombre').touched">
-                Debe de ingresar un dato menor a 32 carácteres
-              </nb-alert>
+              <div *ngIf="registrarPersonaForm.get('pNombre').invalid && registrarPersonaForm.get('pNombre').touched">
+
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('pNombre').hasError('required') ">
+                  El primer nombre es obligatorio
+                </nb-alert>
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('pNombre').hasError('maxlength') ">
+                  El nombre no puede ser mayor a 32 carácteres
+                </nb-alert>
+
+              </div>
+
               <div class="form-group">
-                <label class="label">Primer Nombre</label>
+                <label class="label">Primer nombre</label>
                 <input type="text" formControlName="pNombre" nbInput fullWidth>
               </div>
             </div>
 
             <div class="col-md-4">
               <nb-alert status="danger"
-                *ngIf="registrarPersonaForm.get('sNombre').hasError('required') && registrarPersonaForm.get('sNombre').touched">
-                Debe de ingresar un dato menor a 32 carácteres
+                *ngIf="registrarPersonaForm.get('sNombre').hasError('maxlength') && registrarPersonaForm.get('sNombre').touched">
+                El segundo nombre no puede ser mayor a 32 carácteres
+
               </nb-alert>
               <div class="form-group">
-                <label class="label">Segundo Nombre</label>
+                <label class="label">Segundo nombre</label>
                 <input type="text" formControlName="sNombre" nbInput fullWidth>
               </div>
             </div>
@@ -43,31 +60,50 @@
 
           <div class="row">
             <div class="col-md-4">
-              <nb-alert status="danger"
-                *ngIf="registrarPersonaForm.get('pApellido').hasError('required') && registrarPersonaForm.get('pApellido').touched">
-                Debe de ingresar un dato menor a 32 carácteres
-              </nb-alert>
+              <div
+                *ngIf="registrarPersonaForm.get('pApellido').invalid && registrarPersonaForm.get('pApellido').touched">
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('pApellido').hasError('required')">
+                  El primer apellido es obligatorio
+                </nb-alert>
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('pApellido').hasError('maxlength')">
+                  Debe de ingresar un dato menor a 32 carácteres
+                </nb-alert>
+              </div>
+
               <div class="form-group">
-                <label class="label">Primer Apellido</label>
+                <label class="label">Primer apellido</label>
                 <input type="text" formControlName="pApellido" nbInput fullWidth>
               </div>
             </div>
 
             <div class="col-md-3">
+
+
               <nb-alert status="danger"
-                *ngIf="registrarPersonaForm.get('sApellido').hasError('required') && registrarPersonaForm.get('sApellido').touched">
+                *ngIf="registrarPersonaForm.get('sApellido').hasError('maxlength') && registrarPersonaForm.get('sApellido').touched">
                 Debe de ingresar un dato menor a 32 carácteres
               </nb-alert>
+
+
               <div class="form-group">
-                <label class="label">Segundo Apellido</label>
+                <label class="label">Segundo apellido</label>
                 <input type="text" formControlName="sApellido" nbInput fullWidth>
               </div>
             </div>
             <div class="col-md-3">
-              <nb-alert status="danger"
-                *ngIf="registrarPersonaForm.get('tipo').hasError('required') && registrarPersonaForm.get('tipo').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
+
+              <div
+                *ngIf="registrarPersonaForm.get('tipo').invalid && registrarPersonaForm.get('tipo').touched">
+                <nb-alert status="danger"
+                  *ngIf="registrarPersonaForm.get('tipo').hasError('required')">
+                 El tipo de usuario es obligatorio
+                </nb-alert>
+
+                <nb-alert status="danger"
+                  *ngIf="registrarPersonaForm.get('tipo').hasError('maxlength')">
+                 El tipo de usuario no puede ser mayor a 32 carácteres
+                </nb-alert>
+              </div>
               <div class="form-group">
                 <label class="label">Tipo</label>
                 <select class="form-control" formControlName="tipo">
@@ -79,18 +115,17 @@
             <div class="col-md-2">
               <nb-alert status="danger"
                 *ngIf="registrarPersonaForm.get('estado').hasError('required') && registrarPersonaForm.get('estado').touched">
-                Debe de seleccionar una opción
+                Debe de seleccionar un estado
               </nb-alert>
               <div class="form-group">
                 <label class="label">Estado</label>
-                <select class="form-control" formControlName="estado">
-                  <option value="">Seleccione</option>
-                  <option *ngFor="let estado of estado" [value]="estado.esActivo">{{estado.Estado}}</option>
+                <select class="form-control" formControlName="estado" >
+                  <option *ngFor="let e of estado" [value]="e.esActivo">{{e.Estado}}</option>
                 </select>
               </div>
             </div>
           </div>
-<!-- 
+          <!-- 
           <button id="b1" class="b1" type="submit" [routerLink]="['../ListarPersona']"
             [disabled]="registrarPersonaForm.invalid" nbButton status="primary">Guardar</button>
              -->

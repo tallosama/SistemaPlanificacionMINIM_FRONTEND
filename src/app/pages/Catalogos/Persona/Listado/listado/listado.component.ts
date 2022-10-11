@@ -48,6 +48,7 @@ export class ListadoComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.construir();
+    
     //datatables
     this.dtOptions = {
       pagingType: 'full_numbers',

@@ -19,8 +19,8 @@ export class CrearComponent implements OnInit, OnDestroy {
   //inicializadores del mensaje toast
   config: NbToastrConfig;
   estado = [
-    { esActivo: true, Estado: "activo" },
-    { esActivo: false, Estado: "inactivo" }
+    { esActivo: true, Estado: "Activo" },
+    { esActivo: false, Estado: "Inactivo" }
   ]
   areas: any;
   subscripciones: Array<Subscription> = [];
@@ -29,7 +29,7 @@ export class CrearComponent implements OnInit, OnDestroy {
     public personaService: PersonaService,
     public areaService: AreaService) { }
 
-    
+
   private llenadoCombobox(): void {
     this.subscripciones.push(this.areaService.listar().subscribe(resp => {
       this.areas = resp;
@@ -46,11 +46,11 @@ export class CrearComponent implements OnInit, OnDestroy {
       {
         cedula: ['', Validators.compose([Validators.required, Validators.minLength(16), Validators.maxLength(50)])],
         pNombre: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
-        sNombre: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
+        sNombre: ['', Validators.maxLength(32)],
         pApellido: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
-        sApellido: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
+        sApellido: ['', Validators.maxLength(32)],
         tipo: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
-        estado: ['', Validators.required],
+        estado: [this.estado[0].esActivo, Validators.required],
         usuarioCreacion: [this.usuario, Validators.required],
         fechaCreacion: [this.fecha, Validators.required],
         usuarioModificacion: [this.usuario, Validators.required],
