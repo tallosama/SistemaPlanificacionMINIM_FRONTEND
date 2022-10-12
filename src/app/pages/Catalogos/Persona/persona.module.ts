@@ -15,7 +15,7 @@ import { DataTablesModule } from 'angular-datatables';
   declarations: [
     CrearComponent,
     EditarComponent,
-    ListadoComponent
+    ListadoComponent, 
   ],
   imports: [
     CommonModule,
@@ -37,6 +37,7 @@ import { DataTablesModule } from 'angular-datatables';
     NbDialogModule.forChild(),
     //Datatables
     DataTablesModule,
+    
   ]
 })
 export class PersonaModule { }

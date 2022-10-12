@@ -11,13 +11,13 @@ import { DialogNamePromptComponent } from '../../../../modal-overlays/dialog/dia
   styleUrls: ['./listado.component.scss']
 })
 export class ListadoComponent implements OnInit, OnDestroy {
-
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
   subscripciones: Array<Subscription> = [];
   data: any;
+
   constructor(private personaService: PersonaService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService) { }
@@ -46,18 +46,21 @@ export class ListadoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.construir();
-    
+
     //datatables
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       destroy: true,
+
       language: {
         url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json'
-      }
+      },
+
     };
+  
+
   }
 
   ngOnDestroy(): void {

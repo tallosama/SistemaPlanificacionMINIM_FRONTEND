@@ -37,7 +37,6 @@ import { ListadoPersonasComponent } from './Usuario/Registrar/ListarPersonas/lis
   ],
   declarations: [
     PagesComponent,
-    ListadoPersonasComponent,
   ],
 })
 export class PagesModule {
