@@ -152,6 +152,22 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'FEATURES',
     group: true,
+  }, {
+    title: 'Usuarios',
+    icon: 'person-add-outline',
+    link: '/pages/Usuario',
+    children: [
+      {
+        title: 'Registrar',
+        link: '/pages/Usuario/RegistrarUsuario',
+      }
+      // ,
+
+      // {
+      //   title: 'Listar',
+      //   link: '/pages/Usuario/ListarPersona',
+      // }
+    ]
   },
   {
     title: 'Layout',

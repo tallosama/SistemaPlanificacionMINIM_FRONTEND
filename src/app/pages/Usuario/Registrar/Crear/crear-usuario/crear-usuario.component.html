@@ -1,0 +1,23 @@
+<nb-card class="col-md-12 col-lg-12 col-xxxl-12">
+    <nb-card-body>
+        <nb-stepper orientation="horizontal">
+            <nb-step [label]="labelOne">
+                <ng-template #labelOne>Paso #1</ng-template>
+                <h3>#1 Selección del personal</h3>
+
+                <input type="text" nbInput fullWidth shape="round" placeholder="Rounded border">
+
+                <button nbButton disabled nbStepperNext>Atrás</button>
+                <button nbButton nbStepperNext>Siguiente</button>
+            </nb-step>
+
+            <nb-step [label]="labelTwo">
+                <ng-template #labelTwo>Paso #2</ng-template>
+                <h3>#2 Registrar</h3>
+                <button nbButton nbStepperPrevious>Atrás</button>
+                <button nbButton disabled nbStepperNext>Siguiente</button>
+            </nb-step>
+
+        </nb-stepper>
+    </nb-card-body>
+</nb-card>

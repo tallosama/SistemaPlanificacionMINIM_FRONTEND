@@ -7,7 +7,7 @@
       <nb-card-body>
         <form [formGroup]="registrarPersonaForm" (ngSubmit)="guardar()">
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
 
               <div *ngIf="registrarPersonaForm.get('cedula').invalid && registrarPersonaForm.get('cedula').touched">
                 <nb-alert status="danger" *ngIf="registrarPersonaForm.get('cedula').hasError('required')">
@@ -17,7 +17,7 @@
                   La identificación tiene que tener máximo 60 carácteres
                 </nb-alert>
                 <nb-alert status="danger" *ngIf="registrarPersonaForm.get('cedula').hasError('minlength')">
-                  La identificación tiene que poseere mínimo 16 carácteres
+                  La identificación tiene que poseer mínimo 16 carácteres
                 </nb-alert>
               </div>
 
@@ -26,6 +26,26 @@
                 <input type="text" formControlName="cedula" placeholder="000-000000-0000A" nbInput fullWidth>
               </div>
             </div>
+
+            <div class="col-md-4">
+
+              <div
+                *ngIf="registrarPersonaForm.get('areaId').hasError('required') && registrarPersonaForm.get('areaId').touched">
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('tipo').hasError('required')">
+                  El área del usuario es obligatorio
+                </nb-alert>
+              </div>
+
+              <div class="form-group">
+                <label class="label">Área perteneciente</label>
+                <select class="form-control" formControlName="areaId">
+                  <option value="">Seleccione</option>
+                  <option [ngValue]="item" *ngFor="let item of areas">{{item.desArea}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
 
             <div class="col-md-4">
               <div *ngIf="registrarPersonaForm.get('pNombre').invalid && registrarPersonaForm.get('pNombre').touched">
@@ -46,20 +66,43 @@
             </div>
 
             <div class="col-md-4">
+
               <nb-alert status="danger"
                 *ngIf="registrarPersonaForm.get('sNombre').hasError('maxlength') && registrarPersonaForm.get('sNombre').touched">
                 El segundo nombre no puede ser mayor a 32 carácteres
-
               </nb-alert>
+
               <div class="form-group">
                 <label class="label">Segundo nombre</label>
                 <input type="text" formControlName="sNombre" nbInput fullWidth>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+
+              <div *ngIf="registrarPersonaForm.get('tipo').invalid && registrarPersonaForm.get('tipo').touched">
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('tipo').hasError('required')">
+                  El tipo de usuario es obligatorio
+                </nb-alert>
+
+                <nb-alert status="danger" *ngIf="registrarPersonaForm.get('tipo').hasError('maxlength')">
+                  El tipo de usuario no puede ser mayor a 32 carácteres
+                </nb-alert>
+              </div>
+
+              <div class="form-group">
+                <label class="label">Tipo</label>
+                <select class="form-control" formControlName="tipo">
+                  <option value="">Seleccione</option>
+                  <option [value]="item.desArea" *ngFor="let item of areas">{{item.desArea}}</option>
+                </select>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-4">
+
               <div
                 *ngIf="registrarPersonaForm.get('pApellido').invalid && registrarPersonaForm.get('pApellido').touched">
                 <nb-alert status="danger" *ngIf="registrarPersonaForm.get('pApellido').hasError('required')">
@@ -76,59 +119,37 @@
               </div>
             </div>
 
-            <div class="col-md-3">
-
+            <div class="col-md-4">
 
               <nb-alert status="danger"
                 *ngIf="registrarPersonaForm.get('sApellido').hasError('maxlength') && registrarPersonaForm.get('sApellido').touched">
                 Debe de ingresar un dato menor a 32 carácteres
               </nb-alert>
 
-
               <div class="form-group">
                 <label class="label">Segundo apellido</label>
                 <input type="text" formControlName="sApellido" nbInput fullWidth>
               </div>
             </div>
-            <div class="col-md-3">
 
-              <div
-                *ngIf="registrarPersonaForm.get('tipo').invalid && registrarPersonaForm.get('tipo').touched">
-                <nb-alert status="danger"
-                  *ngIf="registrarPersonaForm.get('tipo').hasError('required')">
-                 El tipo de usuario es obligatorio
-                </nb-alert>
 
-                <nb-alert status="danger"
-                  *ngIf="registrarPersonaForm.get('tipo').hasError('maxlength')">
-                 El tipo de usuario no puede ser mayor a 32 carácteres
-                </nb-alert>
-              </div>
-              <div class="form-group">
-                <label class="label">Tipo</label>
-                <select class="form-control" formControlName="tipo">
-                  <option value="">Seleccione</option>
-                  <option [value]="item.desArea" *ngFor="let item of areas">{{item.desArea}}</option>
-                </select>
-              </div>
-            </div>
             <div class="col-md-2">
+
               <nb-alert status="danger"
                 *ngIf="registrarPersonaForm.get('estado').hasError('required') && registrarPersonaForm.get('estado').touched">
                 Debe de seleccionar un estado
               </nb-alert>
+
               <div class="form-group">
                 <label class="label">Estado</label>
-                <select class="form-control" formControlName="estado" >
+                <select class="form-control" formControlName="estado">
                   <option *ngFor="let e of estado" [value]="e.esActivo">{{e.Estado}}</option>
                 </select>
               </div>
+
             </div>
           </div>
-          <!-- 
-          <button id="b1" class="b1" type="submit" [routerLink]="['../ListarPersona']"
-            [disabled]="registrarPersonaForm.invalid" nbButton status="primary">Guardar</button>
-             -->
+
           <button type="submit" [disabled]="registrarPersonaForm.invalid" nbButton status="primary">Guardar</button>
         </form>
       </nb-card-body>

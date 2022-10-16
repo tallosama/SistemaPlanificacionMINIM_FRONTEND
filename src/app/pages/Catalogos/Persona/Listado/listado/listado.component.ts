@@ -4,6 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { PersonaService } from '../../persona.service';
 import { DialogNamePromptComponent } from '../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component';
+import { AreaService } from '../../../Area/area.service';
 
 @Component({
   selector: 'ngx-listado',
@@ -16,9 +17,9 @@ export class ListadoComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
   subscripciones: Array<Subscription> = [];
-  data: any;
-
-  constructor(private personaService: PersonaService,
+  data: any; 
+  constructor( 
+    private personaService: PersonaService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService) { }
 
@@ -47,7 +48,6 @@ export class ListadoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.construir();
-
     //datatables
     this.dtOptions = {
       pagingType: 'full_numbers',

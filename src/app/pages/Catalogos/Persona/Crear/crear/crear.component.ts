@@ -50,6 +50,7 @@ export class CrearComponent implements OnInit, OnDestroy {
         pApellido: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
         sApellido: ['', Validators.maxLength(32)],
         tipo: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
+        areaId: ['', Validators.required],
         estado: [this.estado[0].esActivo, Validators.required],
         usuarioCreacion: [this.usuario, Validators.required],
         fechaCreacion: [this.fecha, Validators.required],
@@ -69,8 +70,6 @@ export class CrearComponent implements OnInit, OnDestroy {
     this.registrarPersonaForm.get('sNombre').reset();
     this.registrarPersonaForm.get('pApellido').reset();
     this.registrarPersonaForm.get('sApellido').reset();
-    this.registrarPersonaForm.get('tipo').reset();
-    this.registrarPersonaForm.get('estado').reset();
 
   }
 

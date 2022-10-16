@@ -18,6 +18,9 @@ export class PersonaService {
   listar():Observable<any>  {
     return this.httpclient.get(ApiServe.API_SERVER+"persona/");
   }
+  listarPorArea(areaId):Observable<any>  {
+    return this.httpclient.get(ApiServe.API_SERVER+"persona/area/"+areaId);
+  }
   buscar(id):Observable<any>  {
     return this.httpclient.get(ApiServe.API_SERVER+"persona/"+id);
   }

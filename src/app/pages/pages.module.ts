@@ -15,7 +15,7 @@ import { ProductoModule } from './Catalogos/Producto/producto.module';
 import { PersonaModule } from './Catalogos/Persona/persona.module';
 import { VehiculoModule } from './Catalogos/Vehiculo/vehiculo.module';
 import { RolModule } from './Catalogos/Rol/rol.module';
-import { ListadoPersonasComponent } from './Usuario/Registrar/ListarPersonas/listado-personas/listado-personas.component';
+import { UsuarioModule } from './Usuario/usuario.module';
 
 @NgModule({
   imports: [
@@ -33,7 +33,8 @@ import { ListadoPersonasComponent } from './Usuario/Registrar/ListarPersonas/lis
     ProductoModule,
     PersonaModule,
     VehiculoModule,
-    RolModule
+    RolModule,
+    UsuarioModule
   ],
   declarations: [
     PagesComponent,

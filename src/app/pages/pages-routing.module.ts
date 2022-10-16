@@ -67,6 +67,11 @@ const routes: Routes = [{
         .then(a => a.RolModule),
     },
     {
+      path: 'Usuario',
+      loadChildren: () => import('./Usuario/usuario.module')
+        .then(a => a.UsuarioModule),
+    },
+    {
       path: 'forms',
       loadChildren: () => import('./forms/forms.module')
         .then(m => m.FormsModule),
