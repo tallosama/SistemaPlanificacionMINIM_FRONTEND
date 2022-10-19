@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogService, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { AreaService } from '../../../../Catalogos/Area/area.service';
 import { PersonaService } from '../../../../Catalogos/Persona/persona.service';
 
 @Component({
@@ -17,13 +19,41 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
   dtTrigger = new Subject();
   subscripciones: Array<Subscription> = [];
   data: any;
-  areaId: number;
+  //autocompletado
+  keyword = "desArea";
+  //areas$: Observable<any>;
+  areas: any = [];
+  personaSeleccionada = null;
+  usuarioForm: FormGroup;
+  fecha = new Date().toISOString().slice(0, 10);
+  usuario = 1;
+
   constructor(private dialogService: NbDialogService,
     private toastrService: NbToastrService,
-    private personaService: PersonaService) { }
+    public fb: FormBuilder,
+    private personaService: PersonaService,
+    private areaService: AreaService) { }
 
-  construir(): void {
-    this.subscripciones.push(this.personaService.listarPorArea(this.areaId).subscribe((resp: any) => {
+
+  reconstruir(area: any): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+
+      this.subscripciones.push(this.personaService.listarPorArea(area.idArea).subscribe((resp: any) => {
+        this.data = resp;
+        this.dtTrigger.next();
+      }, error => {
+        console.error(error);
+        this.showToast('danger', 'Error ' + error.status, 'Mientras se listaban los registros' + error.message, 0);
+
+      }));
+
+
+    });
+  }
+
+  construir(area: any): void {
+    this.subscripciones.push(this.personaService.listarPorArea(area.idArea).subscribe((resp: any) => {
       this.data = resp;
       this.dtTrigger.next();
     }, error => {
@@ -32,7 +62,28 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
 
     }));
   }
+
+  autoCompletadoArea(): void {
+    // this.subscripciones.push(this.areaService.listar().subscribe(resp => this.areas.push(resp)));
+    this.subscripciones.push(this.areaService.listar().subscribe(resp => {
+      this.areas = resp
+
+      ///MEJORAR ESTOOOOOOOO!!!!!!!!!!!!!!!!!!
+      this.construir(resp[0]);
+    },
+      error => {
+        console.error(error);
+        this.showToast('danger', 'Error ' + error.status, 'Mientras se listaban categorías ' + error.message, 0);
+      }
+    ));
+
+  }
+  asignarPersona(persona): void {
+    this.personaSeleccionada = persona;
+  }
+
   ngOnInit(): void {
+    this.autoCompletadoArea();
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -44,6 +95,23 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
       },
 
     };
+
+
+    this.usuarioForm = this.fb.group(
+      {
+        Correo: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
+        Clave: ['', Validators.compose([Validators.required, Validators.maxLength(128)])],
+        Estado: ['', Validators.required],
+        Rol: ['',  Validators.required],
+        PersonaId: [ this.personaSeleccionada.idPersona, Validators.required],
+        usuarioCreacion: [this.usuario, Validators.required],
+        fechaCreacion: [this.fecha, Validators.required],
+        usuarioModificacion: [this.usuario, Validators.required],
+        fechaModificacion: [this.fecha, Validators.required],
+      }
+    );
+
+
 
   }
   ngOnDestroy(): void {

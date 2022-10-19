@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbAlertModule, NbButtonModule, NbCardModule, NbDialogModule, NbInputModule, NbStepperModule  } from '@nebular/theme';
 import { DataTablesModule } from 'angular-datatables'; 
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,8 @@ import { DataTablesModule } from 'angular-datatables';
     DataTablesModule,
     //para mostrar paso a paso
     NbStepperModule,
+    //Modulo de autocompletado
+    AutocompleteLibModule
   ]
 })
 export class UsuarioModule { }

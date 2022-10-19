@@ -48,6 +48,7 @@
     "@nebular/theme": "8.0.0",
     "@swimlane/ngx-charts": "^14.0.0",
     "angular-datatables": "^14.0.0",
+    "angular-ng-autocomplete": "^2.0.12",
     "angular2-chartjs": "0.4.1",
     "bootstrap": "4.3.1",
     "chart.js": "2.7.1",

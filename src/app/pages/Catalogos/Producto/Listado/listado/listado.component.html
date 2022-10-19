@@ -9,7 +9,7 @@
       <nb-card-body>
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
           class="table table-hover table table-striped table-dark row-border hover">
-          <thead class="thead-dark">
+          <thead class="table-dark">
             <tr>
               <th scope="col">Descripción</th>
               <th scope="col">Cantidad mínima</th>
@@ -26,10 +26,10 @@
               <td>{{ p.tipoMaterial }}</td>
               <td>
 
-                <button type="button" class="btn btn-info" [routerLink]="['../EditarProducto', p.idProducto]"> <i
+                <button   class="btn btn-info" [routerLink]="['../EditarProducto', p.idProducto]"> <i
                     class="nb-compose"></i></button>
 
-                <button type="button" (click)="confirmacion(p)" class="btn btn-danger"> <i
+                <button  (click)="confirmacion(p)" class="btn btn-danger"> <i
                     class="nb-trash"></i></button>
 
               </td>

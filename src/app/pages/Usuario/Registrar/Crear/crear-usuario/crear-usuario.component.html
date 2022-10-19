@@ -1,23 +1,77 @@
 <nb-card class="col-md-12 col-lg-12 col-xxxl-12">
-    <nb-card-body>
-        <nb-stepper orientation="horizontal">
-            <nb-step [label]="labelOne">
-                <ng-template #labelOne>Paso #1</ng-template>
-                <h3>#1 Selección del personal</h3>
+  <nb-card-body>
+    <nb-stepper orientation="horizontal">
+      <nb-step [label]="labelOne">
+        <ng-template #labelOne>Paso #1</ng-template>
+        <h3>#1 Selección del personal</h3>
 
-                <input type="text" nbInput fullWidth shape="round" placeholder="Rounded border">
+        <div class="col-md-8 mx-auto">
+          <!--                              Con pipe async
+          <ng-autocomplete [data]="areas$ | async" [searchKeyword]="keyword" [itemTemplate]="itemTemplate"
+            [notFoundTemplate]="notFoundTemplate" placeholder="Ingrese el área" (selected)='reconstruir($event)'>
+          </ng-autocomplete> -->
 
-                <button nbButton disabled nbStepperNext>Atrás</button>
-                <button nbButton nbStepperNext>Siguiente</button>
-            </nb-step>
+          <ng-autocomplete [data]="areas" [searchKeyword]="keyword" [itemTemplate]="itemTemplate"
+            [notFoundTemplate]="notFoundTemplate" placeholder="Ingrese el área" (selected)='reconstruir($event)'>
+          </ng-autocomplete>
 
-            <nb-step [label]="labelTwo">
-                <ng-template #labelTwo>Paso #2</ng-template>
-                <h3>#2 Registrar</h3>
-                <button nbButton nbStepperPrevious>Atrás</button>
-                <button nbButton disabled nbStepperNext>Siguiente</button>
-            </nb-step>
+          <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.desArea"></a>
+          </ng-template>
 
-        </nb-stepper>
-    </nb-card-body>
+          <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+          </ng-template>
+        </div>
+
+
+
+        <nb-card-body>
+          <div class="table-responsive">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Cédula</th>
+                  <th scope="col">Primer nombre</th>
+                  <th scope="col">Segundo nombre</th>
+                  <th scope="col">Primer apellido</th>
+                  <th scope="col">Segundo apellido</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Asignar usuario</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let p of data">
+                  <td>{{ p.cedula }}</td>
+                  <td>{{ p.pNombre }}</td>
+                  <td>{{ p.sNombre }}</td>
+                  <td>{{ p.pApellido }}</td>
+                  <td>{{ p.sApellido }}</td>
+                  <td>{{ p.tipo }}</td>
+                  <td>{{ p.estado?"Activo":"Inactivo" }}</td>
+                  <td>
+                    <button class="btn btn-primary" nbStepperNext (click)='asignarPersona(p)'><i
+                      class="nb-compose"></i></button>
+                      
+                  </td> 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </nb-card-body>
+
+      </nb-step>
+
+      <nb-step [label]="labelTwo">
+        <ng-template #labelTwo>Paso #2</ng-template>
+        <h3>#2 Registrar</h3>
+
+
+        <button nbButton nbStepperPrevious>Atrás</button>
+        <button nbButton disabled nbStepperNext>Siguiente</button>
+      </nb-step>
+
+    </nb-stepper>
+  </nb-card-body>
 </nb-card>

@@ -53,11 +53,10 @@ export class ListadoComponent implements OnInit, OnDestroy {
       pagingType: 'full_numbers',
       pageLength: 10,
       destroy: true,
-
       language: {
         url: '//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json'
       },
-
+     
     };
   
 
