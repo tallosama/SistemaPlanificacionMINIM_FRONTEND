@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogService, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { DataTableDirective } from 'angular-datatables';
 import { Observable, Subject, Subscription } from 'rxjs';
+import { authService } from '../../../../../auth/auth.service';
 import { AreaService } from '../../../../Catalogos/Area/area.service';
 import { PersonaService } from '../../../../Catalogos/Persona/persona.service';
 
@@ -23,16 +24,25 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
   keyword = "desArea";
   //areas$: Observable<any>;
   areas: any = [];
-  personaSeleccionada = null;
+  // personaSeleccionada: any;
   usuarioForm: FormGroup;
   fecha = new Date().toISOString().slice(0, 10);
   usuario = 1;
+  roles = [
+    'Admin',
+    'ASustantivas'
+  ];
+  estado = [
+    { Estado: true, Descripcion: "Activo" },
+    { Estado: false, Descripcion: "Inactivo" }
+  ]
 
   constructor(private dialogService: NbDialogService,
     private toastrService: NbToastrService,
     public fb: FormBuilder,
     private personaService: PersonaService,
-    private areaService: AreaService) { }
+    private areaService: AreaService,
+    private auth: authService) { }
 
 
   reconstruir(area: any): void {
@@ -79,7 +89,22 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
 
   }
   asignarPersona(persona): void {
-    this.personaSeleccionada = persona;
+
+    this.usuarioForm = this.fb.group(
+      {
+        Correo: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
+        uId: ['',],
+        Clave: ['', Validators.compose([Validators.required, Validators.maxLength(128)])],
+        Estado: ['', Validators.required],
+        Rol: ['', Validators.required],
+        PersonaId: [persona.idPersona, Validators.required],
+        usuarioCreacion: [this.usuario, Validators.required],
+        fechaCreacion: [this.fecha, Validators.required],
+        usuarioModificacion: [this.usuario, Validators.required],
+        fechaModificacion: [this.fecha, Validators.required],
+      }
+    );
+
   }
 
   ngOnInit(): void {
@@ -97,19 +122,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     };
 
 
-    this.usuarioForm = this.fb.group(
-      {
-        Correo: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
-        Clave: ['', Validators.compose([Validators.required, Validators.maxLength(128)])],
-        Estado: ['', Validators.required],
-        Rol: ['',  Validators.required],
-        PersonaId: [ this.personaSeleccionada.idPersona, Validators.required],
-        usuarioCreacion: [this.usuario, Validators.required],
-        fechaCreacion: [this.fecha, Validators.required],
-        usuarioModificacion: [this.usuario, Validators.required],
-        fechaModificacion: [this.fecha, Validators.required],
-      }
-    );
+
 
 
 
@@ -118,7 +131,18 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     this.subscripciones.forEach(subs => subs.unsubscribe());
     this.dtTrigger.unsubscribe();
   }
-
+  async guardar() {
+    const resultado = await this.auth.sigin(this.usuarioForm.value).catch(error =>
+      this.showToast('danger', 'Error ' + error.status, 'Mientras se registraba un usuario ' + error, 0)
+    );
+    if (resultado) {
+      this.usuarioForm.get('Clave').setValue(null);
+      this.usuarioForm.get('uId').setValue(resultado.user.uid);
+      await this.auth.coleccionUsuario(this.usuarioForm.value, "Usuario", resultado.user.uid).catch(error =>
+        this.showToast('danger', 'Error ' + error.status, 'Mientras se ingresaban los datos de usuario ' + error, 0)
+      );
+    }
+  }
   //construccion del mensaje
   public showToast(estado: string, titulo: string, cuerpo: string, duracion: number) {
     const config = {

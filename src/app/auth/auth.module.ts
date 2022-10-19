@@ -6,6 +6,7 @@ import { NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbInputM
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxLoginComponent } from './login/login.component'; // <---
 
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 @NgModule({
   imports: [
@@ -31,6 +32,8 @@ import { NgxLoginComponent } from './login/login.component'; // <---
        NbInputModule,
        NbCardModule,
        NbButtonModule,
+       //esto es para almacenar las colecciones de los usuarios
+       AngularFirestoreModule
   ],
   declarations: [
     NgxLoginComponent, // <---

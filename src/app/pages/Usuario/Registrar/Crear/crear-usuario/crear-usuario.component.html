@@ -52,9 +52,9 @@
                   <td>{{ p.estado?"Activo":"Inactivo" }}</td>
                   <td>
                     <button class="btn btn-primary" nbStepperNext (click)='asignarPersona(p)'><i
-                      class="nb-compose"></i></button>
-                      
-                  </td> 
+                        class="nb-compose"></i></button>
+
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -68,8 +68,97 @@
         <h3>#2 Registrar</h3>
 
 
+        <form [formGroup]="usuarioForm" *ngIf="usuarioForm" (ngSubmit)="guardar()">
+          <div class="row">
+            <div class="col-md-6">
+
+
+              <div *ngIf="usuarioForm.get('Correo').invalid && usuarioForm.get('Correo').touched">
+
+                <nb-alert status="danger" *ngIf="usuarioForm.get('Correo').hasError('required')">
+                  El correo es obligatorio
+                </nb-alert>
+
+                <nb-alert status="danger" *ngIf="usuarioForm.get('Correo').hasError('maxlength')">
+                  Debe ingresar un correo menor a 32 carácteres
+                </nb-alert>
+              </div>
+
+              <div class="form-group">
+                <label class="label">Correo</label>
+                <input type="email" formControlName="Correo" nbInput fullWidth />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+
+              <div *ngIf="usuarioForm.get('Clave').invalid && usuarioForm.get('Clave').touched">
+
+                <nb-alert status="danger" *ngIf="usuarioForm.get('Clave').hasError('required')">
+                  La clave es obligatoria
+                </nb-alert>
+
+                <nb-alert status="danger" *ngIf="usuarioForm.get('Clave').hasError('maxlength')">
+                  Debe ingresar una clave menor a 128 carácteres
+                </nb-alert>
+              </div>
+
+              <div class="form-group">
+                <label class="label">Clave</label>
+                <input type="text" formControlName="Clave" nbInput fullWidth>
+              </div>
+
+            </div>
+            <!-- Para confirmar clave -->
+            <!-- <div class="col-md-6">
+               <div class="form-group">
+                <label class="label">Cantidad Miníma</label>
+                <input type="text" formControlName="Correo" nbInput fullWidth>
+              </div>
+            </div> -->
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <!-- <nb-alert status="danger"
+                *ngIf="usuarioForm.get('tipoMaterial').hasError('required') && usuarioForm.get('tipoMaterial').touched">
+                Debe de seleccionar una opción
+              </nb-alert>
+              <div class="form-group">
+                <label class="label">Tipo de material</label>
+                <select class="form-control" formControlName="tipoMaterial">
+                  <option value="">Seleccione</option>
+                  <option *ngFor="let item of tipoMaterial" [value]="item.tipoM">{{item.tipoM}}</option>
+                </select>
+              </div> -->
+
+
+              <div class="form-group">
+                <label class="label">Estado</label>
+                <select class="form-control" formControlName="Estado">
+                  <option *ngFor="let e of estado" [ngValue]="e.Estado">{{e.Descripcion}}</option>
+                </select>
+              </div>
+
+
+
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Rol</label>
+                <select class="form-control" formControlName="Rol">
+                  <option *ngFor="let r of roles" [value]="r">{{r}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button id="b1" class="b1" type="submit" [disabled]="usuarioForm.invalid" nbButton
+            status="primary">Guardar</button>
+        </form>
+
         <button nbButton nbStepperPrevious>Atrás</button>
-        <button nbButton disabled nbStepperNext>Siguiente</button>
+        <!--<button nbButton disabled nbStepperNext>Siguiente</button> -->
       </nb-step>
 
     </nb-stepper>
