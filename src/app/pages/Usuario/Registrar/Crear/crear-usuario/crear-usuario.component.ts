@@ -138,7 +138,11 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     if (resultado) {
       this.usuarioForm.get('Clave').setValue(null);
       this.usuarioForm.get('uId').setValue(resultado.user.uid);
-      await this.auth.coleccionUsuario(this.usuarioForm.value, "Usuario", resultado.user.uid).catch(error =>
+      await this.auth.coleccionUsuario(this.usuarioForm.value, "Usuario", resultado.user.uid).then(r =>
+
+        this.showToast('success', 'Acción realizada', 'Se ha ingresado el registro', 4000)
+
+      ).catch(error =>
         this.showToast('danger', 'Error ' + error.status, 'Mientras se ingresaban los datos de usuario ' + error, 0)
       );
     }
