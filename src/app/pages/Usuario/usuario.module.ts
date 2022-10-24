@@ -1,20 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { UsuarioRoutingModule } from './usuario-routing.module';
-import { ListadoPersonalComponent } from './Registrar/ListarPersonas/listado-personal/listado-personal.component';
-import { CrearUsuarioComponent } from './Registrar/Crear/crear-usuario/crear-usuario.component';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbAlertModule, NbButtonModule, NbCardModule, NbDialogModule, NbInputModule, NbStepperModule  } from '@nebular/theme';
-import { DataTablesModule } from 'angular-datatables'; 
-import { AutocompleteLibModule } from 'angular-ng-autocomplete';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { UsuarioRoutingModule } from "./usuario-routing.module";
+import { CrearUsuarioComponent } from "./Registrar/Crear/crear-usuario/crear-usuario.component";
+import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  NbAlertModule,
+  NbButtonModule,
+  NbCardModule,
+  NbDialogModule,
+  NbInputModule,
+  NbStepperModule,
+} from "@nebular/theme";
+import { DataTablesModule } from "angular-datatables";
+import { AutocompleteLibModule } from "angular-ng-autocomplete";
 
 @NgModule({
-  declarations: [
-    ListadoPersonalComponent,
-    CrearUsuarioComponent,
-
-  ],
+  declarations: [CrearUsuarioComponent],
   imports: [
     CommonModule,
     UsuarioRoutingModule,
@@ -39,7 +41,7 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
     //para mostrar paso a paso
     NbStepperModule,
     //Modulo de autocompletado
-    AutocompleteLibModule
-  ]
+    AutocompleteLibModule,
+  ],
 })
-export class UsuarioModule { }
+export class UsuarioModule {}

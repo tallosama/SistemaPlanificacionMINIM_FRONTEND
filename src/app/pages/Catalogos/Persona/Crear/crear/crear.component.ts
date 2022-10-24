@@ -50,6 +50,7 @@ export class CrearComponent implements OnInit, OnDestroy {
         pApellido: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
         sApellido: ['', Validators.maxLength(32)],
         tipo: ['', Validators.compose([Validators.required, Validators.maxLength(32)])],
+        poseeUsuario: [false, Validators.required],
         areaId: ['', Validators.required],
         estado: [this.estado[0].esActivo, Validators.required],
         usuarioCreacion: [this.usuario, Validators.required],

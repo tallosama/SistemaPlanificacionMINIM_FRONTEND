@@ -1,9 +1,15 @@
 <nb-card>
-  <nb-card-header>¿Desea eliminar el registro?</nb-card-header>
- 
- 
+  <div class="text-center">
+    <nb-card-header>{{ titulo }}</nb-card-header>
+  </div>
   <nb-card-footer>
-    <button class="cancel" nbButton status="danger" (click)="cancel()">Cancelar</button>
-    <button nbButton status="success" (click)="submit()">Aceptar</button>
+    <div class="text-center">
+      <span>{{ cuerpo }}</span>
+      <br /><br />
+      <button class="cancel" nbButton status="danger" (click)="cancel()">
+        Cancelar
+      </button>
+      <button nbButton status="success" (click)="submit()">Aceptar</button>
+    </div>
   </nb-card-footer>
 </nb-card>

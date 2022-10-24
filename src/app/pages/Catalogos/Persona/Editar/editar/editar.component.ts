@@ -57,6 +57,7 @@ export class EditarComponent implements OnInit, OnDestroy {
           pApellido: [res.pApellido, Validators.compose([Validators.required, Validators.maxLength(32)])],
           sApellido: [res.sApellido, Validators.maxLength(32)],
           tipo: [res.tipo, Validators.compose([Validators.required, Validators.maxLength(32)])],
+          poseeUsuario: [res.poseeUsuario, Validators.required],
           estado: [res.estado, Validators.required],
           areaId: [this.areas.find(a=>a.idArea==res.areaId.idArea), Validators.required],
 
