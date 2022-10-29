@@ -11,6 +11,7 @@ import { Observable, Subject, Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
 import { AreaService } from "../../../../Catalogos/Area/area.service";
 import { PersonaService } from "../../../../Catalogos/Persona/persona.service";
+import { RolService } from "../../../../Catalogos/Rol/rol.service";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 
 @Component({
@@ -29,13 +30,14 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
   //autocompletado
   keyword = "desArea";
   //areas$: Observable<any>;
+  roles: any;
   areas: any = [];
   usuarioForm: FormGroup;
   personaSeleccionada: any;
 
   fecha = new Date().toISOString().slice(0, 10);
   usuario = 1;
-  roles = ["Admin", "ASustantivas"];
+  //["Admin", "ASustantivas"];
   estado = [
     { Estado: true, Descripcion: "Activo" },
     { Estado: false, Descripcion: "Inactivo" },
@@ -47,12 +49,17 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     public fb: FormBuilder,
     private personaService: PersonaService,
     private areaService: AreaService,
-    private auth: authService
+    private auth: authService,
+    private rol: RolService
   ) {}
-
+  listarRole(): void {
+    this.rol.listar().subscribe((r) => {
+      this.roles = r;
+    });
+  }
   ngOnInit(): void {
     this.autoCompletadoArea();
-
+    this.listarRole();
     this.dtOptions = {
       pagingType: "full_numbers",
       pageLength: 10,
@@ -154,14 +161,18 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     this.usuarioForm = this.fb.group({
       Correo: [
         "",
-        Validators.compose([Validators.required, Validators.maxLength(32)]),
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(32),
+          Validators.email,
+        ]),
       ],
       uId: [""],
       Clave: [
         "",
         Validators.compose([Validators.required, Validators.maxLength(128)]),
       ],
-      Estado: ["", Validators.required],
+      Estado: [this.estado[0].Estado, Validators.required],
       Rol: ["", Validators.required],
       PersonaId: [persona.idPersona, Validators.required],
       usuarioCreacion: [this.usuario, Validators.required],
@@ -172,47 +183,93 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
   }
 
   async guardar() {
-    const resultado = await this.auth
-      .sigin(this.usuarioForm.value)
-      .catch((error) =>
-        this.showToast(
-          "danger",
-          "Error " + error.status,
-          "Mientras se registraba un usuario " + error,
-          0
-        )
-      );
-    if (resultado) {
-      this.usuarioForm.get("Clave").setValue(null);
-      this.usuarioForm.get("uId").setValue(resultado.user.uid);
-      await this.auth
-        .coleccionUsuario(this.usuarioForm.value, "Usuario", resultado.user.uid)
-        .then((r) => {
-          this.subscripciones.push(
-            this.personaService
-              .editar(
-                this.personaSeleccionada.idPersona,
-                this.personaSeleccionada
-              )
-              .subscribe((r) => {
-                this.showToast(
-                  "success",
-                  "Acción realizada",
-                  "Se ha ingresado el registro",
-                  4000
-                );
-              })
-          );
-        })
+    this.hash256(this.usuarioForm.value.Clave).then(async (clave) => {
+      const resultado = await this.auth
+        .sigin(this.usuarioForm.value.Correo, clave)
         .catch((error) =>
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se ingresaban los datos de usuario " + error,
+            "Mientras se creaba la cuenta de usuario " + error,
             0
           )
         );
-    }
+      if (resultado) {
+        this.usuarioForm.get("uId").setValue(resultado.user.uid);
+        this.usuarioForm.get("Clave").setValue(clave);
+        await this.colecciondeUsuario(resultado);
+        this.actualizarTabla(this.personaSeleccionada);
+        this.limpiar();
+      }
+    });
+  }
+  async colecciondeUsuario(resultado) {
+    await this.auth
+      .coleccionUsuario(this.usuarioForm.value, "Usuario", resultado.user.uid)
+      .then((res) => {
+        this.editarUsuario();
+      })
+      .catch((error) => {
+        this.showToast(
+          "danger",
+          "Error " + error.status,
+          "Mientras se registraban los datos del usuario " + error.code,
+          0
+        );
+      });
+  }
+  private editarUsuario(): void {
+    this.subscripciones.push(
+      this.personaService
+        .editar(this.personaSeleccionada.idPersona, this.personaSeleccionada)
+        .subscribe((r) => {
+          this.showToast(
+            "success",
+            "Acción realizada",
+            "Se ha ingresado el registro",
+            4000
+          );
+        })
+    );
+  }
+
+  actualizarTabla(id: any): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Primero destruimos la instancia de la datatable
+      dtInstance.destroy();
+      //Obtenemos el índice del elemento a eliminar y lo eliminamos de this.data
+      this.data.splice(this.data.indexOf(id), 1); // 1 es la cantidad de elemento a eliminar
+      //reconstrucción de la datatables con los nevos elementos
+      this.dtTrigger.next();
+    });
+  }
+  hash256(clave): any {
+    const utf8 = new TextEncoder().encode(clave);
+    return crypto.subtle.digest("SHA-256", utf8).then((hashBuffer) => {
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray
+        .map((bytes) => bytes.toString(16).padStart(2, "0"))
+        .join("");
+      return hashHex;
+    });
+  }
+  limpiar(): void {
+    this.personaSeleccionada = null;
+    this.usuarioForm.get("Clave").reset();
+    this.usuarioForm.get("Correo").reset();
+    // this.usuarioForm.get("Estado").reset();
+    // this.usuarioForm.get("Rol").reset();
+    this.usuarioForm.get("PersonaId").reset();
+    this.usuarioForm.get("uId").reset();
+  }
+  generarClave(): void {
+    this.usuarioForm
+      .get("Clave")
+      .setValue(
+        this.personaSeleccionada.pNombre[0] +
+          this.personaSeleccionada.pApellido +
+          Math.round(Math.random() * 10000)
+      );
   }
   //construccion del mensaje
   public showToast(

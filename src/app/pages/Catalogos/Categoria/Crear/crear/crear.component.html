@@ -1,30 +1,73 @@
 <div class="row">
   <div class="col-md-12">
     <nb-card>
-      <nb-card-header>
-        Registro de categorías
-      </nb-card-header>
+      <nb-card-header> Registro de categorías </nb-card-header>
       <nb-card-body>
-        <form [formGroup]="registraCategoriaForm" (ngSubmit)="guardar()">
+        <form
+          [formGroup]="categoriaForm"
+          *ngIf="categoriaForm"
+          (ngSubmit)="guardar()"
+        >
           <div class="row">
             <div class="col-md-12">
-              <nb-alert status="danger"
-                *ngIf="registraCategoriaForm.get('descripCategoria').hasError('required') && registraCategoriaForm.get('descripCategoria').touched">
-                Debe de ingresar una descripción menor a 100 carácteres
-              </nb-alert>
               <label class="label">Descripción de categoria</label>
-              <textarea rows="3" formControlName="descripCategoria" nbInput fullWidth></textarea>
+              <textarea
+                rows="3"
+                formControlName="descripCategoria"
+                nbInput
+                fullWidth
+              ></textarea>
+
+              <div
+                *ngIf="
+                  categoriaForm.get('descripCategoria').invalid &&
+                  categoriaForm.get('descripCategoria').touched
+                "
+              >
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    categoriaForm.get('descripCategoria').hasError('required')
+                  "
+                >
+                  La descripción es obligatoria
+                </p>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    categoriaForm.get('descripCategoria').hasError('maxlength')
+                  "
+                >
+                  Debe de ingresar una descripción menor a 100 carácteres
+                </p>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    categoriaForm.get('descripCategoria').hasError('whitespace')
+                  "
+                >
+                  Ingrese una descripción válida
+                </p>
+              </div>
             </div>
           </div>
-          <button type="submit" [disabled]="registraCategoriaForm.invalid" nbButton status="primary">Guardar</button>
+          <button
+            type="submit"
+            [disabled]="categoriaForm.invalid"
+            nbButton
+            status="primary"
+          >
+            Guardar
+          </button>
         </form>
       </nb-card-body>
 
       <nb-card-footer>
         <button (click)="limpiar()" nbButton status="danger">Cancelar</button>
-        <button [routerLink]="['../ListarCategoria']" nbButton status="success"> Atrás</button>
+        <button [routerLink]="['../ListarCategoria']" nbButton status="success">
+          Atrás
+        </button>
       </nb-card-footer>
-
     </nb-card>
   </div>
 </div>

@@ -10,6 +10,7 @@ import {
   NbCardModule,
   NbDialogModule,
   NbInputModule,
+  NbSelectModule,
   NbStepperModule,
 } from "@nebular/theme";
 import { DataTablesModule } from "angular-datatables";
@@ -42,6 +43,8 @@ import { AutocompleteLibModule } from "angular-ng-autocomplete";
     NbStepperModule,
     //Modulo de autocompletado
     AutocompleteLibModule,
+    //para combobox
+    NbSelectModule,
   ],
 })
 export class UsuarioModule {}

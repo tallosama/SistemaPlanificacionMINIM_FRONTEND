@@ -1,189 +1,189 @@
 <div class="row">
   <div class="col-md-12">
     <nb-card>
-      <nb-card-header>
-        Editar producto
-      </nb-card-header>
+      <nb-card-header> Editar producto </nb-card-header>
       <nb-card-body>
-        <form [formGroup]="editarProductoForm" *ngIf="editarProductoForm" (ngSubmit)="editar()">
-          <!-- <div class="row">
-            <div class="col-md-12">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('descripcion').hasError('required') && editarProductoForm.get('descripcion').touched">
-                Debe de ingresar descripción menor de 128 carácteres
-              </nb-alert>
-              <div class="form-group">
-                <label class="label">Descripción</label>
-                <textarea rows="3" formControlName="descripcion" nbInput fullWidth></textarea>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('cantMinima').hasError('required') && editarProductoForm.get('cantMinima').touched">
-                Debe de ingresar una cantidad
-              </nb-alert>
-              <div class="form-group">
-                <label class="label">Cantidad Miníma</label>
-                <input type="text" formControlName="cantMinima" nbInput fullWidth>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('cantStock').hasError('required') && editarProductoForm.get('cantStock').touched">
-                Debe de ingresar una cantidad
-              </nb-alert>
-              <div class="form-group">
-                <label class="label">Stock</label>
-                <input type="text" formControlName="cantStock" nbInput fullWidth>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('tipoMaterial').hasError('required') && editarProductoForm.get('tipoMaterial').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
-              <div class="form-group">
-                <label class="label">Tipo De Material</label>
-                <select class="form-control" formControlName="tipoMaterial">
-                  <option value="">Seleccione</option>
-                  <option *ngFor="let item of tipoMaterial" [value]="item.tipoM">{{item.tipoM}}</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('unidadMedidaId').hasError('required') && editarProductoForm.get('unidadMedidaId').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
-              <div class="form-group">
-                <label class="label">Unidad De Medida</label>
-                <select class="form-control" formControlName="unidadMedidaId">
-                  <option value="">Seleccione</option>
-                  <option *ngFor="let item of unidadMedida" [value]="item.idUnidadMedida">{{item.DescripUnidadMedida}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('categoriaId').hasError('required') && editarProductoForm.get('categoriaId').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
-              <div class="form-group">
-                <label class="label">Categoria</label>
-                <select class="form-control" formControlName="categoriaId">
-                  <option value="">Seleccione</option>
-                  <option *ngFor="let item of categoria" [value]="item.idCategoria">{{item.descripCategoria}}</option>
-                </select>
-              </div>
-            </div>
-          </div> -->
-
+        <form
+          [formGroup]="productoForm"
+          *ngIf="productoForm"
+          (ngSubmit)="editar()"
+        >
           <div class="row">
             <div class="col-md-12">
-
-
               <!-- Control de errores para la descripción -->
-              <div
-                *ngIf="editarProductoForm.get('descripcion').invalid && editarProductoForm.get('descripcion').touched">
-
-                <nb-alert status="danger" *ngIf="editarProductoForm.get('descripcion').hasError('required')">
-                  La descripción es obligatoria
-                </nb-alert>
-
-                <nb-alert status="danger" *ngIf="editarProductoForm.get('descripcion').hasError('maxlength')">
-                  Debe de ingresar descripción menor o igual a 128 carácteres
-                </nb-alert>
-              </div>
 
               <div class="form-group">
                 <label class="label">Descripción</label>
-                <textarea rows="3" formControlName="descripcion" nbInput fullWidth></textarea>
+                <textarea
+                  rows="3"
+                  formControlName="descripcion"
+                  nbInput
+                  fullWidth
+                ></textarea>
+
+                <div
+                  *ngIf="
+                    productoForm.get('descripcion').invalid &&
+                    productoForm.get('descripcion').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="productoForm.get('descripcion').hasError('required')"
+                  >
+                    La descripción es obligatoria
+                  </p>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      productoForm.get('descripcion').hasError('maxlength')
+                    "
+                  >
+                    Debe de ingresar descripción menor o igual a 128 carácteres
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      productoForm.get('descripcion').hasError('whitespace')
+                    "
+                  >
+                    Ingrese una descripción válida
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="row">
-            <div class="col-md-6">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('cantMinima').hasError('required') && editarProductoForm.get('cantMinima').touched">
-                Debe de ingresar una cantidad
-              </nb-alert>
+            <!-- <div class="col-md-6">
               <div class="form-group">
                 <label class="label">Cantidad Miníma</label>
-                <input type="number" formControlName="cantMinima" nbInput fullWidth>
+                <input
+                  type="number"
+                  formControlName="cantMinima"
+                  nbInput
+                  fullWidth
+                />
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('cantMinima').hasError('required') &&
+                    productoForm.get('cantMinima').touched
+                  "
+                >
+                  Debe de ingresar una cantidad
+                </p>
               </div>
-            </div>
+            </div> -->
             <div class="col-md-6">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('cantStock').hasError('required') && editarProductoForm.get('cantStock').touched">
-                Debe de ingresar una cantidad
-              </nb-alert>
               <div class="form-group">
                 <label class="label">Stock</label>
-                <input type="number" formControlName="cantStock" nbInput fullWidth>
+                <input
+                  type="number"
+                  formControlName="cantStock"
+                  nbInput
+                  fullWidth
+                  disabled
+                />
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('cantStock').hasError('required') &&
+                    productoForm.get('cantStock').touched
+                  "
+                >
+                  Debe de ingresar una cantidad
+                </p>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-4">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('tipoMaterial').hasError('required') && editarProductoForm.get('tipoMaterial').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
               <div class="form-group">
                 <label class="label">Tipo de material</label>
                 <select class="form-control" formControlName="tipoMaterial">
                   <option value="">Seleccione</option>
-                  <option *ngFor="let item of tipoMaterial" [value]="item.tipoM">{{item.tipoM}}</option>
+                  <option
+                    *ngFor="let item of tipoMaterial"
+                    [value]="item.tipoM"
+                  >
+                    {{ item.tipoM }}
+                  </option>
                 </select>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('tipoMaterial').hasError('required') &&
+                    productoForm.get('tipoMaterial').touched
+                  "
+                >
+                  Debe de seleccionar una opción
+                </p>
               </div>
             </div>
             <div class="col-md-4">
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('unidadMedidaId').hasError('required') && editarProductoForm.get('unidadMedidaId').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
               <div class="form-group">
                 <label class="label">Unidad de medida</label>
                 <select class="form-control" formControlName="unidadMedidaId">
                   <option value="">Seleccione</option>
-                  <option *ngFor="let item of unidadMedida" [ngValue]="item">{{item.descripUnidadMedida}}
+                  <option *ngFor="let item of unidadMedida" [ngValue]="item">
+                    {{ item.descripUnidadMedida }}
                   </option>
                 </select>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('unidadMedidaId').hasError('required') &&
+                    productoForm.get('unidadMedidaId').touched
+                  "
+                >
+                  Debe de seleccionar una opción
+                </p>
               </div>
             </div>
             <div class="col-md-4">
-
-              <nb-alert status="danger"
-                *ngIf="editarProductoForm.get('categoriaId').hasError('required') && editarProductoForm.get('categoriaId').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
-
               <div class="form-group">
                 <label class="label">Categoria</label>
                 <select class="form-control" formControlName="categoriaId">
                   <option value="">Seleccione</option>
-                  <option *ngFor="let item of categoria" [ngValue]="item">{{item.descripCategoria}}</option>
+                  <option *ngFor="let item of categoria" [ngValue]="item">
+                    {{ item.descripCategoria }}
+                  </option>
                 </select>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('categoriaId').hasError('required') &&
+                    productoForm.get('categoriaId').touched
+                  "
+                >
+                  Debe de seleccionar una opción
+                </p>
               </div>
             </div>
           </div>
-
-          <button id="b1" class="b1" type="submit" [disabled]="editarProductoForm.invalid" nbButton
-            status="primary">Editar</button>
-
+          <button
+            id="b1"
+            class="b1"
+            type="submit"
+            [disabled]="productoForm.invalid"
+            nbButton
+            status="primary"
+          >
+            Editar
+          </button>
         </form>
       </nb-card-body>
       <nb-card-footer>
-        <button [routerLink]="['../../ListarProducto']" nbButton status="success"> Atrás</button>
+        <button
+          [routerLink]="['../../ListarProducto']"
+          nbButton
+          status="success"
+        >
+          Atrás
+        </button>
       </nb-card-footer>
     </nb-card>
   </div>

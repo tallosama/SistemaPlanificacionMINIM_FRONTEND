@@ -3,23 +3,57 @@
     <nb-card>
       <nb-card-header>Registrar áreas</nb-card-header>
       <nb-card-body>
-        <form [formGroup]="areaForm" (ngSubmit)="guardar()">
-          <nb-alert status="danger"
-            *ngIf="areaForm.get('desArea').hasError('required') && areaForm.get('desArea').touched">Debe de ingresar una
-            descripción menor a 512 carácteres</nb-alert>
-          <textarea rows="5" formControlName="desArea" nbInput fullWidth shape="round"
-            placeholder="Descripción del área"></textarea>
-        
+        <form [formGroup]="areaForm" *ngIf="areaForm" (ngSubmit)="guardar()">
+          <textarea
+            rows="5"
+            formControlName="desArea"
+            nbInput
+            fullWidth
+            shape="round"
+            placeholder="Descripción del área"
+          ></textarea>
+          <div
+            *ngIf="
+              areaForm.get('desArea').invalid && areaForm.get('desArea').touched
+            "
+          >
+            <p
+              class="caption status-danger"
+              *ngIf="areaForm.get('desArea').hasError('required')"
+            >
+              La descripción es obligatoria
+            </p>
+            <p
+              class="caption status-danger"
+              *ngIf="areaForm.get('desArea').hasError('maxlength')"
+            >
+              Debe de ingresar una descripción menor a 512 carácteres
+            </p>
+            <p
+              class="caption status-danger"
+              *ngIf="areaForm.get('desArea').hasError('whitespace')"
+            >
+              Ingrese una descripción válida
+            </p>
+          </div>
 
-          <button type="submit" [disabled]="areaForm.invalid" nbButton status="success">Guardar</button>
+          <button
+            type="submit"
+            [disabled]="areaForm.invalid"
+            nbButton
+            status="success"
+          >
+            Guardar
+          </button>
         </form>
       </nb-card-body>
 
       <nb-card-footer>
         <button (click)="limpiar()" nbButton status="danger">Cancelar</button>
-        <button [routerLink]="['../ListarAreas']" nbButton status="success"> Atrás</button>
+        <button [routerLink]="['../ListarAreas']" nbButton status="success">
+          Atrás
+        </button>
       </nb-card-footer>
-
     </nb-card>
   </div>
 </div>

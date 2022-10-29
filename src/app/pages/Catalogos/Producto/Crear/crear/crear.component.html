@@ -1,113 +1,190 @@
 <div class="row">
   <div class="col-md-12">
     <nb-card>
-      <nb-card-header>
-        Registro de Productos
-      </nb-card-header>
+      <nb-card-header> Registro de Productos </nb-card-header>
       <nb-card-body>
-        <form [formGroup]="registrarProductoForm" (ngSubmit)="guardar()">
+        <form
+          [formGroup]="productoForm"
+          *ngIf="productoForm"
+          (ngSubmit)="guardar()"
+        >
           <div class="row">
             <div class="col-md-12">
-
-
               <!-- Control de errores para la descripción -->
-              <div
-                *ngIf="registrarProductoForm.get('descripcion').invalid && registrarProductoForm.get('descripcion').touched">
-
-                <nb-alert status="danger" *ngIf="registrarProductoForm.get('descripcion').hasError('required')">
-                  La descripción es obligatoria
-                </nb-alert>
-
-                <nb-alert status="danger" *ngIf="registrarProductoForm.get('descripcion').hasError('maxlength')">
-                  Debe de ingresar descripción menor o igual a 128 carácteres
-                </nb-alert>
-              </div>
 
               <div class="form-group">
                 <label class="label">Descripción</label>
-                <textarea rows="3" formControlName="descripcion" nbInput fullWidth></textarea>
+                <textarea
+                  rows="3"
+                  formControlName="descripcion"
+                  nbInput
+                  fullWidth
+                ></textarea>
+
+                <div
+                  *ngIf="
+                    productoForm.get('descripcion').invalid &&
+                    productoForm.get('descripcion').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="productoForm.get('descripcion').hasError('required')"
+                  >
+                    La descripción es obligatoria
+                  </p>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      productoForm.get('descripcion').hasError('maxlength')
+                    "
+                  >
+                    Debe de ingresar descripción menor o igual a 128 carácteres
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      productoForm.get('descripcion').hasError('whitespace')
+                    "
+                  >
+                    Ingrese una descripción válida
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="row">
-            <div class="col-md-6">
-              <nb-alert status="danger"
-                *ngIf="registrarProductoForm.get('cantMinima').hasError('required') && registrarProductoForm.get('cantMinima').touched">
-                Debe de ingresar una cantidad
-              </nb-alert>
+            <!-- <div class="col-md-6">
               <div class="form-group">
                 <label class="label">Cantidad Miníma</label>
-                <input type="number" formControlName="cantMinima" nbInput fullWidth>
+                <input
+                  type="number"
+                  formControlName="cantMinima"
+                  nbInput
+                  fullWidth
+                />
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('cantMinima').hasError('required') &&
+                    productoForm.get('cantMinima').touched
+                  "
+                >
+                  Debe de ingresar una cantidad
+                </p>
               </div>
-            </div>
+            </div> -->
             <div class="col-md-6">
-              <nb-alert status="danger"
-                *ngIf="registrarProductoForm.get('cantStock').hasError('required') && registrarProductoForm.get('cantStock').touched">
-                Debe de ingresar una cantidad
-              </nb-alert>
               <div class="form-group">
                 <label class="label">Stock</label>
-                <input type="number" formControlName="cantStock" nbInput fullWidth>
+                <input
+                  type="number"
+                  formControlName="cantStock"
+                  nbInput
+                  fullWidth
+                />
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('cantStock').hasError('required') &&
+                    productoForm.get('cantStock').touched
+                  "
+                >
+                  Debe de ingresar una cantidad
+                </p>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-4">
-              <nb-alert status="danger"
-                *ngIf="registrarProductoForm.get('tipoMaterial').hasError('required') && registrarProductoForm.get('tipoMaterial').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
               <div class="form-group">
                 <label class="label">Tipo de material</label>
                 <select class="form-control" formControlName="tipoMaterial">
                   <option value="">Seleccione</option>
-                  <option *ngFor="let item of tipoMaterial" [value]="item.tipoM">{{item.tipoM}}</option>
+                  <option
+                    *ngFor="let item of tipoMaterial"
+                    [value]="item.tipoM"
+                  >
+                    {{ item.tipoM }}
+                  </option>
                 </select>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('tipoMaterial').hasError('required') &&
+                    productoForm.get('tipoMaterial').touched
+                  "
+                >
+                  Debe de seleccionar una opción
+                </p>
               </div>
             </div>
             <div class="col-md-4">
-              <nb-alert status="danger"
-                *ngIf="registrarProductoForm.get('unidadMedidaId').hasError('required') && registrarProductoForm.get('unidadMedidaId').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
               <div class="form-group">
                 <label class="label">Unidad de medida</label>
                 <select class="form-control" formControlName="unidadMedidaId">
                   <option value="">Seleccione</option>
-                  <option *ngFor="let item of unidadMedida" [ngValue]="item">{{item.descripUnidadMedida}}
+                  <option *ngFor="let item of unidadMedida" [ngValue]="item">
+                    {{ item.descripUnidadMedida }}
                   </option>
                 </select>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('unidadMedidaId').hasError('required') &&
+                    productoForm.get('unidadMedidaId').touched
+                  "
+                >
+                  Debe de seleccionar una opción
+                </p>
               </div>
             </div>
             <div class="col-md-4">
-
-              <nb-alert status="danger"
-                *ngIf="registrarProductoForm.get('categoriaId').hasError('required') && registrarProductoForm.get('categoriaId').touched">
-                Debe de seleccionar una opción
-              </nb-alert>
-
               <div class="form-group">
                 <label class="label">Categoria</label>
                 <select class="form-control" formControlName="categoriaId">
                   <option value="">Seleccione</option>
-                  <option *ngFor="let item of categoria" [ngValue]="item">{{item.descripCategoria}}</option>
+                  <option *ngFor="let item of categoria" [ngValue]="item">
+                    {{ item.descripCategoria }}
+                  </option>
                 </select>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    productoForm.get('categoriaId').hasError('required') &&
+                    productoForm.get('categoriaId').touched
+                  "
+                >
+                  Debe de seleccionar una opción
+                </p>
               </div>
             </div>
           </div>
 
-          <button id="b1" class="b1" type="submit" [disabled]="registrarProductoForm.invalid" nbButton
-            status="primary">Guardar</button>
+          <button
+            id="b1"
+            class="b1"
+            type="submit"
+            [disabled]="productoForm.invalid"
+            nbButton
+            status="primary"
+          >
+            Guardar
+          </button>
         </form>
       </nb-card-body>
 
       <nb-card-footer>
-        <button (click)="limpiar()" nbButton status="danger">Cancelar</button>
-        <button [routerLink]="['../ListarProducto']" nbButton status="success"> Atrás</button>
+        <button (click)="limpiar()" nbButton class="caption status-danger">
+          Cancelar
+        </button>
+        <button [routerLink]="['../ListarProducto']" nbButton status="success">
+          Atrás
+        </button>
       </nb-card-footer>
     </nb-card>
   </div>
-
 </div>

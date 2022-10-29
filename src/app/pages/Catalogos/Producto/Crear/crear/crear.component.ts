@@ -1,103 +1,162 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NbGlobalPhysicalPosition, NbToastrService, NbToastrConfig, } from '@nebular/theme';
-import { ProductoService } from '../../producto.service';
-import { CategoriaService } from '../../../Categoria/categoria.service';
-import { MedidaService } from '../../../UnidadMedida/medida.service';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import {
+  NbGlobalPhysicalPosition,
+  NbToastrService,
+  NbToastrConfig,
+} from "@nebular/theme";
+import { ProductoService } from "../../producto.service";
+import { CategoriaService } from "../../../Categoria/categoria.service";
+import { MedidaService } from "../../../UnidadMedida/medida.service";
+import { Subscription } from "rxjs";
+import { authService } from "../../../../../auth/auth.service";
 
 @Component({
-  selector: 'ngx-crear',
-  templateUrl: './crear.component.html',
-  styleUrls: ['./crear.component.scss']
+  selector: "ngx-crear",
+  templateUrl: "./crear.component.html",
+  styleUrls: ["./crear.component.scss"],
 })
 export class CrearComponent implements OnInit, OnDestroy {
-
   fecha = new Date().toISOString().slice(0, 10);
-  usuario = 1;
-  registrarProductoForm: FormGroup;
+  productoForm: FormGroup;
   //inicializadores del mensaje toast
   config: NbToastrConfig;
-  tipoMaterial = [
-    { tipoM: "Bien de uso" },
-    { tipoM: "Consumible" }
-  ];
+  tipoMaterial = [{ tipoM: "Bien de uso" }, { tipoM: "Consumible" }];
   categoria: any;
   unidadMedida: any;
   subscripciones: Array<Subscription> = [];
 
-  constructor(private toastrService: NbToastrService,
+  constructor(
+    private toastrService: NbToastrService,
     public fb: FormBuilder,
     public productoService: ProductoService,
     public categoriaService: CategoriaService,
-    public unidadMedidaService: MedidaService) { }
-
+    public unidadMedidaService: MedidaService,
+    public auth: authService
+  ) {}
 
   ngOnInit(): void {
-    this.registrarProductoForm = this.fb.group(
-      {
-        descripcion: ['', Validators.compose([Validators.required, Validators.maxLength(128)])],
-        cantMinima: ['', Validators.required],
-        cantStock: ['', Validators.required],
-        tipoMaterial: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-        unidadMedidaId: ['', Validators.required],
-        categoriaId: ['', Validators.required],
-        usuarioCreacion: [this.usuario, Validators.required],
-        fechaCreacion: [this.fecha, Validators.required],
-        usuarioModificacion: [this.usuario, Validators.required],
-        fechaModificacion: [this.fecha, Validators.required],
-      }
-    );
-
-    this.subscripciones.push(this.categoriaService.listar().subscribe(resp => {
-      this.categoria = resp;
-    },
-      error => {
-        console.error(error);
-        this.showToast('danger', 'Error ' + error.status, 'Mientras se listaban categorías ' + error.message, 0);
-      }
-    ));
-
-    this.subscripciones.push(this.unidadMedidaService.listar().subscribe(resp => {
-      this.unidadMedida = resp;
-    },
-      error => {
-        console.error(error);
-        this.showToast('danger', 'Error ' + error.status, 'Mientras se listaban unidades de medida ' + error.message, 0);
-      }
-    )
-    );
+    this.llenadoCombobox();
+    this.cargarForm(this.auth.getUserStorage());
   }
   ngOnDestroy(): void {
-    this.subscripciones.forEach(s => s.unsubscribe);
+    this.subscripciones.forEach((s) => s.unsubscribe);
   }
+  llenadoCombobox() {
+    this.subscripciones.push(
+      this.categoriaService.listar().subscribe(
+        (resp) => {
+          this.categoria = resp;
+        },
+        (error) => {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "Error " + error.status,
+            "Mientras se listaban categorías " + error.message,
+            0
+          );
+        }
+      )
+    );
+
+    this.subscripciones.push(
+      this.unidadMedidaService.listar().subscribe(
+        (resp) => {
+          this.unidadMedida = resp;
+        },
+        (error) => {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "Error " + error.status,
+            "Mientras se listaban unidades de medida " + error.message,
+            0
+          );
+        }
+      )
+    );
+  }
+
+  private cargarForm(usuario) {
+    this.productoForm = this.fb.group({
+      descripcion: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(128),
+          this.noWhitespaceValidator,
+        ]),
+      ],
+      // cantMinima: ["", Validators.required],
+      cantStock: ["", Validators.required],
+      tipoMaterial: [
+        "",
+        Validators.compose([Validators.required, Validators.maxLength(50)]),
+      ],
+      unidadMedidaId: ["", Validators.required],
+      categoriaId: ["", Validators.required],
+      usuarioCreacion: [usuario.uid, Validators.required],
+      fechaCreacion: [this.fecha, Validators.required],
+      usuarioModificacion: [usuario.uid, Validators.required],
+      fechaModificacion: [this.fecha, Validators.required],
+    });
+  }
+  public noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || "").trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { whitespace: true };
+  }
+
   limpiar(): void {
-    this.registrarProductoForm.get('descripcion').reset();
-    this.registrarProductoForm.get('cantMinima').reset();
-    this.registrarProductoForm.get('cantStock').reset();
+    this.productoForm.get("descripcion").reset();
+    //this.productoForm.get("cantMinima").reset();
+    this.productoForm.get("cantStock").reset();
 
-    // this.registrarProductoForm.get('tipoMaterial').reset();
-    // this.registrarProductoForm.get('unidadMedidaId').reset();
-    // this.registrarProductoForm.get('categoriaId').reset();
+    // this.productoForm.get('tipoMaterial').reset();
+    // this.productoForm.get('unidadMedidaId').reset();
+    // this.productoForm.get('categoriaId').reset();
   }
-
 
   guardar(): void {
-    this.subscripciones.push(this.productoService.guardar(this.registrarProductoForm.value).subscribe(resp => {
+    this.subscripciones.push(
+      this.productoService.guardar(this.productoForm.value).subscribe(
+        (resp) => {
+          this.showToast(
+            "success",
+            "Acción realizada",
+            "Se ha ingresado el registro",
+            4000
+          );
 
-      this.showToast('success', 'Acción realizada', 'Se ha ingresado el registro', 4000);
-
-      this.limpiar();
-    },
-      error => {
-        console.error(error);
-        this.showToast('danger', 'Error ' + error.status, 'Verifique que no exista un registro con el mismo nombre ' + error.message, 0);
-      }
-    ));
+          this.limpiar();
+        },
+        (error) => {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "Error " + error.status,
+            "Verifique que no exista un registro con el mismo nombre " +
+              error.message,
+            0
+          );
+        }
+      )
+    );
   }
 
   //construccion del mensaje
-  public showToast(estado: string, titulo: string, cuerpo: string, duracion: number) {
+  public showToast(
+    estado: string,
+    titulo: string,
+    cuerpo: string,
+    duracion: number
+  ) {
     const config = {
       status: estado,
       destroyByClick: true,
@@ -107,9 +166,6 @@ export class CrearComponent implements OnInit, OnDestroy {
       preventDuplicates: false,
     };
 
-    this.toastrService.show(
-      cuerpo,
-      `${titulo}`,
-      config);
+    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

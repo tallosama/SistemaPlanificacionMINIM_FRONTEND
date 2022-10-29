@@ -1,25 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { authService } from '../../auth/auth.service';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NbGlobalPhysicalPosition, NbToastrService } from "@nebular/theme";
+import { authService } from "../../auth/auth.service";
 @Component({
-  selector: 'ngx-login',
-  templateUrl: './login.component.html',
+  selector: "ngx-login",
+  templateUrl: "./login.component.html",
 })
 export class NgxLoginComponent implements OnInit {
   loginForm: FormGroup;
   respuesta: string = "";
-  constructor(public fb: FormBuilder, private authService: authService, private router: Router,
-    private route: ActivatedRoute, private toastrService: NbToastrService) { }
- 
-    ngOnInit(): void {
-    this.loginForm = this.fb.group(
-      {
-        correo: ['', Validators.compose([Validators.required, Validators.email])],
-        clave: ['', Validators.required],
-      }
-    );
+  constructor(
+    public fb: FormBuilder,
+    private authService: authService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private toastrService: NbToastrService
+  ) {}
+
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      correo: ["", Validators.compose([Validators.required, Validators.email])],
+      clave: ["", Validators.required],
+    });
   }
   private errores(code: any) {
     if (code === "auth/invalid-email") {
@@ -34,29 +37,50 @@ export class NgxLoginComponent implements OnInit {
     if (code === "auth/wrong-password") {
       return "Contraseña errónea";
     }
-    if(code==="auth/too-many-requests")
-    {
-      return "La cuenta ha sido suspendida porque se ha intentado acceder varias veces"
+    if (code === "auth/too-many-requests") {
+      return "La cuenta ha sido suspendida porque se ha intentado acceder varias veces";
     }
     return "Error desconocido " + code;
   }
   async login() {
-    await this.authService.login(this.loginForm.value).then(r => {
-    
-      this.showToast('success', 'Bienvenido', 'Se ha iniciado sesión ', 4000);
-      
-      this.router.navigate(['/'], { relativeTo: this.route });
-      
-    }).catch(e => {
-      console.error(e);
-     
-      this.respuesta = this.errores(e.code);
+    this.hash256(this.loginForm.controls.clave.value).then(async (clave) => {
+      await this.authService
+        .login(this.loginForm.controls.correo.value, clave)
+        .then((r) => {
+          this.showToast(
+            "success",
+            "Bienvenido",
+            "Se ha iniciado sesión ",
+            4000
+          );
+
+          this.router.navigate(["/"], { relativeTo: this.route });
+        })
+        .catch((e) => {
+          console.error(e);
+
+          this.respuesta = this.errores(e.code);
+        });
     });
-    
   }
 
+  hash256(clave): any {
+    const utf8 = new TextEncoder().encode(clave);
+    return crypto.subtle.digest("SHA-256", utf8).then((hashBuffer) => {
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray
+        .map((bytes) => bytes.toString(16).padStart(2, "0"))
+        .join("");
+      return hashHex;
+    });
+  }
   //construccion del mensaje
-  public showToast(estado: string, titulo: string, cuerpo: string, duracion: number) {
+  public showToast(
+    estado: string,
+    titulo: string,
+    cuerpo: string,
+    duracion: number
+  ) {
     const config = {
       status: estado,
       destroyByClick: true,
@@ -66,10 +90,6 @@ export class NgxLoginComponent implements OnInit {
       preventDuplicates: false,
     };
 
-    this.toastrService.show(
-      cuerpo,
-      `${titulo}`,
-      config);
+    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
-
 }

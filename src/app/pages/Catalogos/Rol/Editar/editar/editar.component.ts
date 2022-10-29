@@ -1,69 +1,115 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import {NbGlobalPhysicalPosition,NbToastrService,NbToastrConfig,} from '@nebular/theme'; 
-import { RolService } from '../../rol.service';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import {
+  NbGlobalPhysicalPosition,
+  NbToastrService,
+  NbToastrConfig,
+} from "@nebular/theme";
+import { RolService } from "../../rol.service";
+import { Subscription } from "rxjs";
+import { authService } from "../../../../../auth/auth.service";
 
 @Component({
-  selector: 'ngx-editar',
-  templateUrl: './editar.component.html',
-  styleUrls: ['./editar.component.scss']
+  selector: "ngx-editar",
+  templateUrl: "./editar.component.html",
+  styleUrls: ["./editar.component.scss"],
 })
-export class EditarComponent implements OnInit,OnDestroy {
-
+export class EditarComponent implements OnInit, OnDestroy {
   fecha = new Date().toISOString().slice(0, 10);
-  usuario = 1;
-  editarRolForm: FormGroup;
+  rolForm: FormGroup;
   id: number;
   //inicializadores del mensaje toast
   config: NbToastrConfig;
   subscripciones: Array<Subscription> = [];
 
-  constructor(public fb: FormBuilder,
+  constructor(
+    public fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private toastrService: NbToastrService,
-    public rolService: RolService) { }
+    public rolService: RolService,
+    private auth: authService
+  ) {}
 
   ngOnInit(): void {
-   this.id = this.route.snapshot.params['id'];
+    this.id = this.route.snapshot.params["id"];
+    this.cargarForm(this.auth.getUserStorage());
+  }
+  ngOnDestroy(): void {
+    this.subscripciones.forEach((s) => s.unsubscribe);
+  }
+  public cargarForm(usuario) {
     this.subscripciones.push(
-      this.rolService.buscar(this.id).subscribe(res => {
-        this.editarRolForm = this.fb.group(
-          {
-            desRol: [res.desRol, Validators.compose([Validators.required,  Validators.maxLength(512)])],
-            usuarioModificacion: [this.usuario, Validators.required],
+      this.rolService.buscar(this.id).subscribe(
+        (res) => {
+          this.rolForm = this.fb.group({
+            desRol: [
+              res.desRol,
+              Validators.compose([
+                Validators.required,
+                Validators.maxLength(512),
+                this.noWhitespaceValidator,
+              ]),
+            ],
+            usuarioModificacion: [usuario.uid, Validators.required],
             fechaModificacion: [this.fecha, Validators.required],
-          }
-        );
-      },
-        error => {
+          });
+        },
+        (error) => {
           console.error(error);
-          this.showToast('danger', 'Error ' + error.status, 'Mientras se buscaba un registro ' + error.message, 0);
+          this.showToast(
+            "danger",
+            "Error " + error.status,
+            "Mientras se buscaba un registro " + error.message,
+            0
+          );
         }
       )
     );
-  } 
-  ngOnDestroy(): void {
-    this.subscripciones.forEach(s => s.unsubscribe);
   }
-
+  public noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || "").trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { whitespace: true };
+  }
   public editar(): void {
-    this.subscripciones.push(this.rolService.editar(this.id, this.editarRolForm.value).subscribe(resp => {
-      this.router.navigate(['../../ListarRol'], { relativeTo: this.route });
-      this.showToast('success', 'Acción realizada', 'Se ha editado el registro', 4000);
-
-    },
-      error => {
-        console.error(error);
-        this.showToast('danger', 'Error ' + error.status, 'Verifique que no exista un registro con el mismo nombre ' + error.message, 0);
-      }
-    ));
-
+    this.subscripciones.push(
+      this.rolService.editar(this.id, this.rolForm.value).subscribe(
+        (resp) => {
+          this.router.navigate(["../../ListarRol"], { relativeTo: this.route });
+          this.showToast(
+            "success",
+            "Acción realizada",
+            "Se ha editado el registro",
+            4000
+          );
+        },
+        (error) => {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "Error " + error.status,
+            "Verifique que no exista un registro con el mismo nombre " +
+              error.message,
+            0
+          );
+        }
+      )
+    );
   }
-   //construccion del mensaje
-   public showToast(estado: string, titulo: string, cuerpo: string, duracion: number) {
+  //construccion del mensaje
+  public showToast(
+    estado: string,
+    titulo: string,
+    cuerpo: string,
+    duracion: number
+  ) {
     const config = {
       status: estado,
       destroyByClick: true,
@@ -73,9 +119,6 @@ export class EditarComponent implements OnInit,OnDestroy {
       preventDuplicates: false,
     };
 
-    this.toastrService.show(
-      cuerpo,
-      `${titulo}`,
-      config);
+    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

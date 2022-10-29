@@ -1,28 +1,60 @@
 <div class="row">
   <div class="col-md-12">
     <nb-card>
-      <nb-card-header>
-        Registro de roles
-      </nb-card-header>
+      <nb-card-header> Registro de roles </nb-card-header>
       <nb-card-body>
-        <form [formGroup]="registrarRolForm" (ngSubmit)="guardar()">
+        <form [formGroup]="rolForm" *ngIf="rolForm" (ngSubmit)="guardar()">
           <div class="row">
             <div class="col-md-12">
-              <nb-alert status="danger"
-                *ngIf="registrarRolForm.get('desRol').hasError('required') && registrarRolForm.get('desRol').touched">
-                Debe de ingresar una descripción menor a 512 carácteres
-              </nb-alert>
               <label class="label">Descripción del rol</label>
-              <textarea rows="3" formControlName="desRol" nbInput fullWidth></textarea>
+              <textarea
+                rows="3"
+                formControlName="desRol"
+                nbInput
+                fullWidth
+              ></textarea>
+              <div
+                *ngIf="
+                  rolForm.get('desRol').touched && rolForm.get('desRol').invalid
+                "
+              >
+                <p
+                  class="caption status-danger"
+                  *ngIf="rolForm.get('desRol').hasError('required')"
+                >
+                  La descripción es requerida
+                </p>
+                <p
+                  class="caption status-danger"
+                  *ngIf="rolForm.get('desRol').hasError('maxlength')"
+                >
+                  Debe de ingresar una descripción menor a 512 carácteres
+                </p>
+
+                <p
+                  class="caption status-danger"
+                  *ngIf="rolForm.get('desRol').hasError('whitespace')"
+                >
+                  Ingrese una descripción válida
+                </p>
+              </div>
             </div>
           </div>
-          <button type="submit" [disabled]="registrarRolForm.invalid" nbButton status="success">Guardar</button>
-
+          <button
+            type="submit"
+            [disabled]="rolForm.invalid"
+            nbButton
+            status="success"
+          >
+            Guardar
+          </button>
         </form>
       </nb-card-body>
       <nb-card-footer>
         <button (click)="limpiar()" nbButton status="danger">Cancelar</button>
-        <button [routerLink]="['../ListarRol']" nbButton status="success"> Atrás</button>
+        <button [routerLink]="['../ListarRol']" nbButton status="success">
+          Atrás
+        </button>
       </nb-card-footer>
     </nb-card>
   </div>

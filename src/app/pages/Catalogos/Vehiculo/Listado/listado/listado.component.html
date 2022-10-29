@@ -2,13 +2,25 @@
   <div class="col-md-12">
     <nb-card>
       <nb-card-header>
-        Listado De Vehiculo
-        <button size="small" id="b3" class="b3" [routerLink]="['../RegistrarVehiculo']" nbButton
-          status="primary">Nuevo</button>
+        Listado de vehiculos
+        <button
+          size="small"
+          id="b3"
+          class="b3"
+          [routerLink]="['../RegistrarVehiculo']"
+          nbButton
+          status="primary"
+        >
+          Nuevo
+        </button>
       </nb-card-header>
       <nb-card-body>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-          class="table table-hover table table-striped table-dark row-border hover">
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="table table-hover table table-striped table-dark row-border hover"
+        >
           <thead class="thead-dark">
             <tr>
               <th scope="col">Descripcion</th>
@@ -27,13 +39,21 @@
               <td>{{ l.marca }}</td>
               <td>{{ l.estado }}</td>
               <td>
+                <button
+                  type="button"
+                  class="btn btn-info"
+                  [routerLink]="['../EditarVehiculo', l.idVehiculo]"
+                >
+                  <i class="nb-compose"></i>
+                </button>
 
-                <button type="button" class="btn btn-info" [routerLink]="['../EditarVehiculo', l.idVehiculo]"> <i
-                    class="nb-compose"></i></button>
-
-                <button type="button" (click)="confirmacion(l)" class="btn btn-danger"> <i
-                    class="nb-trash"></i></button>
-
+                <button
+                  type="button"
+                  (click)="confirmacion(l)"
+                  class="btn btn-danger"
+                >
+                  <i class="nb-trash"></i>
+                </button>
               </td>
             </tr>
           </tbody>

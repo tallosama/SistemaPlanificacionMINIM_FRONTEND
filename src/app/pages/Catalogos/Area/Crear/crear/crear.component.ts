@@ -1,62 +1,102 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import {
   NbGlobalPhysicalPosition,
   NbToastrService,
   NbToastrConfig,
-} from '@nebular/theme';
-import { Subscription } from 'rxjs';
-import { AreaService } from '../../area.service';
-
+} from "@nebular/theme";
+import { Observable, Subscription } from "rxjs";
+import { AreaService } from "../../area.service";
+import { authService } from "../../../../../auth/auth.service";
 @Component({
-  selector: 'ngx-crear',
-  templateUrl: './crear.component.html',
-  styleUrls: ['./crear.component.scss']
+  selector: "ngx-crear",
+  templateUrl: "./crear.component.html",
+  styleUrls: ["./crear.component.scss"],
 })
-
 export class CrearComponent implements OnInit, OnDestroy {
-
   fecha = new Date().toISOString().slice(0, 10);
-  usuario = 1;
   areaForm: FormGroup;
   //inicializadores del mensaje toast
   config: NbToastrConfig;
   subscripcion: Array<Subscription> = [];
-  constructor(public fb: FormBuilder, public areaServices: AreaService, private toastrService: NbToastrService) { }
 
-  ngOnInit(): void {
-    this.areaForm = this.fb.group(
-      {
-        desArea: ['', Validators.compose([Validators.required, Validators.maxLength(512)])],
-        usuarioCreacion: [this.usuario, Validators.required],
-        fechaCreacion: [this.fecha, Validators.required],
-        usuarioModificacion: [this.usuario, Validators.required],
-        fechaModificacion: [this.fecha, Validators.required],
+  constructor(
+    public fb: FormBuilder,
+    public areaServices: AreaService,
+    private toastrService: NbToastrService,
 
-      }
-    );
+    private auth: authService
+  ) {}
+
+  ngOnInit() {
+    // await this.auth.getUser().then((r) => (this.usuario = r)); //Si queremos trabajar con datos de promesas, usar un awair para almacenar lo que retorna
+
+    this.cargarForm(this.auth.getUserStorage());
   }
   ngOnDestroy(): void {
-    this.subscripcion.forEach(s => s.unsubscribe());
+    this.subscripcion.forEach((s) => s.unsubscribe());
   }
   limpiar(): void {
-    this.areaForm.get('desArea').reset();
+    this.areaForm.get("desArea").reset();
+  }
+  cargarForm(user): void {
+    this.areaForm = this.fb.group({
+      desArea: [
+        "",
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(512),
+          this.noWhitespaceValidator,
+        ]),
+      ],
+      usuarioCreacion: [user.uid, Validators.required],
+      fechaCreacion: [this.fecha, Validators.required],
+      usuarioModificacion: [user.uid, Validators.required],
+      fechaModificacion: [this.fecha, Validators.required],
+    });
+  }
+  public noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || "").trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { whitespace: true };
   }
   guardar(): void {
     this.subscripcion.push(
-      this.areaServices.guardar(this.areaForm.value).subscribe(resp => {
-        this.showToast('success', 'Acción realizada', 'Se ha ingresado el registro', 4000);
-        this.limpiar();
-      },
-        error => {
+      this.areaServices.guardar(this.areaForm.value).subscribe(
+        (resp) => {
+          this.showToast(
+            "success",
+            "Acción realizada",
+            "Se ha ingresado el registro",
+            4000
+          );
+          this.limpiar();
+        },
+        (error) => {
           console.error(error);
-          this.showToast('danger', 'Error ' + error.status, 'Verifique que no exista un registro con el mismo nombre ' + error.message, 0);
+          this.showToast(
+            "danger",
+            "Error " + error.status,
+            "Verifique que no exista un registro con el mismo nombre " +
+              error.message,
+            0
+          );
         }
-      ));
-
+      )
+    );
   }
-  //construccion del mensaje
-  public showToast(estado: string, titulo: string, cuerpo: string, duracion: number) {
+  // construccion del mensaje
+  public showToast(
+    estado: string,
+    titulo: string,
+    cuerpo: string,
+    duracion: number
+  ) {
     const config = {
       status: estado,
       destroyByClick: true,
@@ -66,10 +106,6 @@ export class CrearComponent implements OnInit, OnDestroy {
       preventDuplicates: false,
     };
 
-    this.toastrService.show(
-      cuerpo,
-      `${titulo}`,
-      config);
+    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
-
 }

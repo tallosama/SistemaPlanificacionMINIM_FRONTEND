@@ -1,160 +1,278 @@
 <div class="row">
   <div class="col-md-12">
     <nb-card>
-      <nb-card-header>
-        Editar personal
-      </nb-card-header>
+      <nb-card-header> Editar personal </nb-card-header>
       <nb-card-body>
-        <form [formGroup]="editarPersonaForm" (ngSubmit)="editar()" *ngIf="editarPersonaForm">
+        <form
+          [formGroup]="personaForm"
+          *ngIf="personaForm"
+          (ngSubmit)="editar()"
+        >
           <div class="row">
             <div class="col-md-8">
-
-              <div *ngIf="editarPersonaForm.get('cedula').invalid && editarPersonaForm.get('cedula').touched">
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('cedula').hasError('required')">
-                  La identificación es requerida
-                </nb-alert>
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('cedula').hasError('maxlength')">
-                  La identificación tiene que tener máximo 60 carácteres
-                </nb-alert>
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('cedula').hasError('minlength')">
-                  La identificación tiene que poseer mínimo 16 carácteres
-                </nb-alert>
-              </div>
-
               <div class="form-group">
                 <label class="label">Cédula</label>
-                <input type="text" formControlName="cedula" placeholder="000-000000-0000A" nbInput fullWidth>
+                <input
+                  type="text"
+                  formControlName="cedula"
+                  placeholder="000-000000-0000A"
+                  nbInput
+                  fullWidth
+                />
+                <div
+                  *ngIf="
+                    personaForm.get('cedula').invalid &&
+                    personaForm.get('cedula').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('cedula').hasError('required')"
+                  >
+                    La identificación es requerida
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('cedula').hasError('maxlength')"
+                  >
+                    La identificación tiene que tener máximo 60 carácteres
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('cedula').hasError('minlength')"
+                  >
+                    La identificación tiene que poseer mínimo 16 carácteres
+                  </p>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('cedula').hasError('whitespace')"
+                  >
+                    Ingrese una identificación válida
+                  </p>
+                </div>
               </div>
             </div>
 
             <div class="col-md-4">
-
-              <div
-                *ngIf="editarPersonaForm.get('areaId').hasError('required') && editarPersonaForm.get('areaId').touched">
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('tipo').hasError('required')">
-                  El área del usuario es obligatorio
-                </nb-alert>
-              </div>
-
               <div class="form-group">
                 <label class="label">Área perteneciente</label>
                 <select class="form-control" formControlName="areaId">
                   <option value="">Seleccione</option>
-                  <option [ngValue]="item" *ngFor="let item of areas">{{item.desArea}}</option>
+                  <option [ngValue]="item" *ngFor="let item of areas">
+                    {{ item.desArea }}
+                  </option>
                 </select>
+                <div
+                  *ngIf="
+                    personaForm.get('areaId').hasError('required') &&
+                    personaForm.get('areaId').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('tipo').hasError('required')"
+                  >
+                    El área del usuario es obligatorio
+                  </p>
+                </div>
               </div>
             </div>
           </div>
           <div class="row">
-
             <div class="col-md-4">
-              <div *ngIf="editarPersonaForm.get('pNombre').invalid && editarPersonaForm.get('pNombre').touched">
-
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('pNombre').hasError('required') ">
-                  El primer nombre es obligatorio
-                </nb-alert>
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('pNombre').hasError('maxlength') ">
-                  El nombre no puede ser mayor a 32 carácteres
-                </nb-alert>
-
-              </div>
-
               <div class="form-group">
                 <label class="label">Primer nombre</label>
-                <input type="text" formControlName="pNombre" nbInput fullWidth>
+                <input
+                  type="text"
+                  formControlName="pNombre"
+                  nbInput
+                  fullWidth
+                />
+                <div
+                  *ngIf="
+                    personaForm.get('pNombre').invalid &&
+                    personaForm.get('pNombre').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('pNombre').hasError('required')"
+                  >
+                    El primer nombre es obligatorio
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('pNombre').hasError('maxlength')"
+                  >
+                    El nombre no puede ser mayor a 32 carácteres
+                  </p>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('pNombre').hasError('whitespace')"
+                  >
+                    Ingrese un nombre válido
+                  </p>
+                </div>
               </div>
             </div>
 
             <div class="col-md-4">
-
-              <nb-alert status="danger"
-                *ngIf="editarPersonaForm.get('sNombre').hasError('maxlength') && editarPersonaForm.get('sNombre').touched">
-                El segundo nombre no puede ser mayor a 32 carácteres
-              </nb-alert>
-
               <div class="form-group">
                 <label class="label">Segundo nombre</label>
-                <input type="text" formControlName="sNombre" nbInput fullWidth>
+                <input
+                  type="text"
+                  formControlName="sNombre"
+                  nbInput
+                  fullWidth
+                />
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    personaForm.get('sNombre').hasError('maxlength') &&
+                    personaForm.get('sNombre').touched
+                  "
+                >
+                  El segundo nombre no puede ser mayor a 32 carácteres
+                </p>
               </div>
             </div>
 
             <div class="col-md-4">
-
-              <div *ngIf="editarPersonaForm.get('tipo').invalid && editarPersonaForm.get('tipo').touched">
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('tipo').hasError('required')">
-                  El tipo de usuario es obligatorio
-                </nb-alert>
-
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('tipo').hasError('maxlength')">
-                  El tipo de usuario no puede ser mayor a 32 carácteres
-                </nb-alert>
-              </div>
-
               <div class="form-group">
                 <label class="label">Tipo</label>
                 <select class="form-control" formControlName="tipo">
                   <option value="">Seleccione</option>
-                  <option [value]="item.desArea" *ngFor="let item of areas">{{item.desArea}}</option>
+                  <option [value]="item.desArea" *ngFor="let item of areas">
+                    {{ item.desArea }}
+                  </option>
                 </select>
+                <div
+                  *ngIf="
+                    personaForm.get('tipo').invalid &&
+                    personaForm.get('tipo').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('tipo').hasError('required')"
+                  >
+                    El tipo de usuario es obligatorio
+                  </p>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('tipo').hasError('maxlength')"
+                  >
+                    El tipo de usuario no puede ser mayor a 32 carácteres
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-4">
-
-              <div *ngIf="editarPersonaForm.get('pApellido').invalid && editarPersonaForm.get('pApellido').touched">
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('pApellido').hasError('required')">
-                  El primer apellido es obligatorio
-                </nb-alert>
-                <nb-alert status="danger" *ngIf="editarPersonaForm.get('pApellido').hasError('maxlength')">
-                  Debe de ingresar un dato menor a 32 carácteres
-                </nb-alert>
-              </div>
-
               <div class="form-group">
                 <label class="label">Primer apellido</label>
-                <input type="text" formControlName="pApellido" nbInput fullWidth>
+                <input
+                  type="text"
+                  formControlName="pApellido"
+                  nbInput
+                  fullWidth
+                />
+                <div
+                  *ngIf="
+                    personaForm.get('pApellido').invalid &&
+                    personaForm.get('pApellido').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('pApellido').hasError('required')"
+                  >
+                    El primer apellido es obligatorio
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('pApellido').hasError('maxlength')"
+                  >
+                    Debe de ingresar un dato menor a 32 carácteres
+                  </p>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="personaForm.get('pApellido').hasError('whitespace')"
+                  >
+                    Ingrese un apellido válido
+                  </p>
+                </div>
               </div>
             </div>
 
             <div class="col-md-4">
-
-              <nb-alert status="danger"
-                *ngIf="editarPersonaForm.get('sApellido').hasError('maxlength') && editarPersonaForm.get('sApellido').touched">
-                Debe de ingresar un dato menor a 32 carácteres
-              </nb-alert>
-
               <div class="form-group">
                 <label class="label">Segundo apellido</label>
-                <input type="text" formControlName="sApellido" nbInput fullWidth>
+                <input
+                  type="text"
+                  formControlName="sApellido"
+                  nbInput
+                  fullWidth
+                />
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    personaForm.get('sApellido').hasError('maxlength') &&
+                    personaForm.get('sApellido').touched
+                  "
+                >
+                  Debe de ingresar un dato menor a 32 carácteres
+                </p>
               </div>
             </div>
 
-
             <div class="col-md-2">
-
-              <nb-alert status="danger"
-                *ngIf="editarPersonaForm.get('estado').hasError('required') && editarPersonaForm.get('estado').touched">
-                Debe de seleccionar un estado
-              </nb-alert>
-
               <div class="form-group">
                 <label class="label">Estado</label>
                 <select class="form-control" formControlName="estado">
-                  <option *ngFor="let e of estado" [value]="e.esActivo">{{e.Estado}}</option>
+                  <option *ngFor="let e of estado" [value]="e.esActivo">
+                    {{ e.Estado }}
+                  </option>
                 </select>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    personaForm.get('estado').hasError('required') &&
+                    personaForm.get('estado').touched
+                  "
+                >
+                  Debe de seleccionar un estado
+                </p>
               </div>
-
             </div>
           </div>
-
-          <button id="b1" class="b1" type="submit" [routerLink]="['../ListarPersona']"
-            [disabled]="editarPersonaForm.invalid" nbButton status="primary">Editar</button>
+          <button
+            id="b1"
+            class="b1"
+            type="submit"
+            [routerLink]="['../ListarPersona']"
+            [disabled]="personaForm.invalid"
+            nbButton
+            status="primary"
+          >
+            Editar
+          </button>
         </form>
       </nb-card-body>
       <nb-card-footer>
-        <button [routerLink]="['../../ListarPersona']" nbButton status="success"> Atrás</button>
+        <button
+          [routerLink]="['../../ListarPersona']"
+          nbButton
+          status="success"
+        >
+          Atrás
+        </button>
       </nb-card-footer>
     </nb-card>
   </div>
