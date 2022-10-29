@@ -15,6 +15,9 @@ export class authService implements OnDestroy {
   public login(correo: string, clave: string) {
     return this.authFire.signInWithEmailAndPassword(correo, clave);
   }
+  public request(correo: string) {
+    return this.authFire.sendPasswordResetEmail(correo);
+  }
   public sigin(correo: string, clave: string) {
     return this.authFire.createUserWithEmailAndPassword(correo, clave);
   }

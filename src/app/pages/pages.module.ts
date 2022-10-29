@@ -16,6 +16,7 @@ import { PersonaModule } from "./Catalogos/Persona/persona.module";
 import { VehiculoModule } from "./Catalogos/Vehiculo/vehiculo.module";
 import { RolModule } from "./Catalogos/Rol/rol.module";
 import { UsuarioModule } from "./Usuario/usuario.module";
+import { EventosModule } from "./Eventos/eventos.module";
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { UsuarioModule } from "./Usuario/usuario.module";
     VehiculoModule,
     RolModule,
     UsuarioModule,
+    EventosModule,
   ],
   declarations: [PagesComponent],
 })

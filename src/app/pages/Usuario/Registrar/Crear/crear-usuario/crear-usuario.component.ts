@@ -183,25 +183,26 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
   }
 
   async guardar() {
-    this.hash256(this.usuarioForm.value.Clave).then(async (clave) => {
-      const resultado = await this.auth
-        .sigin(this.usuarioForm.value.Correo, clave)
-        .catch((error) =>
-          this.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se creaba la cuenta de usuario " + error,
-            0
-          )
-        );
-      if (resultado) {
-        this.usuarioForm.get("uId").setValue(resultado.user.uid);
-        this.usuarioForm.get("Clave").setValue(clave);
-        await this.colecciondeUsuario(resultado);
-        this.actualizarTabla(this.personaSeleccionada);
-        this.limpiar();
-      }
-    });
+    //  this.hash256(this.usuarioForm.value.Clave).then(async (clave) => {
+    const resultado = await this.auth
+      .sigin(this.usuarioForm.value.Correo, this.usuarioForm.value.Clave)
+      .catch((error) =>
+        this.showToast(
+          "danger",
+          "Error " + error.status,
+          "Mientras se creaba la cuenta de usuario " + error,
+          0
+        )
+      );
+    if (resultado) {
+      this.usuarioForm.get("uId").setValue(resultado.user.uid);
+      //this.usuarioForm.get("Clave").setValue(clave);
+      this.usuarioForm.get("Clave").reset();
+      await this.colecciondeUsuario(resultado);
+      this.actualizarTabla(this.personaSeleccionada);
+      this.limpiar();
+    }
+    // });
   }
   async colecciondeUsuario(resultado) {
     await this.auth

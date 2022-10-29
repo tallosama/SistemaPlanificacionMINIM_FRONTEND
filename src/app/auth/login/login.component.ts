@@ -29,7 +29,7 @@ export class NgxLoginComponent implements OnInit {
       return "Correo no válido";
     }
     if (code === "auth/user-disabled") {
-      return "El correo ha sido deshabilitado";
+      return "La cuenta ha sido deshabilitada";
     }
     if (code === "auth/user-not-found") {
       return "No se ha encontrado una cuenta vinculada a ese correo";
@@ -43,37 +43,35 @@ export class NgxLoginComponent implements OnInit {
     return "Error desconocido " + code;
   }
   async login() {
-    this.hash256(this.loginForm.controls.clave.value).then(async (clave) => {
-      await this.authService
-        .login(this.loginForm.controls.correo.value, clave)
-        .then((r) => {
-          this.showToast(
-            "success",
-            "Bienvenido",
-            "Se ha iniciado sesión ",
-            4000
-          );
+    // this.hash256(this.loginForm.controls.clave.value).then(async (clave) => {
+    await this.authService
+      .login(
+        this.loginForm.controls.correo.value,
+        this.loginForm.controls.clave.value
+      )
+      .then((r) => {
+        this.showToast("success", "Bienvenido", "Se ha iniciado sesión ", 4000);
 
-          this.router.navigate(["/"], { relativeTo: this.route });
-        })
-        .catch((e) => {
-          console.error(e);
+        this.router.navigate(["/"], { relativeTo: this.route });
+      })
+      .catch((e) => {
+        console.error(e);
 
-          this.respuesta = this.errores(e.code);
-        });
-    });
+        this.respuesta = this.errores(e.code);
+      });
+    //  });
   }
 
-  hash256(clave): any {
-    const utf8 = new TextEncoder().encode(clave);
-    return crypto.subtle.digest("SHA-256", utf8).then((hashBuffer) => {
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray
-        .map((bytes) => bytes.toString(16).padStart(2, "0"))
-        .join("");
-      return hashHex;
-    });
-  }
+  // hash256(clave): any {
+  //   const utf8 = new TextEncoder().encode(clave);
+  //   return crypto.subtle.digest("SHA-256", utf8).then((hashBuffer) => {
+  //     const hashArray = Array.from(new Uint8Array(hashBuffer));
+  //     const hashHex = hashArray
+  //       .map((bytes) => bytes.toString(16).padStart(2, "0"))
+  //       .join("");
+  //     return hashHex;
+  //   });
+  // }
   //construccion del mensaje
   public showToast(
     estado: string,
