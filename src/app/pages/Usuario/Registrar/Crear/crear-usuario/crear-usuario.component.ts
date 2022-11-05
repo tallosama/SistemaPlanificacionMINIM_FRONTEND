@@ -34,9 +34,8 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
   areas: any = [];
   usuarioForm: FormGroup;
   personaSeleccionada: any;
-
+  usuario: any;
   fecha = new Date().toISOString().slice(0, 10);
-  usuario = 1;
   //["Admin", "ASustantivas"];
   estado = [
     { Estado: true, Descripcion: "Activo" },
@@ -58,6 +57,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit(): void {
+    this.usuario = this.auth.getUserStorage();
     this.autoCompletadoArea();
     this.listarRole();
     this.dtOptions = {
@@ -175,9 +175,9 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
       Estado: [this.estado[0].Estado, Validators.required],
       Rol: ["", Validators.required],
       PersonaId: [persona.idPersona, Validators.required],
-      usuarioCreacion: [this.usuario, Validators.required],
+      usuarioCreacion: [this.usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
-      usuarioModificacion: [this.usuario, Validators.required],
+      usuarioModificacion: [this.usuario.uid, Validators.required],
       fechaModificacion: [this.fecha, Validators.required],
     });
   }

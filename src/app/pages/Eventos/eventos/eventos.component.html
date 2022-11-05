@@ -1,1 +1,379 @@
-<p>eventos works!</p>
+<nb-card class="col-md-12 col-lg-12 col-xxxl-12">
+  <nb-card-body>
+    <nb-stepper #stepper orientation="horizontal">
+      <nb-step [label]="labelOne">
+        <ng-template #labelOne>Primer paso</ng-template>
+        <h3>Registro de eventos</h3>
+
+        <nb-card-body>
+          <form [formGroup]="eventoForm" *ngIf="eventoForm">
+            <div class="form-group">
+              <div class="row">
+                <label class="label">Descripción</label>
+                <textarea
+                  rows="2"
+                  formControlName="desEveto"
+                  nbInput
+                  fullWidth
+                  shape="round"
+                  placeholder="Descripción del evento"
+                ></textarea>
+
+                <div
+                  *ngIf="
+                    eventoForm.get('desEveto').invalid &&
+                    eventoForm.get('desEveto').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      eventoForm.get('desEveto').hasError('required') ||
+                      eventoForm.get('desEveto').hasError('whitespace')
+                    "
+                  >
+                    La descripción es obligatoria
+                  </p>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="eventoForm.get('desEveto').hasError('maxlength')"
+                  >
+                    Debe de ingresar descripción menor o igual a 124 carácteres
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="label">Área</label>
+                  <ng-autocomplete
+                    [data]="areas"
+                    [searchKeyword]="keyword[0]"
+                    formControlName="areaId"
+                    [initialValue]="areas[0]"
+                    [itemTemplate]="itemTemplate"
+                    [notFoundTemplate]="notFoundTemplate"
+                    placeholder="Ingrese el área"
+                    notFoundText="No se encontró"
+                    historyIdentifier="ListaAreaReciente"
+                    [historyHeading]="historyHeading"
+                    historyListMaxNumber="3"
+                  >
+                  </ng-autocomplete>
+
+                  <ng-template #itemTemplate let-objeto>
+                    <a [innerHTML]="objeto.desArea"></a>
+                  </ng-template>
+
+                  <ng-template #notFoundTemplate let-notFounds>
+                    <div [innerHTML]="notFounds"></div>
+                  </ng-template>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      eventoForm.get('areaId').hasError('required') &&
+                      eventoForm.get('areaId').touched
+                    "
+                  >
+                    El área es obligatorio
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="label">Planificación</label>
+                  <ng-autocomplete
+                    [data]="planes"
+                    [searchKeyword]="keyword[1]"
+                    [itemTemplate]="itemTemplate"
+                    formControlName="planificacionId"
+                    [notFoundTemplate]="notFoundTemplate"
+                    placeholder="Ingrese el plan"
+                    [initialValue]="planes[0]"
+                    notFoundText="No se encontró"
+                    historyIdentifier="ListaPlanReciente"
+                    [historyHeading]="historyHeading"
+                    historyListMaxNumber="3"
+                  >
+                  </ng-autocomplete>
+
+                  <ng-template #itemTemplate let-item>
+                    <a [innerHTML]="item.descripcion"></a>
+                  </ng-template>
+
+                  <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                  </ng-template>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      eventoForm.get('planificacionId').hasError('required') &&
+                      eventoForm.get('planificacionId').touched
+                    "
+                  >
+                    La planificación es obligatoria
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="row">
+            <div class="col-md-6">
+              <div class="form-group"></div>
+            </div>
+          </div> -->
+
+            <button
+              nbButton
+              [disabled]="eventoForm.invalid"
+              (click)="guardarEvento()"
+            >
+              Guardar evento
+            </button>
+            <button
+              nbButton
+              nbStepperNext
+              [disabled]="eventoForm.invalid"
+              (click)="iniciarDetalle()"
+            >
+              Asignar detalles
+            </button>
+          </form>
+        </nb-card-body>
+        <!-- <button nbButton disabled nbStepperNext>prev</button>
+        <button nbButton nbStepperNext>next</button> -->
+      </nb-step>
+      <nb-step [label]="labelTwo">
+        <ng-template #labelTwo>Segundo paso</ng-template>
+        <h3>Registro de detalles</h3>
+
+        <nb-card-body>
+          <form [formGroup]="detalleEventoForm" *ngIf="detalleEventoForm">
+            <div class="row">
+              <div class="form-group">
+                <div class="col-md-2">
+                  <label class="label">Hora</label>
+                  <input
+                    nbInput
+                    type="text"
+                    [formControl]="hora"
+                    [nbTimepicker]="timepicker"
+                  />
+                  <nb-timepicker #timepicker></nb-timepicker>
+
+                  <div
+                    *ngIf="
+                      detalleEventoForm.get('hora').invalid &&
+                      detalleEventoForm.get('hora').touched
+                    "
+                  >
+                    <p
+                      class="caption status-danger"
+                      *ngIf="
+                        detalleEventoForm.get('hora').hasError('required') ||
+                        detalleEventoForm.get('hora').hasError('whitespace')
+                      "
+                    >
+                      La hora es requerida
+                    </p>
+
+                    <p
+                      class="caption status-danger"
+                      *ngIf="
+                        detalleEventoForm.get('hora').hasError('maxlength')
+                      "
+                    >
+                      Debe de ingresar hora menor o igual a 32 carácteres
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-2">
+                  <label class="label">Fecha</label>
+                  <!-- <input
+                      nbInput
+                      type="text"
+                      [formControl]="fecha"
+                      [nbTimepicker]="timepicker"
+                    /> -->
+
+                  <!-- 
+                    <nb-timepicker #timepicker></nb-timepicker>
+                    <input [nbDatepicker]="datepicker">
+                    <nb-datepicker #datepicker format="MM\dd\yyyy"></nb-datepicker>
+                     -->
+
+                  <input
+                    nbInput
+                    placeholder="Fecha del evento"
+                    [nbDatepicker]="formcontrol"
+                    [formControl]="fecha"
+                  />
+                  <nb-datepicker
+                    #formcontrol
+                    format="MM\dd\yyyy"
+                  ></nb-datepicker>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      detalleEventoForm.get('fecha').hasError('required') &&
+                      detalleEventoForm.get('fecha').touched
+                    "
+                  >
+                    La fecha es requerida
+                  </p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-2">
+                  <label class="label">Municipio</label>
+
+                  <ng-autocomplete
+                    [data]="municipios"
+                    [searchKeyword]="keyword[2]"
+                    formControlName="municipioId"
+                    [initialValue]="municipios[0]"
+                    [itemTemplate]="itemTemplate"
+                    [notFoundTemplate]="notFoundTemplate"
+                    placeholder="Ingrese el municipio"
+                    notFoundText="No se encontró"
+                    historyIdentifier="ListaMunReciente"
+                    [historyHeading]="historyHeading"
+                    historyListMaxNumber="3"
+                  >
+                  </ng-autocomplete>
+
+                  <ng-template #itemTemplate let-mun>
+                    <a [innerHTML]="mun.desMunicipio"></a>
+                  </ng-template>
+
+                  <ng-template #notFoundTemplate let-notFounds>
+                    <div [innerHTML]="notFounds"></div>
+                  </ng-template>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      detalleEventoForm
+                        .get('municipioId')
+                        .hasError('required') &&
+                      detalleEventoForm.get('municipioId').touched
+                    "
+                  >
+                    El Municipio es obligatorio
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label class="label">Participantes</label>
+
+                  <input
+                    type="number"
+                    formControlName="participantesProyectado"
+                    nbInput
+                    fullWidth
+                  />
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      detalleEventoForm
+                        .get('participantesProyectado')
+                        .hasError('required') &&
+                      detalleEventoForm.get('participantesProyectado').touched
+                    "
+                  >
+                    La cantidad de participantes es requerida
+                  </p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-2">
+                  <label class="label">Estado</label>
+                  <input nbInput type="text" [formControl]="estado" />
+
+                  <div
+                    *ngIf="
+                      detalleEventoForm.get('estado').invalid &&
+                      detalleEventoForm.get('estado').touched
+                    "
+                  >
+                    <p
+                      class="caption status-danger"
+                      *ngIf="
+                        detalleEventoForm.get('estado').hasError('required') ||
+                        detalleEventoForm.get('estado').hasError('whitespace')
+                      "
+                    >
+                      El estado es requerido
+                    </p>
+
+                    <p
+                      class="caption status-danger"
+                      *ngIf="
+                        detalleEventoForm.get('estado').hasError('maxlength')
+                      "
+                    >
+                      Debe de ingresar un estado menor o igual a 32 carácteres
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="label">Detalles de eventos</label>
+
+                  <table
+                    datatable
+                    [dtOptions]="dtOptions"
+                    [dtTrigger]="dtTrigger"
+                    class="table table-hover table table-striped table-dark row-border hover"
+                  >
+                    <thead class="table-dark">
+                      <tr>
+                        <th scope="col">Observacion</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Hora</th>
+                        <th scope="col">Participantes</th>
+                        <th scope="col">Municipio</th>
+                        <th scope="col">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let p of data">
+                        <td>{{ p.descripcion }}</td>
+                        <td>{{ p.cantMinima }}</td>
+                        <td>{{ p.cantStock }}</td>
+                        <td>{{ p.tipoMaterial }}</td>
+                        <td>{{ p.tipoMaterial }}</td>
+                        <td>
+                          <button class="btn btn-danger">
+                            <i class="nb-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <button nbButton nbStepperPrevious>prev</button>
+            <button nbButton>Guardar todo</button>
+          </form>
+        </nb-card-body>
+      </nb-step>
+    </nb-stepper>
+  </nb-card-body>
+</nb-card>

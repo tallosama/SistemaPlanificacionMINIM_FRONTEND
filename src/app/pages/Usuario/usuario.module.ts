@@ -5,7 +5,6 @@ import { CrearUsuarioComponent } from "./Registrar/Crear/crear-usuario/crear-usu
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
-  NbAlertModule,
   NbButtonModule,
   NbCardModule,
   NbDialogModule,
@@ -21,15 +20,12 @@ import { AutocompleteLibModule } from "angular-ng-autocomplete";
   imports: [
     CommonModule,
     UsuarioRoutingModule,
-    CommonModule,
     //permite utilizar peticiones http
     HttpClientModule,
     //Permite usar los form builders
     ReactiveFormsModule,
     //Este modulo permite agregar codigo TS en los formularios
     FormsModule,
-    //este es para las alertas
-    NbAlertModule,
 
     //este es para los formularios
     NbInputModule,

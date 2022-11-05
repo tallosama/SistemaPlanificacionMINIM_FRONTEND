@@ -94,6 +94,13 @@ const routes: Routes = [
           import("./Eventos/eventos.module").then((a) => a.EventosModule),
       },
       {
+        path: "Planificacion",
+        loadChildren: () =>
+          import("./Planificacion/planificacion.module").then(
+            (a) => a.PlanificacionModule
+          ),
+      },
+      {
         path: "forms",
         loadChildren: () =>
           import("./forms/forms.module").then((m) => m.FormsModule),

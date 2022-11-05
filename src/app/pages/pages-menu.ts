@@ -32,6 +32,29 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
 
   {
+    title: "Planificación",
+    icon: "book-open-outline",
+    link: "/pages",
+    children: [
+      {
+        title: "Programación",
+        icon: "grid-outline",
+        link: "/pages/Planificacion",
+        children: [
+          {
+            title: "Nueva programación",
+            link: "/pages/Planificacion/RegistrarPlanificacion",
+          },
+          {
+            title: "Listar",
+            link: "/pages/Planificacion/ListarPlanificacion",
+          },
+        ],
+      },
+    ],
+  },
+
+  {
     title: "Catálogos",
     icon: "book-open-outline",
     link: "/pages",

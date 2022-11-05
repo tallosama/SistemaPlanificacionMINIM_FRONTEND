@@ -1,52 +1,43 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-
-import { EventosRoutingModule } from "./eventos-routing.module";
-import { HttpClientModule } from "@angular/common/http";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { PlanificacionRoutingModule } from "./planificacion-routing.module";
+import { CrearComponent } from "./Crear/crear/crear.component";
+import { EditarComponent } from "./Editar/editar/editar.component";
+import { ListadoComponent } from "./Listado/listado/listado.component";
 import {
+  NbAlertModule,
   NbButtonModule,
   NbCardModule,
   NbDatepickerModule,
   NbDialogModule,
   NbInputModule,
-  NbStepperModule,
-  NbTimepickerModule,
 } from "@nebular/theme";
+import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DataTablesModule } from "angular-datatables";
-import { AutocompleteLibModule } from "angular-ng-autocomplete";
-import { EventosComponent } from "./eventos/eventos.component";
 
 @NgModule({
-  declarations: [EventosComponent],
+  declarations: [CrearComponent, EditarComponent, ListadoComponent],
   imports: [
     CommonModule,
-    EventosRoutingModule,
+    PlanificacionRoutingModule,
     //permite utilizar peticiones http
     HttpClientModule,
     //Permite usar los form builders
     ReactiveFormsModule,
     //Este modulo permite agregar codigo TS en los formularios
     FormsModule,
-
+    //este es para las alertas
+    NbAlertModule,
     //este es para los formularios
     NbInputModule,
     NbCardModule,
     NbButtonModule,
-
     NbDialogModule.forChild(),
     //Datatables
     DataTablesModule,
-    //para mostrar paso a paso
-    NbStepperModule,
-    //Modulo de autocompletado
-    AutocompleteLibModule,
-
-    //    Para input horas
-    NbTimepickerModule,
-
-    //   para fechas
+    //fechas
     NbDatepickerModule,
   ],
 })
-export class EventosModule {}
+export class PlanificacionModule {}

@@ -1,0 +1,167 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        <h3>Edición De La Información</h3>
+      </nb-card-header>
+      <nb-card-body>
+        <form
+          [formGroup]="planificacionForm"
+          *ngIf="planificacionForm"
+          (ngSubmit)="editar()"
+        >
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Descripción</label>
+                <input
+                  type="text"
+                  formControlName="descripcion"
+                  nbInput
+                  fullWidth
+                />
+                <div
+                  *ngIf="
+                    planificacionForm.get('descripcion').invalid &&
+                    planificacionForm.get('descripcion').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      planificacionForm.get('descripcion').hasError('required')
+                    "
+                  >
+                    la descripción de la planificación es obligatoria
+                  </p>
+
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      planificacionForm.get('descripcion').hasError('maxlength')
+                    "
+                  >
+                    Debe de ingresar descripción menor a 128 carácteres
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      planificacionForm
+                        .get('descripcion')
+                        .hasError('whitespace')
+                    "
+                  >
+                    Ingrese una descripción válida
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- --------------------------------------------------- -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Lema</label>
+                <input type="text" formControlName="lema" nbInput fullWidth />
+                <div
+                  *ngIf="
+                    planificacionForm.get('lema').invalid &&
+                    planificacionForm.get('lema').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="planificacionForm.get('lema').hasError('maxlength')"
+                  >
+                    Debe de ingresar descripción menor a 128 carácteres
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ///////////////////////////////////////////////////// -->
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Fecha de inicio</label>
+                <input
+                  type="date"
+                  formControlName="fechaInicio"
+                  nbInput
+                  fullWidth
+                />
+                <div
+                  *ngIf="
+                    planificacionForm.get('fechaInicio').invalid &&
+                    planificacionForm.get('fechaInicio').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      planificacionForm.get('fechaInicio').hasError('required')
+                    "
+                  >
+                    la fecha incial es obligatoria
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- --------------------------------------------------- -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Fecha final</label>
+                <!-- <input
+                  type="date"
+                  formControlName="fechaFin"
+                  nbInput
+                  fullWidth
+                />
+                -->
+                <input
+                  type="date"
+                  nbInput
+                  formControlName="fechaFin"
+                  nbInput
+                  fullWidth
+                />
+
+                <div
+                  *ngIf="
+                    planificacionForm.get('fechaFin').invalid &&
+                    planificacionForm.get('fechaFin').touched
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      planificacionForm.get('fechaFin').hasError('required')
+                    "
+                  >
+                    la fecha final es obligatoria
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button
+            type="submit"
+            [disabled]="planificacionForm.invalid"
+            nbButton
+            status="primary"
+          >
+            Editar
+          </button>
+        </form>
+      </nb-card-body>
+      <nb-card-footer>
+        <button
+          [routerLink]="['../../ListarPlanificacion']"
+          nbButton
+          status="success"
+        >
+          Atrás
+        </button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>

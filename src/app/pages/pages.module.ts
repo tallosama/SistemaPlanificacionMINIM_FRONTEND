@@ -1,5 +1,9 @@
 import { NgModule } from "@angular/core";
-import { NbMenuModule } from "@nebular/theme";
+import {
+  NbDatepickerModule,
+  NbMenuModule,
+  NbTimepickerModule,
+} from "@nebular/theme";
 
 import { ThemeModule } from "../@theme/theme.module";
 import { PagesComponent } from "./pages.component";
@@ -37,6 +41,18 @@ import { EventosModule } from "./Eventos/eventos.module";
     RolModule,
     UsuarioModule,
     EventosModule,
+
+    //para input de horas en todo el proyecto
+    NbTimepickerModule.forRoot({
+      localization: {
+        hoursText: "Hr",
+        minutesText: "Min",
+        secondsText: "Sec",
+        ampmText: "Am/Pm",
+      },
+    }),
+    //fecha
+    NbDatepickerModule.forRoot(),
   ],
   declarations: [PagesComponent],
 })
