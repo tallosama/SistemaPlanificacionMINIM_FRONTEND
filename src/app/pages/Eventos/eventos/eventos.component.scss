@@ -6,4 +6,11 @@
       margin: 0.5rem;
     }
   }
-  
+  //:host ::ng-deep .ng2-smart-actions ng2-st-tbody-edit-delete {display: none !important;}
+
+  // :host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
+  //     display: inline-block;
+  //     width: 10px;
+  //     text-align: center;
+  //     padding-top: 5px;
+  // }

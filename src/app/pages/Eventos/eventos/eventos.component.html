@@ -7,9 +7,9 @@
 
         <nb-card-body>
           <form [formGroup]="eventoForm" *ngIf="eventoForm">
-            <div class="form-group">
-              <div class="row">
-                <label class="label">Descripción</label>
+            <label class="label">Descripción</label>
+            <div class="row">
+              <div class="col-md-10">
                 <textarea
                   rows="2"
                   formControlName="desEveto"
@@ -18,79 +18,47 @@
                   shape="round"
                   placeholder="Descripción del evento"
                 ></textarea>
-
-                <div
+              </div>
+              <div class="col-md-2">
+                <button nbButton [routerLink]="['../RegistrarArea']">
+                  Buscar eventos
+                </button>
+              </div>
+              <div
+                *ngIf="
+                  eventoForm.get('desEveto').invalid &&
+                  eventoForm.get('desEveto').touched
+                "
+              >
+                <p
+                  class="caption status-danger"
                   *ngIf="
-                    eventoForm.get('desEveto').invalid &&
-                    eventoForm.get('desEveto').touched
+                    eventoForm.get('desEveto').hasError('required') ||
+                    eventoForm.get('desEveto').hasError('whitespace')
                   "
                 >
-                  <p
-                    class="caption status-danger"
-                    *ngIf="
-                      eventoForm.get('desEveto').hasError('required') ||
-                      eventoForm.get('desEveto').hasError('whitespace')
-                    "
-                  >
-                    La descripción es obligatoria
-                  </p>
+                  La descripción es obligatoria
+                </p>
 
-                  <p
-                    class="caption status-danger"
-                    *ngIf="eventoForm.get('desEveto').hasError('maxlength')"
-                  >
-                    Debe de ingresar descripción menor o igual a 124 carácteres
-                  </p>
-                </div>
+                <p
+                  class="caption status-danger"
+                  *ngIf="eventoForm.get('desEveto').hasError('maxlength')"
+                >
+                  Debe de ingresar descripción menor o igual a 124 carácteres
+                </p>
               </div>
             </div>
 
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="label">Área</label>
-                  <ng-autocomplete
-                    [data]="areas"
-                    [searchKeyword]="keyword[0]"
-                    formControlName="areaId"
-                    [initialValue]="areas[0]"
-                    [itemTemplate]="itemTemplate"
-                    [notFoundTemplate]="notFoundTemplate"
-                    placeholder="Ingrese el área"
-                    notFoundText="No se encontró"
-                    historyIdentifier="ListaAreaReciente"
-                    [historyHeading]="historyHeading"
-                    historyListMaxNumber="3"
-                  >
-                  </ng-autocomplete>
-
-                  <ng-template #itemTemplate let-objeto>
-                    <a [innerHTML]="objeto.desArea"></a>
-                  </ng-template>
-
-                  <ng-template #notFoundTemplate let-notFounds>
-                    <div [innerHTML]="notFounds"></div>
-                  </ng-template>
-                  <p
-                    class="caption status-danger"
-                    *ngIf="
-                      eventoForm.get('areaId').hasError('required') &&
-                      eventoForm.get('areaId').touched
-                    "
-                  >
-                    El área es obligatorio
-                  </p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
                   <label class="label">Planificación</label>
                   <ng-autocomplete
                     [data]="planes"
                     [searchKeyword]="keyword[1]"
-                    [itemTemplate]="itemTemplate"
+                    [itemTemplate]="itemTemplatePlan"
                     formControlName="planificacionId"
-                    [notFoundTemplate]="notFoundTemplate"
+                    [notFoundTemplate]="notFoundTemplatePlan"
                     placeholder="Ingrese el plan"
                     [initialValue]="planes[0]"
                     notFoundText="No se encontró"
@@ -100,12 +68,12 @@
                   >
                   </ng-autocomplete>
 
-                  <ng-template #itemTemplate let-item>
-                    <a [innerHTML]="item.descripcion"></a>
+                  <ng-template #itemTemplatePlan let-plan>
+                    <a [innerHTML]="plan.descripcion"></a>
                   </ng-template>
 
-                  <ng-template #notFoundTemplate let-notFound>
-                    <div [innerHTML]="notFound"></div>
+                  <ng-template #notFoundTemplatePlan let-notFoundPlan>
+                    <div [innerHTML]="notFoundPlan"></div>
                   </ng-template>
 
                   <p
@@ -116,6 +84,42 @@
                     "
                   >
                     La planificación es obligatoria
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="label">Área</label>
+
+                  <ng-autocomplete
+                    [data]="areas"
+                    [searchKeyword]="keyword[0]"
+                    formControlName="areaId"
+                    [initialValue]="areas[0]"
+                    [itemTemplate]="itemTemplateArea"
+                    [notFoundTemplate]="notFoundTemplateArea"
+                    placeholder="Ingrese el área"
+                    notFoundText="No se encontró"
+                    historyIdentifier="ListaAreaReciente"
+                    [historyHeading]="historyHeading"
+                    historyListMaxNumber="3"
+                  >
+                  </ng-autocomplete>
+                  <ng-template #itemTemplateArea let-area>
+                    <a [innerHTML]="area.desArea"></a>
+                  </ng-template>
+                  <ng-template #notFoundTemplateArea let-notFoundArea>
+                    <div [innerHTML]="notFoundArea"></div>
+                  </ng-template>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      eventoForm.get('areaId').hasError('required') &&
+                      eventoForm.get('areaId').touched
+                    "
+                  >
+                    El área es obligatorio
                   </p>
                 </div>
               </div>
@@ -154,16 +158,22 @@
         <nb-card-body>
           <form [formGroup]="detalleEventoForm" *ngIf="detalleEventoForm">
             <div class="row">
+              <!-- Hora -->
+
               <div class="form-group">
                 <div class="col-md-2">
                   <label class="label">Hora</label>
+
                   <input
                     nbInput
                     type="text"
-                    [formControl]="hora"
-                    [nbTimepicker]="timepicker"
+                    formControlName="hora"
+                    [nbTimepicker]="timepickerHora"
                   />
-                  <nb-timepicker #timepicker></nb-timepicker>
+                  <nb-timepicker
+                    #timepickerHora
+                    twelveHoursFormat
+                  ></nb-timepicker>
 
                   <div
                     *ngIf="
@@ -173,10 +183,7 @@
                   >
                     <p
                       class="caption status-danger"
-                      *ngIf="
-                        detalleEventoForm.get('hora').hasError('required') ||
-                        detalleEventoForm.get('hora').hasError('whitespace')
-                      "
+                      *ngIf="detalleEventoForm.get('hora').hasError('required')"
                     >
                       La hora es requerida
                     </p>
@@ -193,32 +200,21 @@
                 </div>
               </div>
 
+              <!-- FECHA -->
               <div class="form-group">
                 <div class="col-md-2">
                   <label class="label">Fecha</label>
-                  <!-- <input
-                      nbInput
-                      type="text"
-                      [formControl]="fecha"
-                      [nbTimepicker]="timepicker"
-                    /> -->
-
-                  <!-- 
-                    <nb-timepicker #timepicker></nb-timepicker>
-                    <input [nbDatepicker]="datepicker">
-                    <nb-datepicker #datepicker format="MM\dd\yyyy"></nb-datepicker>
-                     -->
-
                   <input
+                    type="date"
                     nbInput
                     placeholder="Fecha del evento"
-                    [nbDatepicker]="formcontrol"
-                    [formControl]="fecha"
+                    formControlName="fecha"
                   />
-                  <nb-datepicker
+                  <!-- /PARA FORMATEAR FECHAS -->
+                  <!-- <nb-datepicker
                     #formcontrol
                     format="MM\dd\yyyy"
-                  ></nb-datepicker>
+                  ></nb-datepicker> -->
 
                   <p
                     class="caption status-danger"
@@ -232,8 +228,9 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <div class="col-md-2">
+              <!-- Municipio -->
+              <div class="col-md-2">
+                <div class="form-group">
                   <label class="label">Municipio</label>
 
                   <ng-autocomplete
@@ -241,8 +238,8 @@
                     [searchKeyword]="keyword[2]"
                     formControlName="municipioId"
                     [initialValue]="municipios[0]"
-                    [itemTemplate]="itemTemplate"
-                    [notFoundTemplate]="notFoundTemplate"
+                    [itemTemplate]="itemTemplateMun"
+                    [notFoundTemplate]="notFoundTemplateMun"
                     placeholder="Ingrese el municipio"
                     notFoundText="No se encontró"
                     historyIdentifier="ListaMunReciente"
@@ -251,12 +248,12 @@
                   >
                   </ng-autocomplete>
 
-                  <ng-template #itemTemplate let-mun>
+                  <ng-template #itemTemplateMun let-mun>
                     <a [innerHTML]="mun.desMunicipio"></a>
                   </ng-template>
 
-                  <ng-template #notFoundTemplate let-notFounds>
-                    <div [innerHTML]="notFounds"></div>
+                  <ng-template #notFoundTemplateMun let-notFoundMun>
+                    <div [innerHTML]="notFoundMun"></div>
                   </ng-template>
                   <p
                     class="caption status-danger"
@@ -272,6 +269,7 @@
                 </div>
               </div>
 
+              <!-- Participantes -->
               <div class="col-md-2">
                 <div class="form-group">
                   <label class="label">Participantes</label>
@@ -295,11 +293,17 @@
                   </p>
                 </div>
               </div>
-
-              <div class="form-group">
-                <div class="col-md-2">
+              <!-- Estado -->
+              <div class="col-md-2">
+                <div class="form-group">
                   <label class="label">Estado</label>
-                  <input nbInput type="text" [formControl]="estado" />
+                  <input
+                    type="text"
+                    formControlName="estado"
+                    nbInput
+                    fullWidth
+                    [attr.disabled]="true"
+                  />
 
                   <div
                     *ngIf="
@@ -329,49 +333,92 @@
                 </div>
               </div>
             </div>
+            <!-- Observacion -->
             <div class="row">
               <div class="col-md-12">
-                <div class="form-group">
-                  <label class="label">Detalles de eventos</label>
+                <label class="label">Observación</label>
+                <textarea
+                  rows="5"
+                  formControlName="observaciones"
+                  nbInput
+                  fullWidth
+                  shape="round"
+                  placeholder="Observación"
+                ></textarea>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    detalleEventoForm
+                      .get('observaciones')
+                      .hasError('maxlength') &&
+                    detalleEventoForm.get('observaciones').touched
+                  "
+                >
+                  Debe de ingresar una Observación menor o igual a 512
+                  carácteres
+                </p>
+              </div>
+              <button
+                nbButton
+                (click)="agregarTabla()"
+                [disabled]="detalleEventoForm.invalid"
+              >
+                Añadir
+              </button>
+            </div>
+            <button nbButton (click)="guardarTodo()">Guardar todo</button>
+          </form>
 
-                  <table
-                    datatable
-                    [dtOptions]="dtOptions"
-                    [dtTrigger]="dtTrigger"
-                    class="table table-hover table table-striped table-dark row-border hover"
-                  >
-                    <thead class="table-dark">
-                      <tr>
-                        <th scope="col">Observacion</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Hora</th>
-                        <th scope="col">Participantes</th>
-                        <th scope="col">Municipio</th>
-                        <th scope="col">Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let p of data">
-                        <td>{{ p.descripcion }}</td>
-                        <td>{{ p.cantMinima }}</td>
-                        <td>{{ p.cantStock }}</td>
-                        <td>{{ p.tipoMaterial }}</td>
-                        <td>{{ p.tipoMaterial }}</td>
-                        <td>
-                          <button class="btn btn-danger">
-                            <i class="nb-trash"></i>
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="label">Detalles de eventos</label>
+                <ng2-smart-table
+                  [settings]="settings"
+                  [source]="sourceSmart"
+                  (edit)="onEditRowSelect($event)"
+                  (delete)="onDeleteRowSelect($event)"
+                >
+                </ng2-smart-table>
+                <!-- <table
+                  datatable
+                  [dtOptions]="dtOptions"
+                  class="table table-hover table table-striped table-dark row-border hover"
+                >
+                  <thead class="table-dark">
+                    <tr>
+                      <th scope="col">Observacion</th>
+                      <th scope="col">Fecha</th>
+                      <th scope="col">Hora</th>
+                      <th scope="col">Participantes</th>
+                      <th scope="col">Estado</th>
+                      <th scope="col">Municipio</th>
+                      <th scope="col">Acciones</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr *ngFor="let p of data">
+                      <td>{{ p.observaciones }}</td>
+                      <td>{{ p.fecha }}</td>
+                      <td>{{ p.hora }}</td>
+                      <td>{{ p.participantesProyectado }}</td>
+                      <td>{{ p.estado }}</td>
+                      <td>{{ p.municipioId.desMunicipio }}</td>
+                      <td>
+                        <button class="btn btn-danger">
+                          <i class="nb-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table> -->
               </div>
             </div>
+          </div>
 
-            <button nbButton nbStepperPrevious>prev</button>
-            <button nbButton>Guardar todo</button>
-          </form>
+          <button nbButton nbStepperPrevious>Regresar</button>
+          <!-- <button nbButton (click)="verDatos()">Guardar todo</button> -->
         </nb-card-body>
       </nb-step>
     </nb-stepper>

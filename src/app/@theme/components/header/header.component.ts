@@ -60,6 +60,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
     this.user = this.auth.getUserStorage();
+
     // this.auth
     //   .getUser()
     //   .then((u) => (this.user = u))
@@ -72,8 +73,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.auth
           .logout()
           .then((resp) => {
-            console.log(resp);
-
             window.location.reload();
           })
           .catch((e) => console.error(e));

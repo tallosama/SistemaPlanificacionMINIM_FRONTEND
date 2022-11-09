@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table';
+import { Component } from "@angular/core";
+import { LocalDataSource } from "ng2-smart-table";
 
-import { SmartTableData } from '../../../@core/data/smart-table';
+import { SmartTableData } from "../../../@core/data/smart-table";
 
 @Component({
-  selector: 'ngx-smart-table',
-  templateUrl: './smart-table.component.html',
-  styleUrls: ['./smart-table.component.scss'],
+  selector: "ngx-smart-table",
+  templateUrl: "./smart-table.component.html",
+  styleUrls: ["./smart-table.component.scss"],
 })
 export class SmartTableComponent {
-
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -27,28 +26,28 @@ export class SmartTableComponent {
     },
     columns: {
       id: {
-        title: 'ID',
-        type: 'number',
+        title: "ID",
+        type: "number",
       },
       firstName: {
-        title: 'First Name',
-        type: 'string',
+        title: "First Name",
+        type: "string",
       },
       lastName: {
-        title: 'Last Name',
-        type: 'string',
+        title: "Last Name",
+        type: "string",
       },
       username: {
-        title: 'Username',
-        type: 'string',
+        title: "Username",
+        type: "string",
       },
       email: {
-        title: 'E-mail',
-        type: 'string',
+        title: "E-mail",
+        type: "string",
       },
       age: {
-        title: 'Age',
-        type: 'number',
+        title: "Age",
+        type: "number",
       },
     },
   };
@@ -61,7 +60,7 @@ export class SmartTableComponent {
   }
 
   onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
+    if (window.confirm("Are you sure you want to delete?")) {
       event.confirm.resolve();
     } else {
       event.confirm.reject();
