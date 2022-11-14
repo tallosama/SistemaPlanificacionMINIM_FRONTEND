@@ -1,22 +1,23 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { VehiculoRoutingModule } from './vehiculo-routing.module';
-import { CrearComponent } from './Crear/crear/crear.component';
-import { EditarComponent } from './Editar/editar/editar.component';
-import { ListadoComponent } from './Listado/listado/listado.component';
-import { NbAlertModule, NbButtonModule, NbCardModule, NbDialogModule, NbInputModule} from '@nebular/theme';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DataTablesModule } from 'angular-datatables';
-
-
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { VehiculoRoutingModule } from "./vehiculo-routing.module";
+import { CrearComponent } from "./Crear/crear/crear.component";
+import { EditarComponent } from "./Editar/editar/editar.component";
+import { ListadoComponent } from "./Listado/listado/listado.component";
+import {
+  NbAlertModule,
+  NbButtonModule,
+  NbCardModule,
+  NbDialogModule,
+  NbInputModule,
+} from "@nebular/theme";
+import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { DataTablesModule } from "angular-datatables";
+import { Ng2SmartTableModule } from "ng2-smart-table";
 
 @NgModule({
-  declarations: [
-    CrearComponent,
-    EditarComponent,
-    ListadoComponent
-  ],
+  declarations: [CrearComponent, EditarComponent, ListadoComponent],
   imports: [
     CommonModule,
     VehiculoRoutingModule,
@@ -35,9 +36,8 @@ import { DataTablesModule } from 'angular-datatables';
     NbButtonModule,
 
     NbDialogModule.forChild(),
-    //Datatables
-    DataTablesModule,
-
-  ]
+    //Stmarttable
+    Ng2SmartTableModule,
+  ],
 })
-export class VehiculoModule { }
+export class VehiculoModule {}

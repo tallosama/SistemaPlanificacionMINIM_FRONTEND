@@ -26,4 +26,10 @@ export class DetalleEventoService {
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "detalleEvento/" + id);
   }
+
+  listarPorEvento(eventoId): Observable<any> {
+    return this.httpclient.get(
+      ApiServe.API_SERVER + "detalleEvento/evento/" + eventoId
+    );
+  }
 }

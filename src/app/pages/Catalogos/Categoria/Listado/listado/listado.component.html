@@ -3,11 +3,20 @@
     <nb-card>
       <nb-card-header>
         Listado de categorías
-        <button size="small" id="b3" mat-button class="b3" [routerLink]="['../RegistrarCategoria']" nbButton
-          status="primary">Nuevo</button>
+        <button
+          size="small"
+          id="b3"
+          mat-button
+          class="b3"
+          [routerLink]="['../RegistrarCategoria']"
+          nbButton
+          status="primary"
+        >
+          Nuevo
+        </button>
       </nb-card-header>
       <nb-card-body>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+        <!-- <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
           class="table table-hover table table-striped table-dark row-border hover">
           <thead class="thead-dark">
             <tr>
@@ -30,7 +39,15 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
+
+        <ng2-smart-table
+          [settings]="settings"
+          [source]="sourceSmart"
+          (edit)="editarRegistro($event)"
+          (delete)="confirmacion($event)"
+        >
+        </ng2-smart-table>
       </nb-card-body>
     </nb-card>
   </div>

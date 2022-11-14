@@ -7,6 +7,7 @@ import {
   NbToastrService,
 } from "@nebular/theme";
 import { DataTableDirective } from "angular-datatables";
+import { LocalDataSource } from "ng2-smart-table";
 import { Observable, Subject, Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
 import { AreaService } from "../../../../Catalogos/Area/area.service";
@@ -21,14 +22,15 @@ import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dia
 })
 export class CrearUsuarioComponent implements OnInit, OnDestroy {
   @ViewChild(NbStepperComponent) stepper: NbStepperComponent;
-  @ViewChild(DataTableDirective, { static: false })
-  dtElement: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
-  dtTrigger = new Subject();
+  // @ViewChild(DataTableDirective, { static: false })
+  // dtElement: DataTableDirective;
+  // dtOptions: DataTables.Settings = {};
+  // dtTrigger = new Subject();
   subscripciones: Array<Subscription> = [];
-  data: any;
+  // data: any;
   //autocompletado
   keyword = "desArea";
+  public historyHeading: string = "Recientes";
   //areas$: Observable<any>;
   roles: any;
   areas: any = [];
@@ -41,6 +43,58 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     { Estado: true, Descripcion: "Activo" },
     { Estado: false, Descripcion: "Inactivo" },
   ];
+
+  sourceSmartUsuario: LocalDataSource = new LocalDataSource();
+  settings = {
+    mode: "external",
+
+    edit: {
+      editButtonContent: '<i class="nb-edit"></i>',
+    },
+    actions: {
+      columnTitle: "Acción",
+      add: false,
+      delete: false,
+    },
+
+    pager: {
+      display: true,
+      perPage: 5,
+    },
+    columns: {
+      cedula: {
+        title: "Cédula",
+        type: "string",
+      },
+      pNombre: {
+        title: "Primer nombre",
+        type: "string",
+      },
+      sNombre: {
+        title: "Segundo nombre",
+        type: "string",
+      },
+      pApellido: {
+        title: "Primer apellido",
+        type: "string",
+      },
+      sApellido: {
+        title: "Segundo apellido",
+        type: "string",
+      },
+      tipo: {
+        title: "Tipo",
+        type: "string",
+      },
+
+      estado: {
+        title: "Estado",
+        valuePrepareFunction: (data) => {
+          return data ? "Activo" : "Inactivo";
+        },
+      },
+    },
+  };
 
   constructor(
     private dialogService: NbDialogService,
@@ -60,19 +114,19 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     this.usuario = this.auth.getUserStorage();
     this.autoCompletadoArea();
     this.listarRole();
-    this.dtOptions = {
-      pagingType: "full_numbers",
-      pageLength: 10,
-      destroy: true,
+    // this.dtOptions = {
+    //   pagingType: "full_numbers",
+    //   pageLength: 10,
+    //   destroy: true,
 
-      language: {
-        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json",
-      },
-    };
+    //   language: {
+    //     url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json",
+    //   },
+    // };
   }
   ngOnDestroy(): void {
     this.subscripciones.forEach((subs) => subs.unsubscribe());
-    this.dtTrigger.unsubscribe();
+    // this.dtTrigger.unsubscribe();
   }
 
   autoCompletadoArea(): void {
@@ -83,7 +137,8 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
 
           if (resp.length != 0) {
             this.construir(resp[0]);
-          } else this.dtTrigger.next();
+          }
+          //else this.dtTrigger.next();
         },
         (error) => {
           console.error(error);
@@ -98,34 +153,36 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     );
   }
   reconstruir(area: any): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.subscripciones.push(
-        this.personaService.listarPorArea(area.idArea).subscribe(
-          (resp: any) => {
-            this.data = resp;
-            this.dtTrigger.next();
-          },
-          (error) => {
-            console.error(error);
-            this.showToast(
-              "danger",
-              "Error " + error.status,
-              "Mientras se listaban los registros" + error.message,
-              0
-            );
-          }
-        )
-      );
-    });
+    //this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+    //dtInstance.destroy();
+    this.subscripciones.push(
+      this.personaService.listarPorArea(area.idArea).subscribe(
+        (resp: any) => {
+          //   this.data = resp;
+          this.sourceSmartUsuario.load(resp);
+          // this.dtTrigger.next();
+        },
+        (error) => {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "Error " + error.status,
+            "Mientras se listaban los registros" + error.message,
+            0
+          );
+        }
+      )
+      // );}
+    );
   }
 
   construir(area: any): void {
     this.subscripciones.push(
       this.personaService.listarPorArea(area.idArea).subscribe(
         (resp: any) => {
-          this.data = resp;
-          this.dtTrigger.next();
+          //this.data = resp;
+          this.sourceSmartUsuario.load(resp);
+          //   this.dtTrigger.next();
         },
         (error) => {
           console.error(error);
@@ -141,19 +198,25 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
   }
 
   validarPersona(p) {
-    this.dialogService
-      .open(DialogNamePromptComponent, {
-        context: {
-          titulo: "La persona seleccionada se encuentra desactivada",
-          cuerpo: "¿Desea proseguir?",
-        },
-      })
-      .onClose.subscribe((res) => {
-        if (res) {
-          this.stepper.next();
-          this.asignarPersona(p);
-        }
-      });
+    let datosPersona = p.data;
+    if (datosPersona.estado === true) {
+      this.asignarPersona(datosPersona);
+      this.stepper.next();
+    } else {
+      this.dialogService
+        .open(DialogNamePromptComponent, {
+          context: {
+            titulo: "La persona seleccionada se encuentra desactivada",
+            cuerpo: "¿Desea proseguir?",
+          },
+        })
+        .onClose.subscribe((res) => {
+          if (res) {
+            this.stepper.next();
+            this.asignarPersona(datosPersona);
+          }
+        });
+    }
   }
   asignarPersona(persona): void {
     persona.poseeUsuario = true;
@@ -199,7 +262,8 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
       //this.usuarioForm.get("Clave").setValue(clave);
       this.usuarioForm.get("Clave").reset();
       await this.colecciondeUsuario(resultado);
-      this.actualizarTabla(this.personaSeleccionada);
+      this.sourceSmartUsuario.remove(this.personaSeleccionada);
+      //  this.actualizarTabla(this.personaSeleccionada);
       this.limpiar();
     }
     // });
@@ -234,16 +298,16 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     );
   }
 
-  actualizarTabla(id: any): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Primero destruimos la instancia de la datatable
-      dtInstance.destroy();
-      //Obtenemos el índice del elemento a eliminar y lo eliminamos de this.data
-      this.data.splice(this.data.indexOf(id), 1); // 1 es la cantidad de elemento a eliminar
-      //reconstrucción de la datatables con los nevos elementos
-      this.dtTrigger.next();
-    });
-  }
+  // actualizarTabla(id: any): void {
+  //   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+  //     // Primero destruimos la instancia de la datatable
+  //     dtInstance.destroy();
+  //     //Obtenemos el índice del elemento a eliminar y lo eliminamos de this.data
+  //     this.data.splice(this.data.indexOf(id), 1); // 1 es la cantidad de elemento a eliminar
+  //     //reconstrucción de la datatables con los nevos elementos
+  //     this.dtTrigger.next();
+  //   });
+  // }
   hash256(clave): any {
     const utf8 = new TextEncoder().encode(clave);
     return crypto.subtle.digest("SHA-256", utf8).then((hashBuffer) => {

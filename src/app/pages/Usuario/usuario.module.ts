@@ -14,6 +14,7 @@ import {
 } from "@nebular/theme";
 import { DataTablesModule } from "angular-datatables";
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
+import { Ng2SmartTableModule } from "ng2-smart-table";
 
 @NgModule({
   declarations: [CrearUsuarioComponent],
@@ -41,6 +42,8 @@ import { AutocompleteLibModule } from "angular-ng-autocomplete";
     AutocompleteLibModule,
     //para combobox
     NbSelectModule,
+    //Stmarttable
+    Ng2SmartTableModule,
   ],
 })
 export class UsuarioModule {}

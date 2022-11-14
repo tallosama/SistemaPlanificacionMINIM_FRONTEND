@@ -17,9 +17,10 @@ import { DataTablesModule } from "angular-datatables";
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
 import { EventosComponent } from "./eventos/eventos.component";
 import { Ng2SmartTableModule } from "ng2-smart-table";
+import { BuscarComponent } from './Buscar/buscar/buscar.component';
 
 @NgModule({
-  declarations: [EventosComponent],
+  declarations: [EventosComponent, BuscarComponent],
   imports: [
     CommonModule,
     EventosRoutingModule,

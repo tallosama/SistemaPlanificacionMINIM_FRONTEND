@@ -8,6 +8,8 @@ import { Subject, Subscription } from "rxjs";
 import { DataTableDirective } from "angular-datatables";
 import { ProductoService } from "../../producto.service";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
+import { LocalDataSource } from "ng2-smart-table";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "ngx-listado",
@@ -15,24 +17,59 @@ import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dia
   styleUrls: ["./listado.component.scss"],
 })
 export class ListadoComponent implements OnInit, OnDestroy {
-  @ViewChild(DataTableDirective, { static: false })
-  dtElement: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
-  dtTrigger = new Subject();
+  sourceSmart: LocalDataSource = new LocalDataSource();
+  settings = {
+    mode: "external",
+
+    edit: {
+      editButtonContent: '<i class="nb-edit"></i>',
+    },
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+    },
+    actions: {
+      columnTitle: "Acción",
+      add: false,
+    },
+
+    pager: {
+      display: true,
+      perPage: 5,
+    },
+    columns: {
+      descripcion: {
+        title: "Descripción",
+        type: "string",
+      },
+
+      cantStock: {
+        title: "Stock",
+        type: "number",
+      },
+      desctipoMaterialripcion: {
+        title: "Tipo de material",
+        type: "string",
+      },
+    },
+  };
+
   subscripciones: Array<Subscription> = [];
-  data: any;
+  // data: any;
   constructor(
     private productoService: ProductoService,
     private dialogService: NbDialogService,
-    private toastrService: NbToastrService
+    private toastrService: NbToastrService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   construir(): void {
     this.subscripciones.push(
       this.productoService.listar().subscribe(
         (resp: any) => {
-          this.data = resp;
-          this.dtTrigger.next();
+          this.sourceSmart.load(resp);
+          // this.data = resp;
+          // this.dtTrigger.next();
         },
         (error) => {
           console.error(error);
@@ -48,31 +85,15 @@ export class ListadoComponent implements OnInit, OnDestroy {
   }
 
   reconstruir(id: any): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Primero destruimos la instancia de la datatable
-      dtInstance.destroy();
-      //Obtenemos el índice del elemento a eliminar y lo eliminamos de this.data
-      this.data.splice(this.data.indexOf(id), 1); // 1 es la cantidad de elemento a eliminar
-      //reconstrucción de la datatables con los nevos elementos
-      this.dtTrigger.next();
-    });
+    this.sourceSmart.remove(id);
+    this.sourceSmart.refresh();
   }
 
   ngOnInit(): void {
     this.construir();
-    //datatables
-    this.dtOptions = {
-      pagingType: "full_numbers",
-      pageLength: 10,
-      destroy: true,
-      language: {
-        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json",
-      },
-    };
   }
   ngOnDestroy(): void {
     this.subscripciones.forEach((subs) => subs.unsubscribe());
-    this.dtTrigger.unsubscribe();
   }
   confirmacion(id): void {
     this.subscripciones.push(
@@ -84,7 +105,7 @@ export class ListadoComponent implements OnInit, OnDestroy {
         })
         .onClose.subscribe((res) => {
           if (res) {
-            this.eliminar(id);
+            this.eliminar(id.data);
           }
         })
     );
@@ -123,6 +144,11 @@ export class ListadoComponent implements OnInit, OnDestroy {
     );
   }
 
+  editarRegistro(event) {
+    this.router.navigate(["../EditarProducto", event.data.idProducto], {
+      relativeTo: this.route,
+    });
+  }
   //construccion del mensaje
   public showToast(
     estado: string,

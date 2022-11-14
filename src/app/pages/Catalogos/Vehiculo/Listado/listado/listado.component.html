@@ -15,7 +15,14 @@
         </button>
       </nb-card-header>
       <nb-card-body>
-        <table
+        <ng2-smart-table
+          [settings]="settings"
+          [source]="sourceSmart"
+          (edit)="editarRegistro($event)"
+          (delete)="confirmacion($event)"
+        >
+        </ng2-smart-table>
+        <!-- <table
           datatable
           [dtOptions]="dtOptions"
           [dtTrigger]="dtTrigger"
@@ -57,7 +64,7 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
       </nb-card-body>
     </nb-card>
   </div>

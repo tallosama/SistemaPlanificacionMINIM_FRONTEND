@@ -34,6 +34,9 @@ export class EventosComponent implements OnInit, OnDestroy {
   //autocompletado
   keyword = ["desArea", "descripcion", "desMunicipio"];
   public historyHeading: string = "Recientes";
+
+  sourceSmart: LocalDataSource = new LocalDataSource();
+
   planes: any = [];
   areas: any = [];
   municipios: any = [];
@@ -43,7 +46,7 @@ export class EventosComponent implements OnInit, OnDestroy {
   detalleEventoForm: FormGroup;
   usuario: any;
   fecha = new Date().toISOString().slice(0, 10);
-  sourceSmart: LocalDataSource = new LocalDataSource();
+
   constructor(
     private fb: FormBuilder,
     private auth: authService,
@@ -94,7 +97,7 @@ export class EventosComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.autoCompletados();
     this.usuario = this.auth.getUserStorage();
-
+    //this.sourceSmart.setPaging(5);
     this.cargarForm();
   }
 
@@ -238,6 +241,11 @@ export class EventosComponent implements OnInit, OnDestroy {
   }
 
   agregarTabla() {
+    //formatos de horas
+    //console.log(this.detalleEventoForm.value.hora.toTimeString());
+    //console.log(this.detalleEventoForm.value.hora.toISOString());
+    //console.log(this.detalleEventoForm.value.hora.toLocaleTimeString());
+
     this.sourceSmart.add(this.detalleEventoForm.value);
     this.sourceSmart.refresh();
     this.limpiarDetalle();
@@ -315,6 +323,10 @@ export class EventosComponent implements OnInit, OnDestroy {
       //   { name: "sector", title: '<i class="nb-compose"></i>' },
       //   //   { name: "editrecord", title: '<i class="nb-edit"></i>' },
       // ],
+    },
+    pager: {
+      display: true,
+      perPage: 5,
     },
     columns: {
       observaciones: {

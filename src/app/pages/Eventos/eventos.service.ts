@@ -24,4 +24,7 @@ export class EventosService {
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "evento/" + id);
   }
+  listarPorPlan(planId): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "evento/plan/" + planId);
+  }
 }

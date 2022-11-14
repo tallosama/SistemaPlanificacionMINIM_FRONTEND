@@ -1,9 +1,55 @@
 <nb-card class="col-md-12 col-lg-12 col-xxxl-12">
   <nb-card-body>
     <nb-stepper #stepper orientation="horizontal">
-      <nb-step [label]="labelOne">
-        <ng-template #labelOne>Primer paso</ng-template>
-        <h3>Registro de eventos</h3>
+      <!-- Listado de eventos -->
+
+      <nb-step label="Búsqueda de evento">
+        <h3>Eventos</h3>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-md-8 mx-auto">
+              <ng-autocomplete
+                [data]="planes"
+                [searchKeyword]="keyword[1]"
+                [itemTemplate]="itemTemplate"
+                [notFoundTemplate]="notFoundTemplate"
+                placeholder="Ingrese el plan"
+                (selected)="reconstruir($event)"
+                notFoundText="No se encontró"
+              >
+              </ng-autocomplete>
+
+              <ng-template #itemTemplate let-item>
+                <a [innerHTML]="item.descripcion"></a>
+              </ng-template>
+
+              <ng-template #notFoundTemplate let-notFound>
+                <div [innerHTML]="notFound"></div>
+              </ng-template>
+            </div>
+          </div>
+          <br /><br />
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <ng2-smart-table
+                  [settings]="settings"
+                  [source]="sourceSmart"
+                  (edit)="onEditRowSelect($event)"
+                >
+                </ng2-smart-table>
+              </div>
+            </div>
+          </div>
+
+          <button nbButton [routerLink]="['../RegistrarEventos']">Atrás</button>
+        </nb-card-body>
+      </nb-step>
+
+      <!-- Evento seleccionado -->
+
+      <nb-step label="Edición de evento">
+        <h3>Editar evento</h3>
 
         <nb-card-body>
           <form [formGroup]="eventoForm" *ngIf="eventoForm">
@@ -19,11 +65,7 @@
                   placeholder="Descripción del evento"
                 ></textarea>
               </div>
-              <div class="col-md-2">
-                <button nbButton [routerLink]="['../BuscarEventos']">
-                  Buscar eventos
-                </button>
-              </div>
+
               <div
                 *ngIf="
                   eventoForm.get('desEveto').invalid &&
@@ -119,42 +161,30 @@
                       eventoForm.get('areaId').touched
                     "
                   >
-                    El área es obligatorio
+                    El área es obligatoria
                   </p>
                 </div>
               </div>
             </div>
 
-            <!-- <div class="row">
-            <div class="col-md-6">
-              <div class="form-group"></div>
-            </div>
-          </div> -->
-
             <button
               nbButton
               [disabled]="eventoForm.invalid"
-              (click)="guardarEvento()"
+              (click)="editarEvento()"
             >
-              Guardar evento
-            </button>
-            <button
-              nbButton
-              nbStepperNext
-              [disabled]="eventoForm.invalid"
-              (click)="iniciarDetalle()"
-            >
-              Asignar detalles
+              Editar evento
             </button>
           </form>
-        </nb-card-body>
-        <!-- <button nbButton disabled nbStepperNext>prev</button>
-        <button nbButton nbStepperNext>next</button> -->
-      </nb-step>
-      <nb-step [label]="labelTwo">
-        <ng-template #labelTwo>Segundo paso</ng-template>
-        <h3>Registro de detalles</h3>
 
+          <button nbButton nbStepperPrevious>Regresar</button>
+
+          <button nbButton (click)="cargarDetalles()">Editar detalles</button>
+        </nb-card-body>
+      </nb-step>
+
+      <!-- Detalles del evento -->
+      <nb-step label="Editar detalles">
+        <h3>Detalles</h3>
         <nb-card-body>
           <form [formGroup]="detalleEventoForm" *ngIf="detalleEventoForm">
             <div class="row">
@@ -210,11 +240,6 @@
                     placeholder="Fecha del evento"
                     formControlName="fecha"
                   />
-                  <!-- /PARA FORMATEAR FECHAS -->
-                  <!-- <nb-datepicker
-                    #formcontrol
-                    format="MM\dd\yyyy"
-                  ></nb-datepicker> -->
 
                   <p
                     class="caption status-danger"
@@ -237,7 +262,6 @@
                     [data]="municipios"
                     [searchKeyword]="keyword[2]"
                     formControlName="municipioId"
-                    [initialValue]="municipios[0]"
                     [itemTemplate]="itemTemplateMun"
                     [notFoundTemplate]="notFoundTemplateMun"
                     placeholder="Ingrese el municipio"
@@ -363,10 +387,16 @@
                 (click)="agregarTabla()"
                 [disabled]="detalleEventoForm.invalid"
               >
-                Añadir
+                Actualizar
+              </button>
+              <button
+                nbButton
+                (click)="registrarDetalle()"
+                [disabled]="detalleEventoForm.invalid"
+              >
+                Nuevo
               </button>
             </div>
-            <button nbButton (click)="guardarTodo()">Guardar todo</button>
           </form>
 
           <div class="row">
@@ -374,51 +404,17 @@
               <div class="form-group">
                 <label class="label">Detalles de eventos</label>
                 <ng2-smart-table
-                  [settings]="settings"
-                  [source]="sourceSmart"
-                  (edit)="onEditRowSelect($event)"
-                  (delete)="onDeleteRowSelect($event)"
+                  [settings]="settingsDetalle"
+                  [source]="sourceSmartDetalle"
+                  (edit)="onEditarDetalle($event)"
+                  (delete)="onBorrarDetalle($event)"
                 >
                 </ng2-smart-table>
-                <!-- <table
-                  datatable
-                  [dtOptions]="dtOptions"
-                  class="table table-hover table table-striped table-dark row-border hover"
-                >
-                  <thead class="table-dark">
-                    <tr>
-                      <th scope="col">Observacion</th>
-                      <th scope="col">Fecha</th>
-                      <th scope="col">Hora</th>
-                      <th scope="col">Participantes</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">Municipio</th>
-                      <th scope="col">Acciones</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr *ngFor="let p of data">
-                      <td>{{ p.observaciones }}</td>
-                      <td>{{ p.fecha }}</td>
-                      <td>{{ p.hora }}</td>
-                      <td>{{ p.participantesProyectado }}</td>
-                      <td>{{ p.estado }}</td>
-                      <td>{{ p.municipioId.desMunicipio }}</td>
-                      <td>
-                        <button class="btn btn-danger">
-                          <i class="nb-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table> -->
               </div>
             </div>
           </div>
 
           <button nbButton nbStepperPrevious>Regresar</button>
-          <!-- <button nbButton (click)="verDatos()">Guardar todo</button> -->
         </nb-card-body>
       </nb-step>
     </nb-stepper>
