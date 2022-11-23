@@ -57,10 +57,9 @@ export class NgxLoginComponent implements OnInit {
       if (usuario.user) {
         this.showToast("success", "Bienvenido", "Se ha iniciado sesión ", 4000);
 
-        this.authService.saveUserStorage(
-          usuario.user,
-          this.loginForm.controls.recordar.value
-        );
+        let userJson = usuario.user.toJSON();
+        userJson["recordar"] = this.loginForm.controls.recordar.value;
+        this.authService.saveUserStorage(userJson);
 
         this.router.navigate(["/"], { relativeTo: this.route });
       }

@@ -95,7 +95,7 @@
     </div>
     <script>
       function validarCierre() {
-        if (JSON.parse(localStorage.getItem("recordar")) == false) {
+        if (JSON.parse(localStorage.getItem("usuario")).recordar == false) {
           localStorage.clear();
         }
       }

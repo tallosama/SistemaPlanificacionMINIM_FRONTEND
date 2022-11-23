@@ -51,16 +51,13 @@ export class authService {
     }
   }
 
-  public saveUserStorage(user, recordar) {
+  public saveUserStorage(user) {
     if (localStorage.getItem("usuario") != null) {
       localStorage.removeItem("usuario");
-      localStorage.removeItem("recordar");
     }
 
     localStorage.setItem("usuario", JSON.stringify(user));
-    localStorage.setItem("recordar", JSON.stringify(recordar));
   }
-
   public logout() {
     localStorage.clear();
     this.authFire.signOut();
