@@ -18,7 +18,6 @@ import { NgxRequestPasswordComponent } from "./request-password/request-password
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     RouterModule,
     NbAlertModule,
     NbInputModule,

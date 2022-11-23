@@ -69,15 +69,17 @@
     >
       La clave es requerida
     </p>
-
-    <!-- <p class="caption status-danger" [(ngModel)]="respuesta" [ngModelOptions]="{standalone: true}" ngDefaultControl>
-      {{respuesta}}
-    </p>  -->
+    <!-- controles de respuestas -->
     <p class="caption status-danger" *ngIf="respuesta">
       {{ respuesta }}
     </p>
   </div>
-
+  <!-- recordar sesión -->
+  <div class="form-control-group accept-group">
+    <nb-checkbox formControlName="recordar"
+      >Mantener sesión iniciada</nb-checkbox
+    >
+  </div>
   <button
     type="submit"
     [disabled]="loginForm.invalid"

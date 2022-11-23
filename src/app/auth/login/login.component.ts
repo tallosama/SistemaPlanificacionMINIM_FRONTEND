@@ -22,6 +22,7 @@ export class NgxLoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       correo: ["", Validators.compose([Validators.required, Validators.email])],
       clave: ["", Validators.required],
+      recordar: [false],
     });
   }
   private errores(code: any) {
@@ -47,7 +48,6 @@ export class NgxLoginComponent implements OnInit {
     return "Error desconocido " + code;
   }
   async login() {
-    // this.hash256(this.loginForm.controls.clave.value).then(async (clave) => {
     try {
       //debugger;
       let usuario = await this.authService.login(
@@ -56,7 +56,12 @@ export class NgxLoginComponent implements OnInit {
       );
       if (usuario.user) {
         this.showToast("success", "Bienvenido", "Se ha iniciado sesión ", 4000);
-        this.authService.saveUserStorage(usuario.user);
+
+        this.authService.saveUserStorage(
+          usuario.user,
+          this.loginForm.controls.recordar.value
+        );
+
         this.router.navigate(["/"], { relativeTo: this.route });
       }
     } catch (e) {
@@ -80,7 +85,6 @@ export class NgxLoginComponent implements OnInit {
 
     //   this.respuesta = this.errores(e.code);
     // });
-    //  });
   }
 
   // hash256(clave): any {

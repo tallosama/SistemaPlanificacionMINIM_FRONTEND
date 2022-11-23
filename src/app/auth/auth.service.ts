@@ -51,11 +51,14 @@ export class authService {
     }
   }
 
-  public saveUserStorage(user) {
+  public saveUserStorage(user, recordar) {
     if (localStorage.getItem("usuario") != null) {
       localStorage.removeItem("usuario");
+      localStorage.removeItem("recordar");
     }
-    localStorage.setItem("usuario", JSON.stringify(user.toJSON()));
+
+    localStorage.setItem("usuario", JSON.stringify(user));
+    localStorage.setItem("recordar", JSON.stringify(recordar));
   }
 
   public logout() {
