@@ -46,7 +46,7 @@ export class ListadoComponent implements OnInit, OnDestroy {
         title: "Stock",
         type: "number",
       },
-      desctipoMaterialripcion: {
+      tipoMaterial: {
         title: "Tipo de material",
         type: "string",
       },

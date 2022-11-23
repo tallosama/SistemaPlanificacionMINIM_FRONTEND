@@ -9,7 +9,7 @@ import {
 import { UserData } from "../../../@core/data/users";
 import { LayoutService } from "../../../@core/utils";
 import { map, takeUntil } from "rxjs/operators";
-import { Subject, Subscription } from "rxjs";
+import { Observable, Subject, Subscription } from "rxjs";
 import { authService } from "../../../auth/auth.service";
 import { Router } from "@angular/router";
 //import { AuthService } from '@auth0/auth0-angular';
@@ -22,7 +22,9 @@ import { Router } from "@angular/router";
 export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
+  users: any;
   user: any;
+  subscripciones: Array<Subscription> = [];
   menu$: Subscription;
   themes = [
     {
@@ -57,32 +59,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService
   ) {}
-  ngOnInit() {
+
+  async ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
+
     this.user = this.auth.getUserStorage();
 
-    // this.auth
-    //   .getUser()
-    //   .then((u) => (this.user = u))
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-
     this.menu$ = this.menuService.onItemClick().subscribe((event) => {
-      if (event.item.title == "Cerrar sesión") {
-        this.auth
-          .logout()
-          .then((resp) => {
-            window.location.reload();
-          })
-          .catch((e) => console.error(e));
+      if (event.item.title === "Cerrar sesión") {
+        this.auth.logout();
+        window.location.reload();
       }
     });
-
-    //     this.userService.getUsers()
-    //       .pipe(takeUntil(this.destroy$))
-    //       .subscribe((users: any) => this.user = users.eva);
-    // console.log(this.user);
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService
@@ -108,6 +96,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.menu$.unsubscribe();
+    this.subscripciones.forEach((s) => {
+      s.unsubscribe();
+    });
   }
 
   changeTheme(themeName: string) {

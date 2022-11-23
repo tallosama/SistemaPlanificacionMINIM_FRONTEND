@@ -40,25 +40,46 @@ export class NgxLoginComponent implements OnInit {
     if (code === "auth/too-many-requests") {
       return "La cuenta ha sido suspendida porque se ha intentado acceder varias veces";
     }
+    if (code === "auth/network-request-failed") {
+      return "No se pudo iniciar sesión por problemas de conexión";
+    }
+
     return "Error desconocido " + code;
   }
   async login() {
     // this.hash256(this.loginForm.controls.clave.value).then(async (clave) => {
-    await this.authService
-      .login(
+    try {
+      //debugger;
+      let usuario = await this.authService.login(
         this.loginForm.controls.correo.value,
         this.loginForm.controls.clave.value
-      )
-      .then((r) => {
+      );
+      if (usuario.user) {
         this.showToast("success", "Bienvenido", "Se ha iniciado sesión ", 4000);
-
+        this.authService.saveUserStorage(usuario.user);
         this.router.navigate(["/"], { relativeTo: this.route });
-      })
-      .catch((e) => {
-        console.error(e);
+      }
+    } catch (e) {
+      console.error(e);
+      this.respuesta = this.errores(e.code);
+    }
 
-        this.respuesta = this.errores(e.code);
-      });
+    //Solamente con promesas
+    // await this.authService
+    // .login(
+    //   this.loginForm.controls.correo.value,
+    //   this.loginForm.controls.clave.value
+    // )
+    // .then((r) => {
+    //   this.showToast("success", "Bienvenido", "Se ha iniciado sesión ", 4000);
+    //   localStorage.setItem("usuario", JSON.stringify(r.user.toJSON()));
+    //   this.router.navigate(["/"], { relativeTo: this.route });
+    // })
+    // .catch((e) => {
+    //   console.error(e);
+
+    //   this.respuesta = this.errores(e.code);
+    // });
     //  });
   }
 
