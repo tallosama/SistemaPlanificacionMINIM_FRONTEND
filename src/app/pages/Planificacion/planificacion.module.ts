@@ -15,6 +15,7 @@ import {
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DataTablesModule } from "angular-datatables";
+import { Ng2SmartTableModule } from "ng2-smart-table";
 
 @NgModule({
   declarations: [CrearComponent, EditarComponent, ListadoComponent],
@@ -34,8 +35,9 @@ import { DataTablesModule } from "angular-datatables";
     NbCardModule,
     NbButtonModule,
     NbDialogModule.forChild(),
-    //Datatables
-    DataTablesModule,
+
+    //Stmarttable
+    Ng2SmartTableModule,
     //fechas
     NbDatepickerModule,
   ],

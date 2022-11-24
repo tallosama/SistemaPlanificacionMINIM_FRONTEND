@@ -8,6 +8,9 @@ import { Subject, Subscription } from "rxjs";
 import { DataTableDirective } from "angular-datatables";
 import { DialogNamePromptComponent } from "../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { PlanificacionService } from "../../planificacion.service";
+import { LocalDataSource } from "ng2-smart-table";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Control } from "../../../Globales/Control";
 
 @Component({
   selector: "ngx-listado",
@@ -15,66 +18,84 @@ import { PlanificacionService } from "../../planificacion.service";
   styleUrls: ["./listado.component.scss"],
 })
 export class ListadoComponent implements OnInit, OnDestroy {
-  @ViewChild(DataTableDirective, { static: false })
-  dtElement: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
-  dtTrigger = new Subject();
   subscripciones: Array<Subscription> = [];
-  data: any;
+
+  sourceSmart: LocalDataSource = new LocalDataSource();
+  settings = {
+    mode: "external",
+
+    edit: {
+      editButtonContent: '<i class="nb-edit"></i>',
+    },
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+    },
+    actions: {
+      columnTitle: "Acción",
+      add: false,
+    },
+
+    pager: {
+      display: true,
+      perPage: 5,
+    },
+    columns: {
+      descripcion: {
+        title: "Descripción",
+        type: "string",
+      },
+      lema: {
+        title: "Lema",
+        type: "string",
+      },
+      fechaInicio: {
+        title: "Fecha de inicio",
+        type: "string",
+      },
+      fechaFin: {
+        title: "Fecha final",
+        type: "string",
+      },
+    },
+  };
 
   constructor(
     private planificacionService: PlanificacionService,
     private dialogService: NbDialogService,
-    private toastrService: NbToastrService
+    private toastrService: NbToastrService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
-
   construir(): void {
     this.subscripciones.push(
       this.planificacionService.listar().subscribe(
         (resp: any) => {
-          this.data = resp;
-          this.dtTrigger.next();
+          this.sourceSmart.load(resp);
         },
         (error) => {
           console.error(error);
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los registros" + error.message,
+            "Mientras se listaban los registros" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
       )
     );
   }
-
   reconstruir(id: any): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Primero destruimos la instancia de la datatable
-      dtInstance.destroy();
-      //Obtenemos el índice del elemento a eliminar y lo eliminamos de this.data
-      this.data.splice(this.data.indexOf(id), 1); // 1 es la cantidad de elemento a eliminar
-      //reconstrucción de la datatables con los nevos elementos
-      this.dtTrigger.next();
-    });
+    this.sourceSmart.remove(id);
+    this.sourceSmart.refresh();
   }
 
   ngOnInit(): void {
     this.construir();
-    //datatables
-    this.dtOptions = {
-      pagingType: "full_numbers",
-      pageLength: 10,
-      destroy: true,
-      language: {
-        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json",
-      },
-    };
   }
-
   ngOnDestroy(): void {
     this.subscripciones.forEach((subs) => subs.unsubscribe());
-    this.dtTrigger.unsubscribe();
   }
 
   confirmacion(id): void {
@@ -82,12 +103,12 @@ export class ListadoComponent implements OnInit, OnDestroy {
       this.dialogService
         .open(DialogNamePromptComponent, {
           context: {
-            titulo: "¿Desea eliminar el registro?",
+            cuerpo: "¿Desea eliminar el registro?",
           },
         })
         .onClose.subscribe((res) => {
           if (res) {
-            this.eliminar(id);
+            this.eliminar(id.data);
           }
         })
     );
@@ -119,11 +140,21 @@ export class ListadoComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se eliminaba el registro " + error.message,
+            "Mientras se eliminaba el registro" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
       )
+    );
+  }
+  editarRegistro(event) {
+    this.router.navigate(
+      ["../EditarPlanificacion", event.data.idPlanificacion],
+      {
+        relativeTo: this.route,
+      }
     );
   }
 

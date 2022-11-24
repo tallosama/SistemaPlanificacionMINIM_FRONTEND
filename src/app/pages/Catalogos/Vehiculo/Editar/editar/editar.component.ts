@@ -14,6 +14,7 @@ import {
 } from "@nebular/theme";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-editar",
@@ -83,7 +84,9 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se buscaba un registro " + error.message,
+            "Mientras se buscaba un registro" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -114,7 +117,9 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se editaba un registro " + error.message,
+            "Mientras se editaba un registro" +
+              Control.evaluarErrorRepetido(error.error),
+
             0
           );
         }

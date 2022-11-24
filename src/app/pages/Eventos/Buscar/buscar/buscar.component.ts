@@ -17,9 +17,10 @@ import { authService } from "../../../../auth/auth.service";
 import { AreaService } from "../../../Catalogos/Area/area.service";
 import { DialogNamePromptComponent } from "../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { PlanificacionService } from "../../../Planificacion/planificacion.service";
-import { MunicipioService } from "../../../ServiciosGlobales/Municipio/municipio.service";
+import { MunicipioService } from "../../../Globales/Servicios/municipio.service";
 import { DetalleEventoService } from "../../detalle-evento.service";
 import { EventosService } from "../../eventos.service";
+import { Control } from "../../../Globales/Control";
 
 @Component({
   selector: "ngx-buscar",
@@ -165,7 +166,9 @@ export class BuscarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban áreas " + error.message,
+            "Mientras se listaban las áreas" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -182,7 +185,9 @@ export class BuscarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los planes " + error.message,
+            "Mientras se listaban los planes" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -248,7 +253,9 @@ export class BuscarComponent implements OnInit, OnDestroy {
               this.showToast(
                 "danger",
                 "Error " + error.status,
-                "Mientras se modificaba el evento " + error.message,
+                "Mientras se modificaba el evento" +
+                  Control.evaluarErrorRepetido(error.error),
+
                 0
               );
             }
@@ -287,7 +294,9 @@ export class BuscarComponent implements OnInit, OnDestroy {
               this.showToast(
                 "danger",
                 "Error " + error.status,
-                "Mientras se listaban los detalles " + error.message,
+                "Mientras se listaban los detalles" +
+                  Control.evaluarErrorDependiente(error.error),
+
                 0
               );
             }
@@ -332,7 +341,9 @@ export class BuscarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los municipios " + error.message,
+            "Mientras se listaban los municipios" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -400,7 +411,9 @@ export class BuscarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se ingresaba el detalle " + error.message,
+            "Mientras se ingresaba un detalle" +
+              Control.evaluarErrorRepetido(error.error),
+
             0
           );
         }
@@ -454,7 +467,9 @@ export class BuscarComponent implements OnInit, OnDestroy {
                   this.showToast(
                     "danger",
                     "Error " + error.status,
-                    "Mientras se eliminaba el registro " + error.message,
+                    "Mientras se eliminaba el registro" +
+                      Control.evaluarErrorDependiente(error.error),
+
                     0
                   );
                 }

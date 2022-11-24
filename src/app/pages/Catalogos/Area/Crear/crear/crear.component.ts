@@ -10,9 +10,10 @@ import {
   NbToastrService,
   NbToastrConfig,
 } from "@nebular/theme";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { AreaService } from "../../area.service";
 import { authService } from "../../../../../auth/auth.service";
+import { Control } from "../../../../Globales/Control";
 @Component({
   selector: "ngx-crear",
   templateUrl: "./crear.component.html",
@@ -82,14 +83,15 @@ export class CrearComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Verifique que no exista un registro con el mismo nombre " +
-              error.message,
+            "Mientras se realizaba un registro" +
+              Control.evaluarErrorRepetido(error.error),
             0
           );
         }
       )
     );
   }
+
   // construccion del mensaje
   public showToast(
     estado: string,

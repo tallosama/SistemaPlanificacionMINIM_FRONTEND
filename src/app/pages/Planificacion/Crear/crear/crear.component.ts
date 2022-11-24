@@ -13,6 +13,7 @@ import {
 } from "@nebular/theme";
 import { PlanificacionService } from "../../planificacion.service";
 import { authService } from "../../../../auth/auth.service";
+import { Control } from "../../../Globales/Control";
 
 @Component({
   selector: "ngx-crear",
@@ -90,7 +91,9 @@ export class CrearComponent implements OnInit {
             this.showToast(
               "danger",
               "Error" + error.status,
-              "Mientras se ingresaba un registro" + error.message,
+              "Mientras se realizaba un registro" +
+                Control.evaluarErrorRepetido(error.error),
+
               0
             );
           }

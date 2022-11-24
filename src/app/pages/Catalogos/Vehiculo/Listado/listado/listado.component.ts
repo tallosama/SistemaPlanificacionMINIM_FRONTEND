@@ -10,6 +10,7 @@ import {
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LocalDataSource } from "ng2-smart-table";
+import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-listado",
@@ -80,7 +81,9 @@ export class ListadoComponent implements OnInit {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los registros" + error.message,
+            "Mientras se listaban los registros" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -102,7 +105,7 @@ export class ListadoComponent implements OnInit {
       this.dialogService
         .open(DialogNamePromptComponent, {
           context: {
-            titulo: "¿Desea elminar el registro?",
+            cuerpo: "¿Desea eliminar el registro?",
           },
         })
         .onClose.subscribe((res) => {
@@ -139,7 +142,9 @@ export class ListadoComponent implements OnInit {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se eliminaba el registro " + error.message,
+            "Mientras se eliminaba el registro" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }

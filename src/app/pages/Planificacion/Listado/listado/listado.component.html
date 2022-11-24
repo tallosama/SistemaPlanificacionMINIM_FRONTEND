@@ -2,61 +2,28 @@
   <div class="col-md-12">
     <nb-card>
       <nb-card-header>
-        <h3>
-          Listado de las planificaciones
-          <button
-            [routerLink]="['../RegistrarPlanificacion']"
-            nbButton
-            status="primary"
-          >
-            <i class="nb-plus"></i>
-          </button>
-        </h3>
-      </nb-card-header>
-      <nb-card-body>
-        <table
-          datatable
-          [dtOptions]="dtOptions"
-          [dtTrigger]="dtTrigger"
-          class="table table-hover table table-striped table-dark row-border hover"
+        Listado de los planes
+        <button
+          size="small"
+          id="b3"
+          mat-button
+          class="b3"
+          [routerLink]="['../RegistrarPlanificacion']"
+          nbButton
+          status="primary"
         >
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">Descripción</th>
-              <th scope="col">Lema</th>
-              <th scope="col">Fecha inicial</th>
-              <th scope="col">Fecha final</th>
-              <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let p of data">
-              <td>{{ p.descripcion }}</td>
-              <td>{{ p.lema }}</td>
-              <td>{{ p.fechaInicio }}</td>
-              <td>{{ p.fechaFin }}</td>
+          Nuevo
+        </button>
+      </nb-card-header>
 
-              <td>
-                <button
-                  style="margin-right: 8px"
-                  type="button"
-                  class="btn btn-info"
-                  [routerLink]="['../EditarPlanificacion', p.idPlanificacion]"
-                >
-                  <i class="nb-compose"></i>
-                </button>
-
-                <button
-                  type="button"
-                  (click)="confirmacion(p)"
-                  class="btn btn-danger"
-                >
-                  <i class="nb-trash"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <nb-card-body>
+        <ng2-smart-table
+          [settings]="settings"
+          [source]="sourceSmart"
+          (edit)="editarRegistro($event)"
+          (delete)="confirmacion($event)"
+        >
+        </ng2-smart-table>
       </nb-card-body>
     </nb-card>
   </div>

@@ -15,6 +15,7 @@ import { SectorService } from "../../sector.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-crear",
@@ -82,8 +83,9 @@ export class CrearComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Verifique que no exista un registro con el mismo nombre " +
-              error.message,
+            "Mientras se realizaba un registro" +
+              Control.evaluarErrorRepetido(error.error),
+
             0
           );
         }

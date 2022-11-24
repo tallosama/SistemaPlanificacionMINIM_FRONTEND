@@ -13,6 +13,7 @@ import {
 } from "@nebular/theme";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Control } from "../../../../Globales/Control";
 import { SectorService } from "../../sector.service";
 
 @Component({
@@ -65,7 +66,9 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se buscaba un registro " + error.message,
+            "Mientras se buscaba un registro" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -96,8 +99,9 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Verifique que no exista un registro con el mismo nombre " +
-              error.message,
+            "Mientras se editaba un registro" +
+              Control.evaluarErrorRepetido(error.error),
+
             0
           );
         }

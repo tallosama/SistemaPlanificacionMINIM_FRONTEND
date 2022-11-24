@@ -14,6 +14,7 @@ import { VehiculoService } from "../../vehiculo.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-crear",
@@ -101,7 +102,9 @@ export class CrearComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se ingresaba un registro " + error.message,
+            "Mientras se realizaba un registro" +
+              Control.evaluarErrorRepetido(error.error),
+
             0
           );
         }

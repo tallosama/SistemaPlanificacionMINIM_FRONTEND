@@ -13,6 +13,7 @@ import { authService } from "../../../../../auth/auth.service";
 import { AreaService } from "../../../../Catalogos/Area/area.service";
 import { PersonaService } from "../../../../Catalogos/Persona/persona.service";
 import { RolService } from "../../../../Catalogos/Rol/rol.service";
+import { Control } from "../../../../Globales/Control";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 
 @Component({
@@ -145,7 +146,9 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban categorías " + error.message,
+            "Mientras se listaban las áreas" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -167,7 +170,9 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los registros" + error.message,
+            "Mientras se listaban los registros" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -189,7 +194,9 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los registros" + error.message,
+            "Mientras se listaban los registros" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -253,7 +260,9 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
         this.showToast(
           "danger",
           "Error " + error.status,
-          "Mientras se creaba la cuenta de usuario " + error,
+          "Mientras se creaba la cuenta de usuario" +
+            Control.evaluarErrorRepetido(error.error),
+
           0
         )
       );
@@ -278,7 +287,9 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
         this.showToast(
           "danger",
           "Error " + error.status,
-          "Mientras se registraban los datos del usuario " + error.code,
+          "Mientras se registraban los datos del usuario" +
+            Control.evaluarErrorRepetido(error.error),
+
           0
         );
       });

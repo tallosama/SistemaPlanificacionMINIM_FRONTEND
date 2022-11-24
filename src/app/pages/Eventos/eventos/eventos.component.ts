@@ -17,9 +17,10 @@ import { authService } from "../../../auth/auth.service";
 import { AreaService } from "../../Catalogos/Area/area.service";
 import { DialogNamePromptComponent } from "../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { PlanificacionService } from "../../Planificacion/planificacion.service";
-import { MunicipioService } from "../../ServiciosGlobales/Municipio/municipio.service";
+import { MunicipioService } from "../../Globales/Servicios/municipio.service";
 import { DetalleEventoService } from "../detalle-evento.service";
 import { EventosService } from "../eventos.service";
+import { Control } from "../../Globales/Control";
 
 @Component({
   selector: "ngx-eventos",
@@ -70,7 +71,9 @@ export class EventosComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban áreas " + error.message,
+            "Mientras se listaban las áreas" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -87,7 +90,9 @@ export class EventosComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las planificaciones " + error.message,
+            "Mientras se listaban las planificaciones" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -160,7 +165,8 @@ export class EventosComponent implements OnInit, OnDestroy {
             this.showToast(
               "danger",
               "Error " + error.status,
-              "Mientras se registraba el evento " + error.message,
+              "Mientras se registraba el evento" +
+                Control.evaluarErrorRepetido(error.error),
               0
             );
           }
@@ -196,7 +202,9 @@ export class EventosComponent implements OnInit, OnDestroy {
             this.showToast(
               "danger",
               "Error " + error.status,
-              "Mientras se registraba el evento " + error.message,
+              "Mientras se registraba el evento" +
+                Control.evaluarErrorRepetido(error.error),
+
               0
             );
           }
@@ -392,7 +400,9 @@ export class EventosComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los municipios " + error.message,
+            "Mientras se listaban los municipios" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -421,7 +431,9 @@ export class EventosComponent implements OnInit, OnDestroy {
                 this.showToast(
                   "danger",
                   "Error " + error.status,
-                  "Mientras se ingresaba el detalle " + error.message,
+                  "Mientras se ingresaba un detalles" +
+                    Control.evaluarErrorRepetido(error.error),
+
                   0
                 );
               }

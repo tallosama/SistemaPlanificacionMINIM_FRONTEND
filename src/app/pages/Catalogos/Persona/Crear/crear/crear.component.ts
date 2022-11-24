@@ -15,6 +15,7 @@ import { AreaService } from "../../../Area/area.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-crear",
@@ -51,7 +52,9 @@ export class CrearComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban áreas " + error.message,
+            "Mientras se listaban las áreas" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -139,8 +142,8 @@ export class CrearComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Verifique que no exista un registro con la misma identificación " +
-              error.message,
+            "Mientras se realizaba un registro" +
+              Control.evaluarErrorRepetido(error.error),
             0
           );
         }

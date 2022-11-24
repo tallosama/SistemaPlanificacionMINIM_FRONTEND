@@ -16,6 +16,7 @@ import { CategoriaService } from "../../../Categoria/categoria.service";
 import { MedidaService } from "../../../UnidadMedida/medida.service";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-editar",
@@ -54,7 +55,9 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban categorías " + error.message,
+            "Mientras se listaban las categorías" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -71,7 +74,9 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban unidades de medida " + error.message,
+            "Mientras se listaban las unidades de medida" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -130,7 +135,9 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se buscaba un registro " + error.message,
+            "Mientras se buscaba un registro" +
+              Control.evaluarErrorDependiente(error.error),
+
             0
           );
         }
@@ -163,8 +170,9 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Verifique que no exista un registro con el mismo nombre " +
-              error.message,
+            "Mientras se editaba un registro" +
+              Control.evaluarErrorRepetido(error.error),
+
             0
           );
         }
