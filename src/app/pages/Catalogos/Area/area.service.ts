@@ -1,24 +1,24 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { ApiServe } from '../../../ApiServe';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { tap } from "rxjs/operators";
+import { ApiServe } from "../../Globales/ApiServe";
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AreaService {
-  constructor(public httpclient: HttpClient) { }
+  constructor(public httpclient: HttpClient) {}
 
-// refresh$=new Subject();
-// get refresh(){
-//   return this.refresh$.next();
-// }
-//   //En tiempo real
-//   guardar(area:any): Observable<any> {
-//     return this.httpclient.post(ApiServe.API_SERVER+"area/",area).pipe(tap(()=>{
-//       this.refresh$.next();
-//     }));
-//   }
+  // refresh$=new Subject();
+  // get refresh(){
+  //   return this.refresh$.next();
+  // }
+  //   //En tiempo real
+  //   guardar(area:any): Observable<any> {
+  //     return this.httpclient.post(ApiServe.API_SERVER+"area/",area).pipe(tap(()=>{
+  //       this.refresh$.next();
+  //     }));
+  //   }
 
   guardar(area: any): Observable<any> {
     return this.httpclient.post(ApiServe.API_SERVER + "area/", area);
@@ -36,5 +36,4 @@ export class AreaService {
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "area/" + id);
   }
-
 }

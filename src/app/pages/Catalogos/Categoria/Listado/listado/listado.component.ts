@@ -71,8 +71,7 @@ export class ListadoComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los registros" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban los registros" + error.error[0],
             0
           );
         }
@@ -151,8 +150,7 @@ export class ListadoComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se eliminaba el registro" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se eliminaba el registro" + error.error[0],
             0
           );
         }

@@ -52,8 +52,7 @@ export class CrearComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las áreas" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban las áreas" + error.error[0],
 
             0
           );
@@ -142,8 +141,7 @@ export class CrearComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se realizaba un registro" +
-              Control.evaluarErrorRepetido(error.error),
+            "Mientras se realizaba un registro" + error.error[0],
             0
           );
         }

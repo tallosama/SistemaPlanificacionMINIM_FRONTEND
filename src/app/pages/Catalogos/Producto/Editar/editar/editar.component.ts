@@ -55,8 +55,7 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las categorías" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban las categorías" + error.error[0],
 
             0
           );
@@ -74,8 +73,7 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las unidades de medida" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban las unidades de medida" + error.error[0],
 
             0
           );
@@ -135,8 +133,7 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se buscaba un registro" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se buscaba un registro" + error.error[0],
 
             0
           );
@@ -170,8 +167,7 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se editaba un registro" +
-              Control.evaluarErrorRepetido(error.error),
+            "Mientras se editaba un registro" + error.error[0],
 
             0
           );

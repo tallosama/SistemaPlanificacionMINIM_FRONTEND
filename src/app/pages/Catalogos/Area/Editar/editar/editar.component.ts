@@ -66,8 +66,7 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se buscaba un registro " +
-              Control.evaluarErrorRepetido(error.error),
+            "Mientras se buscaba un registro " + error.error[0],
             0
           );
         }
@@ -100,8 +99,7 @@ export class EditarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se editaba el registro" +
-              Control.evaluarErrorRepetido(error.error),
+            "Mientras se editaba el registro" + error.error[0],
             0
           );
         }

@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
-import { ApiServe } from '../../../ApiServe';
-import { tap } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, Subject } from "rxjs";
+import { ApiServe } from "../../Globales/ApiServe";
+import { tap } from "rxjs/operators";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class SectorService {
-
-  constructor(public httpclient: HttpClient) { }
+  constructor(public httpclient: HttpClient) {}
 
   guardar(sector: any): Observable<any> {
     return this.httpclient.post(ApiServe.API_SERVER + "sector/", sector);

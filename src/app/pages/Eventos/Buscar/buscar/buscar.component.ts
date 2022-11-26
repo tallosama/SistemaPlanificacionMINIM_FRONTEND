@@ -166,8 +166,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las áreas" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban las áreas" + error.error[0],
 
             0
           );
@@ -185,8 +184,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los planes" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban los planes" + error.error[0],
 
             0
           );
@@ -253,8 +251,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
               this.showToast(
                 "danger",
                 "Error " + error.status,
-                "Mientras se modificaba el evento" +
-                  Control.evaluarErrorRepetido(error.error),
+                "Mientras se modificaba el evento" + error.error[0],
 
                 0
               );
@@ -294,8 +291,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
               this.showToast(
                 "danger",
                 "Error " + error.status,
-                "Mientras se listaban los detalles" +
-                  Control.evaluarErrorDependiente(error.error),
+                "Mientras se listaban los detalles" + error.error[0],
 
                 0
               );
@@ -341,8 +337,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los municipios" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban los municipios" + error.error[0],
 
             0
           );
@@ -411,8 +406,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se ingresaba un detalle" +
-              Control.evaluarErrorRepetido(error.error),
+            "Mientras se ingresaba un detalle" + error.error[0],
 
             0
           );
@@ -467,8 +461,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
                   this.showToast(
                     "danger",
                     "Error " + error.status,
-                    "Mientras se eliminaba el registro" +
-                      Control.evaluarErrorDependiente(error.error),
+                    "Mientras se eliminaba el registro" + error.error[0],
 
                     0
                   );

@@ -146,8 +146,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las áreas" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban las áreas" + error.error[0],
 
             0
           );
@@ -170,8 +169,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los registros" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban los registros" + error.error[0],
 
             0
           );
@@ -194,8 +192,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los registros" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban los registros" + error.error[0],
 
             0
           );
@@ -260,8 +257,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
         this.showToast(
           "danger",
           "Error " + error.status,
-          "Mientras se creaba la cuenta de usuario" +
-            Control.evaluarErrorRepetido(error.error),
+          "Mientras se creaba la cuenta de usuario" + error.error[0],
 
           0
         )
@@ -287,8 +283,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
         this.showToast(
           "danger",
           "Error " + error.status,
-          "Mientras se registraban los datos del usuario" +
-            Control.evaluarErrorRepetido(error.error),
+          "Mientras se registraban los datos del usuario" + error.error[0],
 
           0
         );

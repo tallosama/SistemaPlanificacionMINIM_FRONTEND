@@ -71,8 +71,7 @@ export class EventosComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las áreas" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban las áreas" + error.error[0],
 
             0
           );
@@ -90,8 +89,7 @@ export class EventosComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las planificaciones" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban las planificaciones" + error.error[0],
 
             0
           );
@@ -165,8 +163,7 @@ export class EventosComponent implements OnInit, OnDestroy {
             this.showToast(
               "danger",
               "Error " + error.status,
-              "Mientras se registraba el evento" +
-                Control.evaluarErrorRepetido(error.error),
+              "Mientras se registraba el evento" + error.error[0],
               0
             );
           }
@@ -202,8 +199,7 @@ export class EventosComponent implements OnInit, OnDestroy {
             this.showToast(
               "danger",
               "Error " + error.status,
-              "Mientras se registraba el evento" +
-                Control.evaluarErrorRepetido(error.error),
+              "Mientras se registraba el evento" + error.error[0],
 
               0
             );
@@ -400,8 +396,7 @@ export class EventosComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban los municipios" +
-              Control.evaluarErrorDependiente(error.error),
+            "Mientras se listaban los municipios" + error.error[0],
 
             0
           );
@@ -431,8 +426,7 @@ export class EventosComponent implements OnInit, OnDestroy {
                 this.showToast(
                   "danger",
                   "Error " + error.status,
-                  "Mientras se ingresaba un detalles" +
-                    Control.evaluarErrorRepetido(error.error),
+                  "Mientras se ingresaba un detalles" + error.error[0],
 
                   0
                 );
