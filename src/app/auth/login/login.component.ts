@@ -54,14 +54,35 @@ export class NgxLoginComponent implements OnInit {
         this.loginForm.controls.correo.value,
         this.loginForm.controls.clave.value
       );
+
       if (usuario.user) {
-        this.showToast("success", "Bienvenido", "Se ha iniciado sesión ", 4000);
+        let promMetadata = this.authService
+          .findUserDB(usuario.user.uid)
+          .toPromise();
+        let respuesta = await promMetadata;
+        const esActivo = respuesta.data()["Estado"];
 
-        let userJson = usuario.user.toJSON();
-        userJson["recordar"] = this.loginForm.controls.recordar.value;
-        this.authService.saveUserStorage(userJson);
+        if (esActivo) {
+          this.showToast(
+            "success",
+            "Bienvenido",
+            "Se ha iniciado sesión ",
+            4000
+          );
+          let userJson = usuario.user.toJSON();
+          userJson["recordar"] = this.loginForm.controls.recordar.value;
+          this.authService.saveUserStorage(userJson);
 
-        this.router.navigate(["/"], { relativeTo: this.route });
+          this.router.navigate(["/"], { relativeTo: this.route });
+        } else {
+          this.showToast(
+            "warning",
+            "Atención",
+            "Su cuenta se encuentra desactivada, contacte al administrador para reactivarla ",
+            8000
+          );
+          this.authService.logout();
+        }
       }
     } catch (e) {
       console.error(e);

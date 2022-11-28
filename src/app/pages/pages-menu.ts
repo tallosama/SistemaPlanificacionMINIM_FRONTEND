@@ -204,10 +204,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       // ,
 
-      // {
-      //   title: 'Listar',
-      //   link: '/pages/Usuario/ListarPersona',
-      // }
+      {
+        title: "Ver usuarios",
+        link: "/pages/Usuario/VerUsuarios",
+      },
     ],
   },
   // {

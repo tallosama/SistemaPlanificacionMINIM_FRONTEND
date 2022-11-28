@@ -23,17 +23,7 @@ export class authService {
   public sigin(correo: string, clave: string) {
     return this.authFire.createUserWithEmailAndPassword(correo, clave);
   }
-  /**
-   * This function takes in a data object, a path string, and a uid string, and returns a promise that
-   * resolves to a firestore document reference.
-   * @param {any} data - any =&gt; this is the data you want to store in the database
-   * @param {string} path - the path to the collection
-   * @param {string} uid - the user's id
-   * @returns The promise of the set method.
-   */
-  public coleccionUsuario(data: any, path: string, uid: string) {
-    return this.fireStore.collection(path).doc(uid).set(data);
-  }
+
   public getUser$() {
     return this.authFire.user;
   }
@@ -62,5 +52,23 @@ export class authService {
     localStorage.clear();
     this.authFire.signOut();
     this.router.navigate(["auth/login"], { relativeTo: this.route });
+  }
+
+  //Métodos para manipular al db de firebase
+  public saveUserDB(data: any, uid: string) {
+    return this.fireStore.collection("Usuario").doc(uid).set(data);
+  }
+  public findUserDB(doc: string) {
+    return this.fireStore.collection("Usuario").doc(doc).get();
+  }
+  public getUsersDB() {
+    return this.fireStore.collection("Usuario").get();
+  }
+  public deleteUserDB(doc: string) {
+    return this.fireStore.collection("Usuario").doc(doc).delete();
+  }
+
+  public updateUserDB(doc: string, newData: any) {
+    return this.fireStore.collection("Usuario").doc(doc).update(newData);
   }
 }

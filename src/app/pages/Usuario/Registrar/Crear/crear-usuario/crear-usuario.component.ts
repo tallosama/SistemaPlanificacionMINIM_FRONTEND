@@ -6,14 +6,12 @@ import {
   NbStepperComponent,
   NbToastrService,
 } from "@nebular/theme";
-import { DataTableDirective } from "angular-datatables";
 import { LocalDataSource } from "ng2-smart-table";
-import { Observable, Subject, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
 import { AreaService } from "../../../../Catalogos/Area/area.service";
 import { PersonaService } from "../../../../Catalogos/Persona/persona.service";
 import { RolService } from "../../../../Catalogos/Rol/rol.service";
-import { Control } from "../../../../Globales/Control";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 
 @Component({
@@ -23,23 +21,16 @@ import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dia
 })
 export class CrearUsuarioComponent implements OnInit, OnDestroy {
   @ViewChild(NbStepperComponent) stepper: NbStepperComponent;
-  // @ViewChild(DataTableDirective, { static: false })
-  // dtElement: DataTableDirective;
-  // dtOptions: DataTables.Settings = {};
-  // dtTrigger = new Subject();
   subscripciones: Array<Subscription> = [];
-  // data: any;
   //autocompletado
   keyword = "desArea";
   public historyHeading: string = "Recientes";
-  //areas$: Observable<any>;
   roles: any;
   areas: any = [];
   usuarioForm: FormGroup;
   personaSeleccionada: any;
   usuario: any;
   fecha = new Date().toISOString().slice(0, 10);
-  //["Admin", "ASustantivas"];
   estado = [
     { Estado: true, Descripcion: "Activo" },
     { Estado: false, Descripcion: "Inactivo" },
@@ -107,27 +98,19 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     private rol: RolService
   ) {}
   listarRole(): void {
-    this.rol.listar().subscribe((r) => {
-      this.roles = r;
-    });
+    this.subscripciones.push(
+      this.rol.listar().subscribe((r) => {
+        this.roles = r;
+      })
+    );
   }
-  ngOnInit(): void {
+  ngOnInit() {
     this.usuario = this.auth.getUserStorage();
     this.autoCompletadoArea();
     this.listarRole();
-    // this.dtOptions = {
-    //   pagingType: "full_numbers",
-    //   pageLength: 10,
-    //   destroy: true,
-
-    //   language: {
-    //     url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json",
-    //   },
-    // };
   }
   ngOnDestroy(): void {
     this.subscripciones.forEach((subs) => subs.unsubscribe());
-    // this.dtTrigger.unsubscribe();
   }
 
   autoCompletadoArea(): void {
@@ -139,7 +122,6 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
           if (resp.length != 0) {
             this.construir(resp[0]);
           }
-          //else this.dtTrigger.next();
         },
         (error) => {
           console.error(error);
@@ -155,14 +137,10 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     );
   }
   reconstruir(area: any): void {
-    //this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-    //dtInstance.destroy();
     this.subscripciones.push(
       this.personaService.listarPorArea(area.idArea).subscribe(
         (resp: any) => {
-          //   this.data = resp;
           this.sourceSmartUsuario.load(resp);
-          // this.dtTrigger.next();
         },
         (error) => {
           console.error(error);
@@ -175,7 +153,6 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
           );
         }
       )
-      // );}
     );
   }
 
@@ -183,9 +160,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     this.subscripciones.push(
       this.personaService.listarPorArea(area.idArea).subscribe(
         (resp: any) => {
-          //this.data = resp;
           this.sourceSmartUsuario.load(resp);
-          //   this.dtTrigger.next();
         },
         (error) => {
           console.error(error);
@@ -207,19 +182,21 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
       this.asignarPersona(datosPersona);
       this.stepper.next();
     } else {
-      this.dialogService
-        .open(DialogNamePromptComponent, {
-          context: {
-            titulo: "La persona seleccionada se encuentra desactivada",
-            cuerpo: "¿Desea proseguir?",
-          },
-        })
-        .onClose.subscribe((res) => {
-          if (res) {
-            this.stepper.next();
-            this.asignarPersona(datosPersona);
-          }
-        });
+      this.subscripciones.push(
+        this.dialogService
+          .open(DialogNamePromptComponent, {
+            context: {
+              titulo: "La persona seleccionada se encuentra desactivada",
+              cuerpo: "¿Desea proseguir?",
+            },
+          })
+          .onClose.subscribe((res) => {
+            if (res) {
+              this.stepper.next();
+              this.asignarPersona(datosPersona);
+            }
+          })
+      );
     }
   }
   asignarPersona(persona): void {
@@ -264,18 +241,15 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
       );
     if (resultado) {
       this.usuarioForm.get("uId").setValue(resultado.user.uid);
-      //this.usuarioForm.get("Clave").setValue(clave);
       this.usuarioForm.get("Clave").reset();
       await this.colecciondeUsuario(resultado);
       this.sourceSmartUsuario.remove(this.personaSeleccionada);
-      //  this.actualizarTabla(this.personaSeleccionada);
       this.limpiar();
     }
-    // });
   }
   async colecciondeUsuario(resultado) {
     await this.auth
-      .coleccionUsuario(this.usuarioForm.value, "Usuario", resultado.user.uid)
+      .saveUserDB(this.usuarioForm.value, resultado.user.uid)
       .then((res) => {
         this.editarUsuario();
       })
@@ -304,16 +278,6 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     );
   }
 
-  // actualizarTabla(id: any): void {
-  //   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-  //     // Primero destruimos la instancia de la datatable
-  //     dtInstance.destroy();
-  //     //Obtenemos el índice del elemento a eliminar y lo eliminamos de this.data
-  //     this.data.splice(this.data.indexOf(id), 1); // 1 es la cantidad de elemento a eliminar
-  //     //reconstrucción de la datatables con los nevos elementos
-  //     this.dtTrigger.next();
-  //   });
-  // }
   hash256(clave): any {
     const utf8 = new TextEncoder().encode(clave);
     return crypto.subtle.digest("SHA-256", utf8).then((hashBuffer) => {
@@ -328,8 +292,6 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     this.personaSeleccionada = null;
     this.usuarioForm.get("Clave").reset();
     this.usuarioForm.get("Correo").reset();
-    // this.usuarioForm.get("Estado").reset();
-    // this.usuarioForm.get("Rol").reset();
     this.usuarioForm.get("PersonaId").reset();
     this.usuarioForm.get("uId").reset();
   }

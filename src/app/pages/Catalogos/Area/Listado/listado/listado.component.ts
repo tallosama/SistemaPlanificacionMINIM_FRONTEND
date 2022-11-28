@@ -128,7 +128,6 @@ export class ListadoComponent implements OnInit, OnDestroy {
   }
 
   eliminar(id): void {
-    debugger;
     this.subscripciones.push(
       this.areaService.eliminar(id.idArea).subscribe(
         (res) => {

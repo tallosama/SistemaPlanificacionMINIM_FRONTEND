@@ -8,6 +8,7 @@ import {
   canActivate,
   redirectUnauthorizedTo,
 } from "@angular/fire/compat/auth-guard";
+import { ActiveUserGuard } from "../guards/active-user.guard";
 
 const redirectUnauthorizedToLogin = () =>
   redirectUnauthorizedTo(["auth/login"]);
@@ -17,6 +18,7 @@ const routes: Routes = [
     path: "",
     component: PagesComponent,
     ...canActivate(redirectUnauthorizedToLogin),
+    canActivateChild: [ActiveUserGuard],
     children: [
       {
         path: "dashboard",

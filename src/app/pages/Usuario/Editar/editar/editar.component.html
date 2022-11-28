@@ -1,0 +1,130 @@
+<nb-card>
+  <nb-card-header> Editar usuario </nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="usuarioForm" *ngIf="usuarioForm">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="label">Correo</label>
+
+            <input
+              nbInput
+              fullWidth
+              shape="round"
+              formControlName="Correo"
+              placeholder="Correo"
+              pattern=".+@.+\..+"
+            />
+            <div
+              *ngIf="
+                usuarioForm.get('Correo').invalid &&
+                usuarioForm.get('Correo').touched
+              "
+            >
+              <p
+                class="caption status-danger"
+                *ngIf="usuarioForm.get('Correo').errors?.required"
+              >
+                El correo es requerido
+              </p>
+
+              <p
+                class="caption status-danger"
+                *ngIf="
+                  usuarioForm.get('Correo').errors?.email &&
+                  usuarioForm.get('Correo').errors?.pattern
+                "
+              >
+                Debe ingresar un correo real
+              </p>
+
+              <p
+                class="caption status-danger"
+                *ngIf="usuarioForm.get('Correo').hasError('maxlength')"
+              >
+                Debe ingresar un correo menor a 32 carácteres
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="label">Clave</label>
+            <input
+              type="text"
+              formControlName="Clave"
+              nbInput
+              fullWidth
+              shape="round"
+            />
+            <div
+              *ngIf="
+                usuarioForm.get('Clave').invalid &&
+                usuarioForm.get('Clave').touched
+              "
+            >
+              <p
+                class="caption status-danger"
+                *ngIf="usuarioForm.get('Clave').hasError('required')"
+              >
+                La clave es obligatoria
+              </p>
+
+              <p
+                class="caption status-danger"
+                *ngIf="usuarioForm.get('Clave').hasError('maxlength')"
+              >
+                Debe ingresar una clave menor a 128 carácteres
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="label">Estado</label>
+
+            <nb-select formControlName="Estado">
+              <nb-option *ngFor="let e of estado" [value]="e.Estado">
+                {{ e.Descripcion }}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="label">Rol</label>
+            <nb-select formControlName="Rol">
+              <nb-option value="">Seleccione</nb-option>
+              <nb-option *ngFor="let r of roles" [value]="r.desRol">{{
+                r.desRol
+              }}</nb-option>
+            </nb-select>
+          </div>
+        </div>
+      </div>
+
+      <button
+        id="b1"
+        class="b1"
+        type="submit"
+        [disabled]="usuarioForm.invalid"
+        nbButton
+        status="primary"
+        (click)="editar()"
+      >
+        Editar
+      </button>
+    </form>
+  </nb-card-body>
+
+  <nb-card-footer>
+    <button [routerLink]="['../../VerUsuarios']" nbButton status="success">
+      Atrás
+    </button>
+  </nb-card-footer>
+</nb-card>

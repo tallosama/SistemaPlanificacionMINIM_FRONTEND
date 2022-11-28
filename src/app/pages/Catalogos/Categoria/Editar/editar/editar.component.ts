@@ -26,7 +26,7 @@ export class EditarComponent implements OnInit, OnDestroy {
   categoriaForm: FormGroup;
   id: number;
   //inicializadores del mensaje toast
-  config: NbToastrConfig;
+
   subscripciones: Array<Subscription> = [];
   constructor(
     public fb: FormBuilder,
