@@ -46,31 +46,33 @@ export class EditarComponent implements OnInit, OnDestroy {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
   private cargarForm(usuario) {
-    this.medidaService.buscar(this.id).subscribe(
-      (res) => {
-        this.unidadMedidaForm = this.fb.group({
-          descripUnidadMedida: [
-            res.descripUnidadMedida,
-            Validators.compose([
-              Validators.required,
-              Validators.maxLength(512),
-              this.noWhitespaceValidator,
-            ]),
-          ],
-          usuarioModificacion: [usuario.uid, Validators.required],
-          fechaModificacion: [this.fecha, Validators.required],
-        });
-      },
-      (error) => {
-        console.error(error);
-        this.showToast(
-          "danger",
-          "Error " + error.status,
-          "Mientras se buscaba un registro" + error.error[0],
+    this.subscripciones.push(
+      this.medidaService.buscar(this.id).subscribe(
+        (res) => {
+          this.unidadMedidaForm = this.fb.group({
+            descripUnidadMedida: [
+              res.descripUnidadMedida,
+              Validators.compose([
+                Validators.required,
+                Validators.maxLength(512),
+                this.noWhitespaceValidator,
+              ]),
+            ],
+            usuarioModificacion: [usuario.uid, Validators.required],
+            fechaModificacion: [this.fecha, Validators.required],
+          });
+        },
+        (error) => {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "Error " + error.status,
+            "Mientras se buscaba un registro" + error.error[0],
 
-          0
-        );
-      }
+            0
+          );
+        }
+      )
     );
   }
   public noWhitespaceValidator(control: FormControl) {

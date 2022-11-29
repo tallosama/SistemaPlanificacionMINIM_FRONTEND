@@ -109,10 +109,10 @@ export class ListadoComponent implements OnInit, OnDestroy {
         })
     );
   }
-  async accion(data, activar: boolean) {
+  accion(data, activar: boolean) {
     data.Estado = activar;
-    await this.auth
-      .updateUserDB(data.uId, data)
+    this.auth
+      .updateUserDB(data.Correo, data)
       .then(() => {
         this.showToast(
           "success",
@@ -124,6 +124,8 @@ export class ListadoComponent implements OnInit, OnDestroy {
         );
       })
       .catch((error) => {
+        console.error(error);
+
         this.showToast(
           "danger",
           "Error " + error.status,

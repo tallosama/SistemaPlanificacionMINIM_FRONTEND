@@ -19,7 +19,7 @@ export class ActiveUserGuard implements CanActivateChild {
   ): Observable<boolean> | Promise<boolean> | boolean {
     return new Promise((promesaUser) => {
       this.auth
-        .findUserDB(this.auth.getUserStorage()["uid"])
+        .findUserDB(this.auth.getUserStorage()["email"])
         .toPromise()
         .then((res) => {
           if (res.data()["Estado"]) {

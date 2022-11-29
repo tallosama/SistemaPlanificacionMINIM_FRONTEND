@@ -22,6 +22,7 @@ import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dia
 export class CrearUsuarioComponent implements OnInit, OnDestroy {
   @ViewChild(NbStepperComponent) stepper: NbStepperComponent;
   subscripciones: Array<Subscription> = [];
+  respuesta: string = "";
   //autocompletado
   keyword = "desArea";
   public historyHeading: string = "Recientes";
@@ -227,47 +228,52 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
   }
 
   async guardar() {
-    //  this.hash256(this.usuarioForm.value.Clave).then(async (clave) => {
-    const resultado = await this.auth
-      .sigin(this.usuarioForm.value.Correo, this.usuarioForm.value.Clave)
-      .catch((error) =>
-        this.showToast(
-          "danger",
-          "Error " + error.status,
-          "Mientras se creaba la cuenta de usuario" + error.error[0],
-
-          0
-        )
+    try {
+      const resultado = await this.auth.sigin(
+        this.usuarioForm.value.Correo,
+        this.usuarioForm.value.Clave
       );
-    if (resultado) {
-      this.usuarioForm.get("uId").setValue(resultado.user.uid);
-      this.usuarioForm.get("Clave").reset();
-      await this.colecciondeUsuario(resultado);
-      this.sourceSmartUsuario.remove(this.personaSeleccionada);
-      this.limpiar();
+
+      if (resultado) {
+        this.usuarioForm.get("uId").setValue(resultado.user.uid);
+        this.usuarioForm.get("Clave").reset();
+        await this.colecciondeUsuario(resultado);
+        this.sourceSmartUsuario.remove(this.personaSeleccionada);
+        this.limpiar();
+      }
+    } catch (e) {
+      console.error(e);
+
+      this.showToast(
+        "danger",
+        "Error ",
+        "Mientras se creaba la cuenta de usuario se detectó '" +
+          this.errores(e.code) +
+          "'",
+
+        0
+      );
     }
   }
   async colecciondeUsuario(resultado) {
-    await this.auth
-      .saveUserDB(this.usuarioForm.value, resultado.user.uid)
-      .then((res) => {
-        this.editarUsuario();
-      })
-      .catch((error) => {
-        this.showToast(
-          "danger",
-          "Error " + error.status,
-          "Mientras se registraban los datos del usuario" + error.error[0],
+    try {
+      await this.auth.saveUserDB(this.usuarioForm.value, resultado.user.email);
+      this.editarUsuario();
+    } catch (error) {
+      this.showToast(
+        "danger",
+        "Error " + error.code,
+        "Mientras se registraban los datos del usuario " + error,
 
-          0
-        );
-      });
+        0
+      );
+    }
   }
   private editarUsuario(): void {
     this.subscripciones.push(
       this.personaService
         .editar(this.personaSeleccionada.idPersona, this.personaSeleccionada)
-        .subscribe((r) => {
+        .subscribe(() => {
           this.showToast(
             "success",
             "Acción realizada",
@@ -296,13 +302,45 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     this.usuarioForm.get("uId").reset();
   }
   generarClave(): void {
-    this.usuarioForm
-      .get("Clave")
-      .setValue(
-        this.personaSeleccionada.pNombre[0] +
-          this.personaSeleccionada.pApellido +
-          Math.round(Math.random() * 10000)
-      );
+    if (this.personaSeleccionada != null) {
+      this.usuarioForm
+        .get("Clave")
+        .setValue(
+          this.personaSeleccionada.pNombre[0] +
+            this.personaSeleccionada.pApellido +
+            Math.round(Math.random() * 10000)
+        );
+    }
+  }
+
+  private errores(code: any) {
+    if (code === "auth/invalid-email") {
+      return "Correo no válido";
+    }
+    if (code === "auth/email-already-in-use") {
+      return "El correo ya se encuentra registrado";
+    }
+    if (code === "auth/weak-password") {
+      return "La contraseña es muy débil";
+    }
+
+    if (code === "auth/user-disabled") {
+      return "La cuenta ha sido deshabilitada";
+    }
+    if (code === "auth/user-not-found") {
+      return "No se ha encontrado una cuenta vinculada a ese correo";
+    }
+    if (code === "auth/wrong-password") {
+      return "Contraseña errónea";
+    }
+    if (code === "auth/too-many-requests") {
+      return "La cuenta ha sido suspendida porque se ha intentado acceder varias veces";
+    }
+    if (code === "auth/network-request-failed") {
+      return "No se pudo iniciar sesión por problemas de conexión";
+    }
+
+    return "Error desconocido " + code;
   }
   //construccion del mensaje
   public showToast(

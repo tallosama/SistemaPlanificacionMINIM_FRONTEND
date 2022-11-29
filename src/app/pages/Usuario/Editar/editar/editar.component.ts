@@ -24,7 +24,7 @@ export class EditarComponent implements OnInit, OnDestroy {
     { Estado: true, Descripcion: "Activo" },
     { Estado: false, Descripcion: "Inactivo" },
   ];
-  id: string;
+  correo: string;
   constructor(
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
@@ -44,7 +44,7 @@ export class EditarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.listarRole();
-    this.id = this.route.snapshot.params["id"];
+    this.correo = this.route.snapshot.params["id"];
     this.cargarForm(this.auth.getUserStorage());
   }
   ngOnDestroy(): void {
@@ -52,7 +52,7 @@ export class EditarComponent implements OnInit, OnDestroy {
   }
   cargarForm(usuario) {
     this.subscripciones.push(
-      this.auth.findUserDB(this.id).subscribe(
+      this.auth.findUserDB(this.correo).subscribe(
         (u) => {
           this.usuarioForm = this.fb.group({
             Correo: [

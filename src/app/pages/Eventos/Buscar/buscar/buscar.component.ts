@@ -434,39 +434,41 @@ export class BuscarComponent implements OnInit, OnDestroy {
         })
         .onClose.subscribe((res) => {
           if (res) {
-            this.detalleEventoService
-              .eliminar(event.data.idDetalleEvento)
-              .subscribe(
-                (r) => {
-                  if (res) {
+            this.subscripciones.push(
+              this.detalleEventoService
+                .eliminar(event.data.idDetalleEvento)
+                .subscribe(
+                  (r) => {
+                    if (res) {
+                      this.showToast(
+                        "success",
+                        "Acción realizada",
+                        "Se ha eliminado el registro",
+                        4000
+                      );
+                    } else {
+                      this.showToast(
+                        "warning",
+                        "Atención",
+                        "No se ha encontrado el registro",
+                        4000
+                      );
+                    }
+                    this.sourceSmartDetalle.remove(event.data);
+                    this.sourceSmartDetalle.refresh();
+                  },
+                  (error) => {
+                    console.error(error);
                     this.showToast(
-                      "success",
-                      "Acción realizada",
-                      "Se ha eliminado el registro",
-                      4000
-                    );
-                  } else {
-                    this.showToast(
-                      "warning",
-                      "Atención",
-                      "No se ha encontrado el registro",
-                      4000
+                      "danger",
+                      "Error " + error.status,
+                      "Mientras se eliminaba el registro" + error.error[0],
+
+                      0
                     );
                   }
-                  this.sourceSmartDetalle.remove(event.data);
-                  this.sourceSmartDetalle.refresh();
-                },
-                (error) => {
-                  console.error(error);
-                  this.showToast(
-                    "danger",
-                    "Error " + error.status,
-                    "Mientras se eliminaba el registro" + error.error[0],
-
-                    0
-                  );
-                }
-              );
+                )
+            );
           }
         })
     );

@@ -55,20 +55,20 @@ export class authService {
   }
 
   //Métodos para manipular al db de firebase
-  public saveUserDB(data: any, uid: string) {
-    return this.fireStore.collection("Usuario").doc(uid).set(data);
+  public saveUserDB(data: any, correo: string) {
+    return this.fireStore.collection("Usuario").doc(correo).set(data);
   }
-  public findUserDB(doc: string) {
-    return this.fireStore.collection("Usuario").doc(doc).get();
+  public findUserDB(correo: string) {
+    return this.fireStore.collection("Usuario").doc(correo).get();
   }
   public getUsersDB() {
     return this.fireStore.collection("Usuario").get();
   }
-  public deleteUserDB(doc: string) {
-    return this.fireStore.collection("Usuario").doc(doc).delete();
+  public deleteUserDB(correo: string) {
+    return this.fireStore.collection("Usuario").doc(correo).delete();
   }
 
-  public updateUserDB(doc: string, newData: any) {
-    return this.fireStore.collection("Usuario").doc(doc).update(newData);
+  public updateUserDB(correo: string, newData: any) {
+    return this.fireStore.collection("Usuario").doc(correo).update(newData);
   }
 }

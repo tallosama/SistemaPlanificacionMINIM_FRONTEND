@@ -1,21 +1,25 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NbGlobalPhysicalPosition, NbToastrService } from "@nebular/theme";
+import { Subscription } from "rxjs";
 import { authService } from "../../auth/auth.service";
+import { PersonaService } from "../../pages/Catalogos/Persona/persona.service";
 @Component({
   selector: "ngx-login",
   templateUrl: "./login.component.html",
 })
-export class NgxLoginComponent implements OnInit {
+export class NgxLoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
-  respuesta: string = "";
+  respuestaErrores: string = "";
+  subscripciones: Array<Subscription> = [];
   constructor(
     public fb: FormBuilder,
     private authService: authService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastrService: NbToastrService
+    private toastrService: NbToastrService,
+    private personaService: PersonaService
   ) {}
 
   ngOnInit(): void {
@@ -25,6 +29,10 @@ export class NgxLoginComponent implements OnInit {
       recordar: [false],
     });
   }
+  ngOnDestroy(): void {
+    this.subscripciones.forEach((s) => s.unsubscribe());
+  }
+
   private errores(code: any) {
     if (code === "auth/invalid-email") {
       return "Correo no válido";
@@ -47,19 +55,23 @@ export class NgxLoginComponent implements OnInit {
 
     return "Error desconocido " + code;
   }
+  private async findUserData() {
+    let promMetadata = this.authService
+      .findUserDB(this.loginForm.controls.correo.value)
+      .toPromise();
+    return promMetadata;
+  }
   async login() {
+    this.respuestaErrores = "";
     try {
       //debugger;
       let usuario = await this.authService.login(
         this.loginForm.controls.correo.value,
         this.loginForm.controls.clave.value
       );
-
-      if (usuario.user) {
-        let promMetadata = this.authService
-          .findUserDB(usuario.user.uid)
-          .toPromise();
-        let respuesta = await promMetadata;
+      let respuesta = await this.findUserData();
+      //validación de que el usuario exista en la bd de fb y que tenga cuenta en fb
+      if (usuario.user && respuesta.exists) {
         const esActivo = respuesta.data()["Estado"];
 
         if (esActivo) {
@@ -79,32 +91,66 @@ export class NgxLoginComponent implements OnInit {
             "warning",
             "Atención",
             "Su cuenta se encuentra desactivada, contacte al administrador para reactivarla ",
-            8000
+            10000
           );
           this.authService.logout();
         }
+      } else {
+        this.showToast(
+          "warning",
+          "Atención",
+          "La cuenta ingresada no posee la información adicional requerida para iniciar sesión, contacte al administrador para completar la información de su cuenta ",
+          10000
+        );
+        this.authService.logout();
       }
     } catch (e) {
+      //Muestra los errores en consola
       console.error(e);
-      this.respuesta = this.errores(e.code);
+      //Muestra los errores lanzados desde firebase en pantalla
+      this.respuestaErrores = this.errores(e.code);
+
+      //Se valida el error lanzado para así proceder a eliminar el registro de la base de datos fb en caso de que exista el correo ingresado
+      if (
+        this.respuestaErrores ===
+        "No se ha encontrado una cuenta vinculada a ese correo"
+      ) {
+        this.borrarRegistro();
+      }
     }
-
-    //Solamente con promesas
-    // await this.authService
-    // .login(
-    //   this.loginForm.controls.correo.value,
-    //   this.loginForm.controls.clave.value
-    // )
-    // .then((r) => {
-    //   this.showToast("success", "Bienvenido", "Se ha iniciado sesión ", 4000);
-    //   localStorage.setItem("usuario", JSON.stringify(r.user.toJSON()));
-    //   this.router.navigate(["/"], { relativeTo: this.route });
-    // })
-    // .catch((e) => {
-    //   console.error(e);
-
-    //   this.respuesta = this.errores(e.code);
-    // });
+  }
+  private async borrarRegistro() {
+    //Se busca el usuario en fbbd
+    let res = await this.findUserData();
+    //Si existe se elimina de fb y de posgreSQL
+    if (res.exists) {
+      this.subscripciones.push(
+        this.personaService.buscar(res.data()["PersonaId"]).subscribe(
+          (p) => {
+            //Se cambia el estado de posee usuario a false antes de eliminarlo de fbbd
+            p.poseeUsuario = false;
+            this.actualizarPersona(p);
+          },
+          (error) => {
+            console.error(
+              "Mientras se buscaba la persona a cambiar el estado" + error
+            );
+          }
+        )
+      );
+      try {
+        await this.authService.deleteUserDB(res.data()["Correo"]);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+  private async actualizarPersona(persona) {
+    try {
+      await this.personaService.editar(persona.idPersona, persona).toPromise();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   // hash256(clave): any {
