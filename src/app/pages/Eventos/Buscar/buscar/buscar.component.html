@@ -34,8 +34,9 @@
               <div class="form-group">
                 <ng2-smart-table
                   [settings]="settings"
-                  [source]="sourceSmart"
+                  [source]="smartEvento"
                   (edit)="onEditRowSelect($event)"
+                  (delete)="confirmacion($event)"
                 >
                 </ng2-smart-table>
               </div>
@@ -104,9 +105,7 @@
                     placeholder="Ingrese el plan"
                     [initialValue]="planes[0]"
                     notFoundText="No se encontró"
-                    historyIdentifier="ListaPlanReciente"
                     [historyHeading]="historyHeading"
-                    historyListMaxNumber="3"
                   >
                   </ng-autocomplete>
 
@@ -143,9 +142,7 @@
                     [notFoundTemplate]="notFoundTemplateArea"
                     placeholder="Ingrese el área"
                     notFoundText="No se encontró"
-                    historyIdentifier="ListaAreaReciente"
                     [historyHeading]="historyHeading"
-                    historyListMaxNumber="3"
                   >
                   </ng-autocomplete>
                   <ng-template #itemTemplateArea let-area>
@@ -262,13 +259,11 @@
                     [data]="municipios"
                     [searchKeyword]="keyword[2]"
                     formControlName="municipioId"
+                    [initialValue]="municipios[0]"
                     [itemTemplate]="itemTemplateMun"
                     [notFoundTemplate]="notFoundTemplateMun"
                     placeholder="Ingrese el municipio"
                     notFoundText="No se encontró"
-                    historyIdentifier="ListaMunReciente"
-                    [historyHeading]="historyHeading"
-                    historyListMaxNumber="3"
                   >
                   </ng-autocomplete>
 
@@ -392,7 +387,9 @@
               <button
                 nbButton
                 (click)="registrarDetalle()"
-                [disabled]="detalleEventoForm.invalid"
+                [disabled]="
+                  detalleEventoForm.invalid || this.detalleSeleccionado != null
+                "
               >
                 Nuevo
               </button>
@@ -405,7 +402,7 @@
                 <label class="label">Detalles de eventos</label>
                 <ng2-smart-table
                   [settings]="settingsDetalle"
-                  [source]="sourceSmartDetalle"
+                  [source]="smartDetalle"
                   (edit)="onEditarDetalle($event)"
                   (delete)="onBorrarDetalle($event)"
                 >

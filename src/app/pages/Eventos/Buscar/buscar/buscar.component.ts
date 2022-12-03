@@ -33,26 +33,28 @@ export class BuscarComponent implements OnInit, OnDestroy {
   keyword = ["desArea", "descripcion", "desMunicipio"];
   public historyHeading: string = "Recientes";
 
-  planes: any;
-  areas: any;
-  municipios: any;
+  planes: any = [];
+  areas: any = [];
+  municipios: any = [];
 
   eventoSeleccionado: any;
   planSeleccionado: any;
   detalleSeleccionado: any;
 
-  sourceSmart: LocalDataSource = new LocalDataSource();
-  sourceSmartDetalle: LocalDataSource = new LocalDataSource();
+  smartEvento: LocalDataSource = new LocalDataSource();
+  smartDetalle: LocalDataSource = new LocalDataSource();
   settings = {
     mode: "external",
 
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
     },
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+    },
     actions: {
       columnTitle: "Acción",
       add: false,
-      delete: false,
     },
     hideSubHeader: true,
     pager: {
@@ -198,7 +200,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
       this.eventoService
         .listarPorPlan(plan.idPlanificacion)
         .subscribe((resp) => {
-          this.sourceSmart.load(resp);
+          this.smartEvento.load(resp);
         })
     );
   }
@@ -284,7 +286,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
           .listarPorEvento(this.eventoSeleccionado.idEvento)
           .subscribe(
             (r) => {
-              this.sourceSmartDetalle.load(r);
+              this.smartDetalle.load(r);
             },
             (error) => {
               console.error(error);
@@ -351,8 +353,8 @@ export class BuscarComponent implements OnInit, OnDestroy {
     // debugger;
     if (this.detalleSeleccionado == null) {
       this.detalleSeleccionado = event.data;
-      this.sourceSmartDetalle.remove(event.data);
-      this.sourceSmartDetalle.refresh();
+      this.smartDetalle.remove(event.data);
+      this.smartDetalle.refresh();
 
       this.agregarDetalle();
     }
@@ -399,8 +401,8 @@ export class BuscarComponent implements OnInit, OnDestroy {
               4000
             );
             //Si todo sale bien, se registra en el smart table el nuevo resultado
-            this.sourceSmartDetalle.add(resp);
-            this.sourceSmartDetalle.refresh();
+            this.smartDetalle.add(resp);
+            this.smartDetalle.refresh();
             this.limpiarDetalle();
           },
           (error) => {
@@ -433,8 +435,8 @@ export class BuscarComponent implements OnInit, OnDestroy {
             "Se ha ingresado el detalle del registro",
             4000
           );
-          this.sourceSmartDetalle.add(resp);
-          this.sourceSmartDetalle.refresh();
+          this.smartDetalle.add(resp);
+          this.smartDetalle.refresh();
           this.limpiarDetalle();
         },
         (error) => {
@@ -465,7 +467,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
       this.dialogService
         .open(DialogNamePromptComponent, {
           context: {
-            titulo: "¿Desea eliminar el registro?",
+            cuerpo: "¿Desea eliminar el registro?",
           },
         })
         .onClose.subscribe((res) => {
@@ -490,8 +492,8 @@ export class BuscarComponent implements OnInit, OnDestroy {
                         4000
                       );
                     }
-                    this.sourceSmartDetalle.remove(event.data);
-                    this.sourceSmartDetalle.refresh();
+                    this.smartDetalle.remove(event.data);
+                    this.smartDetalle.refresh();
                   },
                   (error) => {
                     console.error(error);
@@ -509,7 +511,57 @@ export class BuscarComponent implements OnInit, OnDestroy {
         })
     );
   }
+  public eliminar(data) {
+    this.subscripciones.push(
+      this.eventoService.eliminar(data.idEvento).subscribe(
+        (r) => {
+          if (r) {
+            this.showToast(
+              "success",
+              "Acción realizada",
+              "Se ha eliminado el registro",
+              4000
+            );
+          } else {
+            this.showToast(
+              "warning",
+              "Atención",
+              "No se ha encontrado el registro",
+              4000
+            );
+          }
+          this.smartEvento.remove(data);
+          this.smartEvento.refresh();
+        },
+        (error) => {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "Error " + error.status,
+            "Mientras se eliminaba el registro" + error.error[0],
 
+            0
+          );
+        }
+      )
+    );
+  }
+
+  confirmacion(event): void {
+    this.subscripciones.push(
+      this.dialogService
+        .open(DialogNamePromptComponent, {
+          context: {
+            cuerpo: "¿Desea eliminar el registro?",
+          },
+        })
+        .onClose.subscribe((res) => {
+          if (res) {
+            this.eliminar(event.data);
+          }
+        })
+    );
+  }
   public noWhitespaceValidator(control: FormControl) {
     const isWhitespace = (control.value || "").trim().length === 0;
     const isValid = !isWhitespace;
