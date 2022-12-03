@@ -14,7 +14,6 @@ import {
 } from "@nebular/theme";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
-import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-editar",

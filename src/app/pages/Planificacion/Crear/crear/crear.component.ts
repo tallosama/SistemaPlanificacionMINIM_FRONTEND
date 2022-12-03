@@ -13,7 +13,6 @@ import {
 } from "@nebular/theme";
 import { PlanificacionService } from "../../planificacion.service";
 import { authService } from "../../../../auth/auth.service";
-import { Control } from "../../../Globales/Control";
 
 @Component({
   selector: "ngx-crear",

@@ -20,8 +20,7 @@ import { PlanificacionService } from "../../Planificacion/planificacion.service"
 import { MunicipioService } from "../../Globales/Servicios/municipio.service";
 import { DetalleEventoService } from "../detalle-evento.service";
 import { EventosService } from "../eventos.service";
-import { Control } from "../../Globales/Control";
-
+import { Util } from "../../Globales/Util";
 @Component({
   selector: "ngx-eventos",
   templateUrl: "./eventos.component.html",
@@ -215,7 +214,7 @@ export class EventosComponent implements OnInit, OnDestroy {
       );
     }
   }
-
+  //Este método se inicia cuando el usuario desea agregar detalles al evento
   public iniciarDetalle(): void {
     this.llenarMunicipio();
     this.detalleEventoForm = this.fb.group({
@@ -246,15 +245,33 @@ export class EventosComponent implements OnInit, OnDestroy {
 
   agregarTabla() {
     //formatos de horas
-    //console.log(this.detalleEventoForm.value.hora.toTimeString());
-    //console.log(this.detalleEventoForm.value.hora.toISOString());
-    //console.log(this.detalleEventoForm.value.hora.toLocaleTimeString());
+    // console.log(this.detalleEventoForm.value.hora.toTimeString());
+    // console.log(this.detalleEventoForm.value.hora.toISOString());
+    // console.log(this.detalleEventoForm.value.hora.toLocaleTimeString());
+    // console.log(this.detalleEventoForm.value.hora.toLocaleTimeString("en-US"));
+
+    //Se convierte la hora retornada por el del combobox a AMPM
+    this.detalleEventoForm.value.hora = Util.getHoraAmPm(
+      this.detalleEventoForm.value.hora
+    );
 
     this.sourceSmart.add(this.detalleEventoForm.value);
     this.sourceSmart.refresh();
     this.limpiarDetalle();
   }
+  onEditRowSelect(event) {
+    // debugger;
+    if (this.detalleSeleccionado == null) {
+      event.data.hora = Util.getHoraDate(event.data.hora);
+      this.detalleSeleccionado = event.data;
+      this.detalleSeleccionado.hora = new Date(event.data.hora);
 
+      this.sourceSmart.remove(event.data);
+      this.sourceSmart.refresh();
+
+      this.agregarDetalle();
+    }
+  }
   limpiarDetalle() {
     this.detalleEventoForm.get("hora").setValue(new Date());
     this.detalleEventoForm
@@ -284,15 +301,6 @@ export class EventosComponent implements OnInit, OnDestroy {
       .setValue(this.detalleSeleccionado.municipioId);
   }
 
-  onEditRowSelect(event) {
-    // debugger;
-    if (this.detalleSeleccionado == null) {
-      this.detalleSeleccionado = event.data;
-      this.sourceSmart.remove(event.data);
-      this.sourceSmart.refresh();
-      this.agregarDetalle();
-    }
-  }
   onDeleteRowSelect(event) {
     this.subscripciones.push(
       this.dialogService

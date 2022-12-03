@@ -20,7 +20,7 @@ import { PlanificacionService } from "../../../Planificacion/planificacion.servi
 import { MunicipioService } from "../../../Globales/Servicios/municipio.service";
 import { DetalleEventoService } from "../../detalle-evento.service";
 import { EventosService } from "../../eventos.service";
-import { Control } from "../../../Globales/Control";
+import { Util } from "../../../Globales/Util";
 
 @Component({
   selector: "ngx-buscar",
@@ -321,6 +321,8 @@ export class BuscarComponent implements OnInit, OnDestroy {
       eventoId: [""],
       municipioId: ["", Validators.required],
 
+      usuarioCreacion: [this.usuario.uid, Validators.required],
+      fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [this.usuario.uid, Validators.required],
       fechaModificacion: [this.fecha, Validators.required],
     });
@@ -349,13 +351,16 @@ export class BuscarComponent implements OnInit, OnDestroy {
     // debugger;
     if (this.detalleSeleccionado == null) {
       this.detalleSeleccionado = event.data;
-      this.sourceSmart.remove(event.data);
-      this.sourceSmart.refresh();
+      this.sourceSmartDetalle.remove(event.data);
+      this.sourceSmartDetalle.refresh();
+
       this.agregarDetalle();
     }
   }
   agregarDetalle() {
-    this.detalleEventoForm.get("hora").setValue(this.detalleSeleccionado.hora);
+    this.detalleEventoForm
+      .get("hora")
+      .setValue(Util.getHoraDate(this.detalleSeleccionado.hora));
     this.detalleEventoForm
       .get("fecha")
       .setValue(this.detalleSeleccionado.fecha);
@@ -374,19 +379,50 @@ export class BuscarComponent implements OnInit, OnDestroy {
   }
 
   agregarTabla() {
-    if (this.detalleSeleccionado != null) {
-      this.detalleEventoService.editar(
-        this.detalleSeleccionado.idDetalleEvento,
-        this.detalleSeleccionado
-      );
-      this.sourceSmartDetalle.add(this.detalleEventoForm.value);
-      this.sourceSmartDetalle.refresh();
-      this.limpiarDetalle();
-    }
+    //Se convierte la hora retornada por el del combobox a AMPM
+    this.detalleEventoForm.value.hora = Util.getHoraAmPm(
+      this.detalleEventoForm.value.hora
+    );
+
+    this.subscripciones.push(
+      this.detalleEventoService
+        .editar(
+          this.detalleSeleccionado.idDetalleEvento,
+          this.detalleEventoForm.value
+        )
+        .subscribe(
+          (resp) => {
+            this.showToast(
+              "success",
+              "Acción realizada",
+              "Se ha ingresado el evento",
+              4000
+            );
+            //Si todo sale bien, se registra en el smart table el nuevo resultado
+            this.sourceSmartDetalle.add(resp);
+            this.sourceSmartDetalle.refresh();
+            this.limpiarDetalle();
+          },
+          (error) => {
+            console.error(error);
+            this.showToast(
+              "danger",
+              "Error " + error.status,
+              "Mientras se registraba el detalle de evento " + error.error[0],
+
+              0
+            );
+          }
+        )
+    );
   }
   registrarDetalle() {
-    this.detalleEventoForm.get("eventoId").setValue(this.eventoSeleccionado);
-    console.log(this.detalleEventoForm.value);
+    //Se convierte la hora retornada por el del combobox a AMPM
+    this.detalleEventoForm.value.hora = Util.getHoraAmPm(
+      this.detalleEventoForm.value.hora
+    );
+    //Se asigna la actividad seleccionada al nuevo detalle
+    this.detalleEventoForm.value.eventoId = this.eventoSeleccionado;
 
     this.subscripciones.push(
       this.detalleEventoService.guardar(this.detalleEventoForm.value).subscribe(
@@ -406,7 +442,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
           this.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se ingresaba un detalle" + error.error[0],
+            "Mientras se ingresaba un nuevo detalle " + error.error[0],
 
             0
           );
@@ -439,7 +475,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
                 .eliminar(event.data.idDetalleEvento)
                 .subscribe(
                   (r) => {
-                    if (res) {
+                    if (r) {
                       this.showToast(
                         "success",
                         "Acción realizada",

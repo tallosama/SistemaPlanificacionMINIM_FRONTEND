@@ -13,7 +13,6 @@ import {
 import { MedidaService } from "../../medida.service";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
-import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-crear",

@@ -385,7 +385,7 @@
               <button
                 nbButton
                 (click)="agregarTabla()"
-                [disabled]="detalleEventoForm.invalid"
+                [disabled]="detalleSeleccionado == null"
               >
                 Actualizar
               </button>

@@ -9,7 +9,6 @@ import { ProductoService } from "../../producto.service";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { LocalDataSource } from "ng2-smart-table";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-listado",

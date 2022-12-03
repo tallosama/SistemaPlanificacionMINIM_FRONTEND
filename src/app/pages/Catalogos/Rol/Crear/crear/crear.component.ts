@@ -14,7 +14,6 @@ import {
 import { RolService } from "../../rol.service";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
-import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-crear",

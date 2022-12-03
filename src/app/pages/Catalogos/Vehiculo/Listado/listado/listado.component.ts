@@ -10,7 +10,6 @@ import {
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LocalDataSource } from "ng2-smart-table";
-import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-listado",

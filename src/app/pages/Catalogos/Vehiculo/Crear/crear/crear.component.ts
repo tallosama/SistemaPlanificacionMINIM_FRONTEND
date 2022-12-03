@@ -14,7 +14,6 @@ import { VehiculoService } from "../../vehiculo.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
-import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-crear",

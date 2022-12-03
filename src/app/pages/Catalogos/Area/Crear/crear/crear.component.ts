@@ -13,7 +13,6 @@ import {
 import { Subscription } from "rxjs";
 import { AreaService } from "../../area.service";
 import { authService } from "../../../../../auth/auth.service";
-import { Control } from "../../../../Globales/Control";
 @Component({
   selector: "ngx-crear",
   templateUrl: "./crear.component.html",

@@ -15,7 +15,6 @@ import { CategoriaService } from "../../../Categoria/categoria.service";
 import { MedidaService } from "../../../UnidadMedida/medida.service";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
-import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-crear",

@@ -11,7 +11,6 @@ import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dia
 import { AreaService } from "../../../Area/area.service";
 import { LocalDataSource } from "ng2-smart-table";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Control } from "../../../../Globales/Control";
 
 @Component({
   selector: "ngx-listado",
