@@ -1,9 +1,12 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+
+import { CargoRoutingModule } from "./cargo-routing.module";
 import { CrearComponent } from "./Crear/crear/crear.component";
 import { EditarComponent } from "./Editar/editar/editar.component";
 import { ListadoComponent } from "./Listado/listado/listado.component";
-import { CategoriaRoutingModule } from "./categoria-routing.module";
+import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   NbAlertModule,
   NbButtonModule,
@@ -11,16 +14,14 @@ import {
   NbDialogModule,
   NbInputModule,
 } from "@nebular/theme";
-import { HttpClientModule } from "@angular/common/http";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { DataTablesModule } from "angular-datatables";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 
 @NgModule({
   declarations: [CrearComponent, EditarComponent, ListadoComponent],
   imports: [
     CommonModule,
-    CategoriaRoutingModule,
+    CargoRoutingModule,
+
     //permite utilizar peticiones http
     HttpClientModule,
     //Permite usar los form builders
@@ -36,11 +37,9 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
     NbButtonModule,
 
     NbDialogModule.forChild(),
-    //Datatables
-    //  DataTablesModule,
 
     //Stmarttable
     Ng2SmartTableModule,
   ],
 })
-export class CategoriaModule {}
+export class CargoModule {}

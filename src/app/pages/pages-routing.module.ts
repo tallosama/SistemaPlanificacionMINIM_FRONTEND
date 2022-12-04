@@ -103,6 +103,11 @@ const routes: Routes = [
           ),
       },
       {
+        path: "Cargo",
+        loadChildren: () =>
+          import("./Catalogos/Cargo/cargo.module").then((a) => a.CargoModule),
+      },
+      {
         path: "forms",
         loadChildren: () =>
           import("./forms/forms.module").then((m) => m.FormsModule),

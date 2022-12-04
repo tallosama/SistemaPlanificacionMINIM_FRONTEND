@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Listado de cargos
+        <button
+          size="small"
+          id="b3"
+          mat-button
+          class="b3"
+          [routerLink]="['../RegistrarCargo']"
+          nbButton
+          status="primary"
+        >
+          Nuevo
+        </button>
+      </nb-card-header>
+      <nb-card-body>
+        <ng2-smart-table
+          [settings]="settings"
+          [source]="smartCargo"
+          (edit)="editarRegistro($event)"
+          (delete)="confirmacion($event)"
+        >
+        </ng2-smart-table>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

@@ -187,10 +187,27 @@ export const MENU_ITEMS: NbMenuItem[] = [
           },
         ],
       },
+
+      {
+        title: "Cargos",
+        icon: "pantone-outline",
+        link: "/pages/Cargo",
+        children: [
+          {
+            title: "Registrar",
+            link: "/pages/Cargo/RegistrarCargo",
+          },
+
+          {
+            title: "Listar",
+            link: "/pages/Cargo/ListarCargo",
+          },
+        ],
+      },
     ],
   },
   {
-    title: "FEATURES",
+    title: "Avanzados",
     group: true,
   },
   {

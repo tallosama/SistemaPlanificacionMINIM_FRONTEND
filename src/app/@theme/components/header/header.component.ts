@@ -47,7 +47,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = "default";
 
-  userMenu = [{ title: "Perfil" }, { title: "Cerrar sesión" }];
+  // userMenu = [{ title: "Perfil" }, { title: "Cerrar sesión" }];
+  userMenu = [{ title: "Cerrar sesión" }];
 
   constructor(
     private sidebarService: NbSidebarService,
@@ -55,7 +56,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private themeService: NbThemeService,
     private auth: authService,
 
-    //private userService: UserData,
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService
   ) {}

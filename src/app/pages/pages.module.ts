@@ -21,6 +21,7 @@ import { VehiculoModule } from "./Catalogos/Vehiculo/vehiculo.module";
 import { RolModule } from "./Catalogos/Rol/rol.module";
 import { UsuarioModule } from "./Usuario/usuario.module";
 import { EventosModule } from "./Eventos/eventos.module";
+import { CargoModule } from "./Catalogos/Cargo/cargo.module";
 
 @NgModule({
   imports: [
@@ -41,7 +42,7 @@ import { EventosModule } from "./Eventos/eventos.module";
     RolModule,
     UsuarioModule,
     EventosModule,
-
+    CargoModule,
     //para input de horas en todo el proyecto
     NbTimepickerModule.forRoot({
       localization: {

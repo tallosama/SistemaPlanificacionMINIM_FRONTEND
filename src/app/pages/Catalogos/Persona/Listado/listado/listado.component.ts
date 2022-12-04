@@ -141,19 +141,28 @@ export class ListadoComponent implements OnInit, OnDestroy {
   }
 
   confirmacion(id): void {
-    this.subscripciones.push(
-      this.dialogService
-        .open(DialogNamePromptComponent, {
-          context: {
-            cuerpo: "¿Desea eliminar el registro?",
-          },
-        })
-        .onClose.subscribe((res) => {
-          if (res) {
-            this.eliminar(id.data);
-          }
-        })
-    );
+    if (!id.data.poseeUsuario) {
+      this.subscripciones.push(
+        this.dialogService
+          .open(DialogNamePromptComponent, {
+            context: {
+              cuerpo: "¿Desea eliminar el registro?",
+            },
+          })
+          .onClose.subscribe((res) => {
+            if (res) {
+              this.eliminar(id.data);
+            }
+          })
+      );
+    } else {
+      this.showToast(
+        "warning",
+        "Atención",
+        "No se puede eliminar el personal seleccionado debido que posee una cuenta de usuario",
+        4000
+      );
+    }
   }
   eliminar(id): void {
     this.subscripciones.push(

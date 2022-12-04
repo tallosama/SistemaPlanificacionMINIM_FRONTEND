@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header> Editar cargo </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="cargoForm" *ngIf="cargoForm" (ngSubmit)="editar()">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="label">Descripción del cargo</label>
+              <textarea
+                rows="3"
+                formControlName="desCargo"
+                nbInput
+                fullWidth
+              ></textarea>
+
+              <div
+                *ngIf="
+                  cargoForm.get('desCargo').invalid &&
+                  cargoForm.get('desCargo').touched
+                "
+              >
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    cargoForm.get('desCargo').hasError('required') ||
+                    cargoForm.get('desCargo').hasError('whitespace')
+                  "
+                >
+                  La descripción es obligatoria
+                </p>
+                <p
+                  class="caption status-danger"
+                  *ngIf="cargoForm.get('desCargo').hasError('maxlength')"
+                >
+                  Debe de ingresar una descripción menor a 100 carácteres
+                </p>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Área perteneciente</label>
+                <select class="form-control" formControlName="areaId">
+                  <option value="">Seleccione</option>
+                  <option *ngFor="let item of areas" [ngValue]="item">
+                    {{ item.desArea }}
+                  </option>
+                </select>
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    cargoForm.get('areaId').hasError('required') &&
+                    cargoForm.get('areaId').touched
+                  "
+                >
+                  Debe de seleccionar una opción
+                </p>
+              </div>
+            </div>
+          </div>
+          <button
+            type="submit"
+            [disabled]="cargoForm.invalid"
+            nbButton
+            status="primary"
+          >
+            Editar
+          </button>
+        </form>
+      </nb-card-body>
+
+      <nb-card-footer>
+        <button [routerLink]="['../../ListarCargo']" nbButton status="success">
+          Atrás
+        </button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>
