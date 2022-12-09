@@ -1,20 +1,12 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import {
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-  NbToastrConfig,
-} from "@nebular/theme";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NbToastrService, NbToastrConfig } from "@nebular/theme";
 import { ProductoService } from "../../producto.service";
 import { CategoriaService } from "../../../Categoria/categoria.service";
 import { MedidaService } from "../../../UnidadMedida/medida.service";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Util } from "../../../../Globales/Util";
 
 @Component({
   selector: "ngx-crear",
@@ -55,12 +47,13 @@ export class CrearComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban las categorías" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -73,12 +66,13 @@ export class CrearComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban las unidades de medida" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -92,7 +86,7 @@ export class CrearComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.maxLength(128),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
       // cantMinima: ["", Validators.required],
@@ -109,11 +103,6 @@ export class CrearComponent implements OnInit, OnDestroy {
       fechaModificacion: [this.fecha, Validators.required],
     });
   }
-  public noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
-  }
 
   limpiar(): void {
     this.productoForm.get("descripcion").reset();
@@ -127,47 +116,32 @@ export class CrearComponent implements OnInit, OnDestroy {
 
   guardar(): void {
     this.subscripciones.push(
-      this.productoService.guardar(this.productoForm.value).subscribe(
-        (resp) => {
-          this.showToast(
-            "success",
-            "Acción realizada",
-            "Se ha ingresado el registro",
-            4000
-          );
+      this.productoService
+        .guardar(Util.limpiarForm(this.productoForm.value))
+        .subscribe(
+          (resp) => {
+            Util.showToast(
+              "success",
+              "Acción realizada",
+              "Se ha ingresado el registro",
+              4000,
+              this.toastrService
+            );
 
-          this.limpiar();
-        },
-        (error) => {
-          console.error(error);
-          this.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se realizaba un registro" + error.error[0],
+            this.limpiar();
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast(
+              "danger",
+              "Error " + error.status,
+              "Mientras se realizaba un registro" + error.error[0],
 
-            0
-          );
-        }
-      )
+              0,
+              this.toastrService
+            );
+          }
+        )
     );
-  }
-
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

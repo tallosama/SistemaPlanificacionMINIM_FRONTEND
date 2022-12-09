@@ -165,12 +165,13 @@ export class BuscarComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban las áreas" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -183,12 +184,13 @@ export class BuscarComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban los planes" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -217,13 +219,16 @@ export class BuscarComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.maxLength(1024),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
-      areaId: [this.eventoSeleccionado.areaId, Validators.required],
+      areaId: [
+        this.eventoSeleccionado.areaId,
+        Validators.compose([Util.noObjeto, Validators.required]),
+      ],
       planificacionId: [
         this.eventoSeleccionado.planificacionId,
-        Validators.required,
+        Validators.compose([Util.noObjeto, Validators.required]),
       ],
       usuarioModificacion: [this.usuario.uid, Validators.required],
       fechaModificacion: [this.fecha, Validators.required],
@@ -237,11 +242,12 @@ export class BuscarComponent implements OnInit, OnDestroy {
           .editar(this.eventoSeleccionado.idEvento, this.eventoForm.value)
           .subscribe(
             (resp) => {
-              this.showToast(
+              Util.showToast(
                 "success",
                 "Acción realizada",
                 "Se ha modificado el evento",
-                4000
+                4000,
+                this.toastrService
               );
 
               this.limpiarEvento();
@@ -250,22 +256,24 @@ export class BuscarComponent implements OnInit, OnDestroy {
             },
             (error) => {
               console.error(error);
-              this.showToast(
+              Util.showToast(
                 "danger",
                 "Error " + error.status,
                 "Mientras se modificaba el evento" + error.error[0],
 
-                0
+                0,
+                this.toastrService
               );
             }
           )
       );
     } else {
-      this.showToast(
+      Util.showToast(
         "warning",
         "Atención",
         "No se puede editar el registro de un evento inexistente ",
-        8000
+        8000,
+        this.toastrService
       );
     }
   }
@@ -290,12 +298,13 @@ export class BuscarComponent implements OnInit, OnDestroy {
             },
             (error) => {
               console.error(error);
-              this.showToast(
+              Util.showToast(
                 "danger",
                 "Error " + error.status,
                 "Mientras se listaban los detalles" + error.error[0],
 
-                0
+                0,
+                this.toastrService
               );
             }
           )
@@ -317,11 +326,14 @@ export class BuscarComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.maxLength(32),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
       eventoId: [""],
-      municipioId: ["", Validators.required],
+      municipioId: [
+        "",
+        Validators.compose([Util.noObjeto, Validators.required]),
+      ],
 
       usuarioCreacion: [this.usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
@@ -338,12 +350,13 @@ export class BuscarComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban los municipios" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -394,11 +407,12 @@ export class BuscarComponent implements OnInit, OnDestroy {
         )
         .subscribe(
           (resp) => {
-            this.showToast(
+            Util.showToast(
               "success",
               "Acción realizada",
               "Se ha ingresado el evento",
-              4000
+              4000,
+              this.toastrService
             );
             //Si todo sale bien, se registra en el smart table el nuevo resultado
             this.smartDetalle.add(resp);
@@ -407,12 +421,13 @@ export class BuscarComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.error(error);
-            this.showToast(
+            Util.showToast(
               "danger",
               "Error " + error.status,
               "Mientras se registraba el detalle de evento " + error.error[0],
 
-              0
+              0,
+              this.toastrService
             );
           }
         )
@@ -429,11 +444,12 @@ export class BuscarComponent implements OnInit, OnDestroy {
     this.subscripciones.push(
       this.detalleEventoService.guardar(this.detalleEventoForm.value).subscribe(
         (resp) => {
-          this.showToast(
+          Util.showToast(
             "success",
             "Acción realizada",
             "Se ha ingresado el detalle del registro",
-            4000
+            4000,
+            this.toastrService
           );
           this.smartDetalle.add(resp);
           this.smartDetalle.refresh();
@@ -441,12 +457,13 @@ export class BuscarComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se ingresaba un nuevo detalle " + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -478,18 +495,20 @@ export class BuscarComponent implements OnInit, OnDestroy {
                 .subscribe(
                   (r) => {
                     if (r) {
-                      this.showToast(
+                      Util.showToast(
                         "success",
                         "Acción realizada",
                         "Se ha eliminado el registro",
-                        4000
+                        4000,
+                        this.toastrService
                       );
                     } else {
-                      this.showToast(
+                      Util.showToast(
                         "warning",
                         "Atención",
                         "No se ha encontrado el registro",
-                        4000
+                        4000,
+                        this.toastrService
                       );
                     }
                     this.smartDetalle.remove(event.data);
@@ -497,12 +516,13 @@ export class BuscarComponent implements OnInit, OnDestroy {
                   },
                   (error) => {
                     console.error(error);
-                    this.showToast(
+                    Util.showToast(
                       "danger",
                       "Error " + error.status,
                       "Mientras se eliminaba el registro" + error.error[0],
 
-                      0
+                      0,
+                      this.toastrService
                     );
                   }
                 )
@@ -516,18 +536,20 @@ export class BuscarComponent implements OnInit, OnDestroy {
       this.eventoService.eliminar(data.idEvento).subscribe(
         (r) => {
           if (r) {
-            this.showToast(
+            Util.showToast(
               "success",
               "Acción realizada",
               "Se ha eliminado el registro",
-              4000
+              4000,
+              this.toastrService
             );
           } else {
-            this.showToast(
+            Util.showToast(
               "warning",
               "Atención",
               "No se ha encontrado el registro",
-              4000
+              4000,
+              this.toastrService
             );
           }
           this.smartEvento.remove(data);
@@ -535,12 +557,13 @@ export class BuscarComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se eliminaba el registro" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -561,28 +584,5 @@ export class BuscarComponent implements OnInit, OnDestroy {
           }
         })
     );
-  }
-  public noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
-  }
-
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

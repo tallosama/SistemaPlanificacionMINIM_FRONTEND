@@ -28,15 +28,9 @@
                   <p
                     class="caption status-danger"
                     *ngIf="
-                      vehiculoForm.get('desVehiculo').hasError('whitespace')
+                      vehiculoForm.get('desVehiculo').hasError('required') ||
+                      vehiculoForm.get('desVehiculo').hasError('incorrecto')
                     "
-                  >
-                    Ingrese una descripción válida
-                  </p>
-
-                  <p
-                    class="caption status-danger"
-                    *ngIf="vehiculoForm.get('desVehiculo').hasError('required')"
                   >
                     La descripción es requerida
                   </p>
@@ -66,14 +60,10 @@
                 >
                   <p
                     class="caption status-danger"
-                    *ngIf="vehiculoForm.get('placa').hasError('whitespace')"
-                  >
-                    Ingrese una placa válida
-                  </p>
-
-                  <p
-                    class="caption status-danger"
-                    *ngIf="vehiculoForm.get('placa').hasError('required')"
+                    *ngIf="
+                      vehiculoForm.get('placa').hasError('required') ||
+                      vehiculoForm.get('placa').hasError('incorrecto')
+                    "
                   >
                     La placa es requerida
                   </p>

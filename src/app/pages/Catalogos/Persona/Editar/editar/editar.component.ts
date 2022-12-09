@@ -1,20 +1,12 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { PersonaService } from "../../persona.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import {
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-  NbToastrConfig,
-} from "@nebular/theme";
-import { AreaService } from "../../../Area/area.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NbToastrService } from "@nebular/theme";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { CargoService } from "../../../Cargo/cargo.service";
+import { Util } from "../../../../Globales/Util";
 
 @Component({
   selector: "ngx-editar",
@@ -25,13 +17,11 @@ export class EditarComponent implements OnInit, OnDestroy {
   fecha = new Date().toISOString().slice(0, 10);
   personaForm: FormGroup;
   id: number;
-  //inicializadores del mensaje toast
-  config: NbToastrConfig;
   estado = [
     { esActivo: true, Estado: "Activo" },
     { esActivo: false, Estado: "Inactivo" },
   ];
-  areas: any;
+  cargos: any;
   subscripciones: Array<Subscription> = [];
   constructor(
     public fb: FormBuilder,
@@ -39,24 +29,25 @@ export class EditarComponent implements OnInit, OnDestroy {
     public personaService: PersonaService,
     private route: ActivatedRoute,
     private toastrService: NbToastrService,
-    public areaService: AreaService,
+    public cargoService: CargoService,
     public auth: authService
   ) {}
 
   private llenadoCombobox(): void {
     this.subscripciones.push(
-      this.areaService.listar().subscribe(
+      this.cargoService.listar().subscribe(
         (resp) => {
-          this.areas = resp;
+          this.cargos = resp;
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las áreas" + error.error[0],
+            "Mientras se listaban los cargos " + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -81,7 +72,7 @@ export class EditarComponent implements OnInit, OnDestroy {
                 Validators.required,
                 Validators.minLength(16),
                 Validators.maxLength(50),
-                this.noWhitespaceValidator,
+                Util.esVacio,
               ]),
             ],
             pNombre: [
@@ -89,7 +80,7 @@ export class EditarComponent implements OnInit, OnDestroy {
               Validators.compose([
                 Validators.required,
                 Validators.maxLength(32),
-                this.noWhitespaceValidator,
+                Util.esVacio,
               ]),
             ],
             sNombre: [res.sNombre, Validators.maxLength(32)],
@@ -98,22 +89,15 @@ export class EditarComponent implements OnInit, OnDestroy {
               Validators.compose([
                 Validators.required,
                 Validators.maxLength(32),
-                this.noWhitespaceValidator,
+                Util.esVacio,
               ]),
             ],
             sApellido: [res.sApellido, Validators.maxLength(32)],
-            tipo: [
-              res.tipo,
-              Validators.compose([
-                Validators.required,
-                Validators.maxLength(32),
-                this.noWhitespaceValidator,
-              ]),
-            ],
+
             poseeUsuario: [res.poseeUsuario, Validators.required],
             estado: [res.estado, Validators.required],
-            areaId: [
-              this.areas.find((a) => a.idArea == res.areaId.idArea),
+            cargoId: [
+              this.cargos.find((c) => c.idCargo == res.cargoId.idCargo),
               Validators.required,
             ],
 
@@ -123,67 +107,48 @@ export class EditarComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se buscaba un registro" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
     );
-  }
-  public noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
   }
 
   public editar(): void {
     this.subscripciones.push(
-      this.personaService.editar(this.id, this.personaForm.value).subscribe(
-        (resp) => {
-          this.router.navigate(["../../ListarPersona"], {
-            relativeTo: this.route,
-          });
-          this.showToast(
-            "success",
-            "Acción realizada",
-            "Se ha editado el registro",
-            4000
-          );
-        },
-        (error) => {
-          console.error(error);
-          this.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se editaba un registro" + error.error[0],
+      this.personaService
+        .editar(this.id, Util.limpiarForm(this.personaForm.value))
+        .subscribe(
+          (resp) => {
+            this.router.navigate(["../../ListarPersona"], {
+              relativeTo: this.route,
+            });
+            Util.showToast(
+              "success",
+              "Acción realizada",
+              "Se ha editado el registro",
+              4000,
+              this.toastrService
+            );
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast(
+              "danger",
+              "Error " + error.status,
+              "Mientras se editaba un registro" + error.error[0],
 
-            0
-          );
-        }
-      )
+              0,
+              this.toastrService
+            );
+          }
+        )
     );
-  }
-
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

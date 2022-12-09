@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import {
   NbDialogService,
-  NbGlobalPhysicalPosition,
   NbStepperComponent,
   NbToastrService,
 } from "@nebular/theme";
@@ -12,6 +11,7 @@ import { authService } from "../../../../../auth/auth.service";
 import { AreaService } from "../../../../Catalogos/Area/area.service";
 import { PersonaService } from "../../../../Catalogos/Persona/persona.service";
 import { RolService } from "../../../../Catalogos/Rol/rol.service";
+import { Util } from "../../../../Globales/Util";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 
 @Component({
@@ -126,12 +126,13 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban las áreas" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -145,12 +146,13 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban los registros" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -165,12 +167,13 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban los registros" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -244,14 +247,15 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.error(e);
 
-      this.showToast(
+      Util.showToast(
         "danger",
         "Error ",
         "Mientras se creaba la cuenta de usuario se detectó '" +
           this.errores(e.code) +
           "'",
 
-        0
+        0,
+        this.toastrService
       );
     }
   }
@@ -260,12 +264,13 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
       await this.auth.saveUserDB(this.usuarioForm.value, resultado.user.email);
       this.editarUsuario();
     } catch (error) {
-      this.showToast(
+      Util.showToast(
         "danger",
         "Error " + error.code,
         "Mientras se registraban los datos del usuario " + error,
 
-        0
+        0,
+        this.toastrService
       );
     }
   }
@@ -274,11 +279,12 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
       this.personaService
         .editar(this.personaSeleccionada.idPersona, this.personaSeleccionada)
         .subscribe(() => {
-          this.showToast(
+          Util.showToast(
             "success",
             "Acción realizada",
             "Se ha ingresado el registro",
-            4000
+            4000,
+            this.toastrService
           );
         })
     );
@@ -341,23 +347,5 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
     }
 
     return "Error desconocido " + code;
-  }
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

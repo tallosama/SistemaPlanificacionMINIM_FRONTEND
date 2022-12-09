@@ -29,7 +29,10 @@
                     *ngIf="
                       regPlanificacionForm
                         .get('descripcion')
-                        .hasError('required')
+                        .hasError('required') ||
+                      regPlanificacionForm
+                        .get('descripcion')
+                        .hasError('incorrecto')
                     "
                   >
                     la descripción de la planificación es obligatoria
@@ -44,16 +47,6 @@
                     "
                   >
                     Debe de ingresar descripción menor a 128 carácteres
-                  </p>
-                  <p
-                    class="caption status-danger"
-                    *ngIf="
-                      regPlanificacionForm
-                        .get('descripcion')
-                        .hasError('whitespace')
-                    "
-                  >
-                    Ingrese una descripción válida
                   </p>
                 </div>
               </div>

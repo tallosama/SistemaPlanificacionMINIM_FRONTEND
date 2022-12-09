@@ -20,7 +20,10 @@
               >
                 <p
                   class="caption status-danger"
-                  *ngIf="rolForm.get('desRol').hasError('required')"
+                  *ngIf="
+                    rolForm.get('desRol').hasError('required') ||
+                    rolForm.get('desRol').hasError('incorrecto')
+                  "
                 >
                   La descripción es requerida
                 </p>
@@ -29,13 +32,6 @@
                   *ngIf="rolForm.get('desRol').hasError('maxlength')"
                 >
                   Debe de ingresar una descripción menor a 512 carácteres
-                </p>
-
-                <p
-                  class="caption status-danger"
-                  *ngIf="rolForm.get('desRol').hasError('whitespace')"
-                >
-                  Ingrese una descripción válida
                 </p>
               </div>
             </div>

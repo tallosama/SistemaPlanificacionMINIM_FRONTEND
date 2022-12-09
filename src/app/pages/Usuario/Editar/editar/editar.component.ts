@@ -9,6 +9,7 @@ import {
 import { Subscription } from "rxjs";
 import { authService } from "../../../../auth/auth.service";
 import { RolService } from "../../../Catalogos/Rol/rol.service";
+import { Util } from "../../../Globales/Util";
 
 @Component({
   selector: "ngx-editar",
@@ -26,9 +27,7 @@ export class EditarComponent implements OnInit, OnDestroy {
   ];
   correo: string;
   constructor(
-    private dialogService: NbDialogService,
     private toastrService: NbToastrService,
-    private router: Router,
     private route: ActivatedRoute,
     public fb: FormBuilder,
     private auth: authService,
@@ -76,11 +75,12 @@ export class EditarComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se buscaba un usuario" + error.error[0],
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -88,24 +88,5 @@ export class EditarComponent implements OnInit, OnDestroy {
   }
   public async editar() {
     console.log(this.usuarioForm.value);
-  }
-
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

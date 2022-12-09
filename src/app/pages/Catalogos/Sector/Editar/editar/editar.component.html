@@ -22,7 +22,10 @@
               >
                 <p
                   class="caption status-danger"
-                  *ngIf="sectorForm.get('desSector').hasError('required')"
+                  *ngIf="
+                    sectorForm.get('desSector').hasError('required') ||
+                    sectorForm.get('desSector').hasError('incorrecto')
+                  "
                 >
                   La descripción es requerida
                 </p>
@@ -31,13 +34,6 @@
                   *ngIf="sectorForm.get('desSector').hasError('maxlength')"
                 >
                   Debe de ingresar una descripción menor a 128 carácteres
-                </p>
-
-                <p
-                  class="caption status-danger"
-                  *ngIf="sectorForm.get('desSector').hasError('whitespace')"
-                >
-                  Ingrese una descripción válida
                 </p>
               </div>
             </div>

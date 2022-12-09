@@ -22,6 +22,8 @@ import { RolModule } from "./Catalogos/Rol/rol.module";
 import { UsuarioModule } from "./Usuario/usuario.module";
 import { EventosModule } from "./Eventos/eventos.module";
 import { CargoModule } from "./Catalogos/Cargo/cargo.module";
+import { EntradaModule } from './Movimientos/Entrada/entrada.module';
+import { SalidaModule } from './Movimientos/Salida/salida.module';
 
 @NgModule({
   imports: [
@@ -54,6 +56,8 @@ import { CargoModule } from "./Catalogos/Cargo/cargo.module";
     }),
     //fecha
     NbDatepickerModule.forRoot(),
+    EntradaModule,
+    SalidaModule,
   ],
   declarations: [PagesComponent],
 })

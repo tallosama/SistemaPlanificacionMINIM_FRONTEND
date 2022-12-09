@@ -67,12 +67,13 @@ export class EventosComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban las áreas" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -85,12 +86,13 @@ export class EventosComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban las planificaciones" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -99,7 +101,6 @@ export class EventosComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.autoCompletados();
     this.usuario = this.auth.getUserStorage();
-    //this.sourceSmart.setPaging(5);
     this.cargarForm();
   }
 
@@ -113,11 +114,14 @@ export class EventosComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.maxLength(1024),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
-      areaId: ["", Validators.required],
-      planificacionId: ["", Validators.required],
+      areaId: ["", Validators.compose([Validators.required, Util.noObjeto])],
+      planificacionId: [
+        "",
+        Validators.compose([Validators.required, Util.noObjeto]),
+      ],
       usuarioCreacion: [this.usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [this.usuario.uid, Validators.required],
@@ -128,17 +132,6 @@ export class EventosComponent implements OnInit, OnDestroy {
   limpiarEvento(): void {
     this.eventoForm.get("desEveto").reset();
   }
-  /**
-   * If the value of the control is not whitespace, return null, otherwise return an error object with a
-   * whitespace property.
-   * @param {FormControl} control - FormControl - The control to validate.
-   * @returns an object with a key of whitespace and a value of true.
-   */
-  public noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
-  }
 
   /**
    * It takes the values from the form and sends them to the server.
@@ -146,34 +139,39 @@ export class EventosComponent implements OnInit, OnDestroy {
   guardarEvento() {
     if (!this.eventoForm.invalid) {
       this.subscripciones.push(
-        this.eventoService.guardar(this.eventoForm.value).subscribe(
-          (resp) => {
-            this.showToast(
-              "success",
-              "Acción realizada",
-              "Se ha ingresado el evento",
-              4000
-            );
+        this.eventoService
+          .guardar(Util.limpiarForm(this.eventoForm.value))
+          .subscribe(
+            (resp) => {
+              Util.showToast(
+                "success",
+                "Acción realizada",
+                "Se ha ingresado el evento",
+                4000,
+                this.toastrService
+              );
 
-            this.limpiarEvento();
-          },
-          (error) => {
-            console.error(error);
-            this.showToast(
-              "danger",
-              "Error " + error.status,
-              "Mientras se registraba el evento" + error.error[0],
-              0
-            );
-          }
-        )
+              this.limpiarEvento();
+            },
+            (error) => {
+              console.error(error);
+              Util.showToast(
+                "danger",
+                "Error " + error.status,
+                "Mientras se registraba el evento" + error.error[0],
+                0,
+                this.toastrService
+              );
+            }
+          )
       );
     } else {
-      this.showToast(
+      Util.showToast(
         "warning",
         "Atención",
         "No se pueden registrar los detalles de un evento inexistente ",
-        8000
+        8000,
+        this.toastrService
       );
     }
   }
@@ -181,36 +179,41 @@ export class EventosComponent implements OnInit, OnDestroy {
   guardarEventoConDetalle() {
     if (!this.eventoForm.invalid) {
       this.subscripciones.push(
-        this.eventoService.guardar(this.eventoForm.value).subscribe(
-          (resp) => {
-            this.showToast(
-              "success",
-              "Acción realizada",
-              "Se ha ingresado el evento",
-              4000
-            );
+        this.eventoService
+          .guardar(Util.limpiarForm(this.eventoForm.value))
+          .subscribe(
+            (resp) => {
+              Util.showToast(
+                "success",
+                "Acción realizada",
+                "Se ha ingresado el evento",
+                4000,
+                this.toastrService
+              );
 
-            this.guardarDetalle(resp);
-            this.limpiarEvento();
-          },
-          (error) => {
-            console.error(error);
-            this.showToast(
-              "danger",
-              "Error " + error.status,
-              "Mientras se registraba el evento" + error.error[0],
+              this.guardarDetalle(resp);
+              this.limpiarEvento();
+            },
+            (error) => {
+              console.error(error);
+              Util.showToast(
+                "danger",
+                "Error " + error.status,
+                "Mientras se registraba el evento" + error.error[0],
 
-              0
-            );
-          }
-        )
+                0,
+                this.toastrService
+              );
+            }
+          )
       );
     } else {
-      this.showToast(
+      Util.showToast(
         "warning",
         "Atención",
         "No se pueden registrar los detalles de un evento inexistente ",
-        8000
+        8000,
+        this.toastrService
       );
     }
   }
@@ -227,14 +230,13 @@ export class EventosComponent implements OnInit, OnDestroy {
       observaciones: ["", Validators.maxLength(512)],
       estado: [
         "Pendiente",
-        Validators.compose([
-          Validators.required,
-          Validators.maxLength(32),
-          this.noWhitespaceValidator,
-        ]),
+        Validators.compose([Validators.required, Validators.maxLength(32)]),
       ],
       eventoId: [""],
-      municipioId: ["", Validators.required],
+      municipioId: [
+        "",
+        Validators.compose([Validators.required, Util.noObjeto]),
+      ],
 
       usuarioCreacion: [this.usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
@@ -401,12 +403,13 @@ export class EventosComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban los municipios" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -422,21 +425,23 @@ export class EventosComponent implements OnInit, OnDestroy {
           this.subscripciones.push(
             this.detalleEventoService.guardar(detalle).subscribe(
               (resp) => {
-                this.showToast(
+                Util.showToast(
                   "success",
                   "Acción realizada",
                   "Se ha ingresado el detalle del registro",
-                  4000
+                  4000,
+                  this.toastrService
                 );
               },
               (error) => {
                 console.error(error);
-                this.showToast(
+                Util.showToast(
                   "danger",
                   "Error " + error.status,
                   "Mientras se ingresaba un detalles" + error.error[0],
 
-                  0
+                  0,
+                  this.toastrService
                 );
               }
             )
@@ -454,30 +459,5 @@ export class EventosComponent implements OnInit, OnDestroy {
       this.guardarEvento();
     }
     this.stepper.previous();
-  }
-  /**
-*construccion del mensaje
- * This function is used to display a toast message on the screen.
- @param {string} estado - string,
- @param {string} titulo - string,
- @param {string} cuerpo - string,
- @param {number} duracion - number -&gt; duration of the toast
- */
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

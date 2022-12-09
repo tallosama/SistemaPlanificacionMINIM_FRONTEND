@@ -27,7 +27,10 @@
                 <p
                   class="caption status-danger"
                   *ngIf="
-                    categoriaForm.get('descripCategoria').hasError('required')
+                    categoriaForm
+                      .get('descripCategoria')
+                      .hasError('required') ||
+                    categoriaForm.get('descripCategoria').hasError('incorrecto')
                   "
                 >
                   La descripción es obligatoria
@@ -39,14 +42,6 @@
                   "
                 >
                   Debe de ingresar una descripción menor a 100 carácteres
-                </p>
-                <p
-                  class="caption status-danger"
-                  *ngIf="
-                    categoriaForm.get('descripCategoria').hasError('whitespace')
-                  "
-                >
-                  Ingrese una descripción válida
                 </p>
               </div>
             </div>

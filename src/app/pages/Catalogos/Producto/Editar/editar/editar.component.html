@@ -29,7 +29,10 @@
                 >
                   <p
                     class="caption status-danger"
-                    *ngIf="productoForm.get('descripcion').hasError('required')"
+                    *ngIf="
+                      productoForm.get('descripcion').hasError('required') ||
+                      productoForm.get('descripcion').hasError('incorrecto')
+                    "
                   >
                     La descripción es obligatoria
                   </p>
@@ -41,14 +44,6 @@
                     "
                   >
                     Debe de ingresar descripción menor o igual a 128 carácteres
-                  </p>
-                  <p
-                    class="caption status-danger"
-                    *ngIf="
-                      productoForm.get('descripcion').hasError('whitespace')
-                    "
-                  >
-                    Ingrese una descripción válida
                   </p>
                 </div>
               </div>
@@ -84,7 +79,7 @@
                   formControlName="cantStock"
                   nbInput
                   fullWidth
-                  disabled
+                  [attr.disabled]="true"
                 />
                 <p
                   class="caption status-danger"

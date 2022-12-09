@@ -108,6 +108,22 @@ const routes: Routes = [
           import("./Catalogos/Cargo/cargo.module").then((a) => a.CargoModule),
       },
       {
+        path: "Entrada",
+        loadChildren: () =>
+          import("./Movimientos/Entrada/entrada.module").then(
+            (a) => a.EntradaModule
+          ),
+      },
+
+      {
+        path: "Salida",
+        loadChildren: () =>
+          import("./Movimientos/Salida/Salida.module").then(
+            (a) => a.SalidaModule
+          ),
+      },
+
+      {
         path: "forms",
         loadChildren: () =>
           import("./forms/forms.module").then((m) => m.FormsModule),

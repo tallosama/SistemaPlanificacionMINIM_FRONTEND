@@ -34,7 +34,7 @@
                   class="caption status-danger"
                   *ngIf="
                     eventoForm.get('desEveto').hasError('required') ||
-                    eventoForm.get('desEveto').hasError('whitespace')
+                    eventoForm.get('desEveto').hasError('incorrecto')
                   "
                 >
                   La descripción es obligatoria
@@ -79,8 +79,11 @@
                   <p
                     class="caption status-danger"
                     *ngIf="
-                      eventoForm.get('planificacionId').hasError('required') &&
-                      eventoForm.get('planificacionId').touched
+                      eventoForm.get('planificacionId').hasError('required') ||
+                      (eventoForm
+                        .get('planificacionId')
+                        .hasError('incorrecto') &&
+                        eventoForm.get('planificacionId').touched)
                     "
                   >
                     La planificación es obligatoria
@@ -115,8 +118,9 @@
                   <p
                     class="caption status-danger"
                     *ngIf="
-                      eventoForm.get('areaId').hasError('required') &&
-                      eventoForm.get('areaId').touched
+                      eventoForm.get('areaId').hasError('required') ||
+                      (eventoForm.get('areaId').hasError('incorrecto') &&
+                        eventoForm.get('areaId').touched)
                     "
                   >
                     El área es obligatorio
@@ -260,8 +264,11 @@
                     *ngIf="
                       detalleEventoForm
                         .get('municipioId')
-                        .hasError('required') &&
-                      detalleEventoForm.get('municipioId').touched
+                        .hasError('required') ||
+                      (detalleEventoForm
+                        .get('municipioId')
+                        .hasError('incorrecto') &&
+                        detalleEventoForm.get('municipioId').touched)
                     "
                   >
                     El Municipio es obligatorio
@@ -314,8 +321,7 @@
                     <p
                       class="caption status-danger"
                       *ngIf="
-                        detalleEventoForm.get('estado').hasError('required') ||
-                        detalleEventoForm.get('estado').hasError('whitespace')
+                        detalleEventoForm.get('estado').hasError('required')
                       "
                     >
                       El estado es requerido

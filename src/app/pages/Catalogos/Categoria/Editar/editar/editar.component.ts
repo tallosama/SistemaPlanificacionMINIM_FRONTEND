@@ -1,19 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { CategoriaService } from "../../categoria.service";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-  NbToastrConfig,
-} from "@nebular/theme";
+import { NbToastrService } from "@nebular/theme";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Util } from "../../../../Globales/Util";
 
 @Component({
   selector: "ngx-editar",
@@ -54,7 +46,7 @@ export class EditarComponent implements OnInit, OnDestroy {
               Validators.compose([
                 Validators.required,
                 Validators.maxLength(100),
-                this.noWhitespaceValidator,
+                Util.esVacio,
               ]),
             ],
             usuarioModificacion: [usuario.uid, Validators.required],
@@ -63,64 +55,46 @@ export class EditarComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se buscaba un registro" + error.error[0],
-            0
+            0,
+            this.toastrService
           );
         }
       )
     );
   }
-  public noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
-  }
+
   public editar(): void {
     this.subscripciones.push(
-      this.categoriaService.editar(this.id, this.categoriaForm.value).subscribe(
-        (resp) => {
-          this.router.navigate(["../../ListarCategoria"], {
-            relativeTo: this.route,
-          });
-          this.showToast(
-            "success",
-            "Acción realizada",
-            "Se ha editado el registro",
-            4000
-          );
-        },
-        (error) => {
-          console.error(error);
-          this.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se editaba un registro" + error.error[0],
-            0
-          );
-        }
-      )
+      this.categoriaService
+        .editar(this.id, Util.limpiarForm(this.categoriaForm.value))
+        .subscribe(
+          (resp) => {
+            this.router.navigate(["../../ListarCategoria"], {
+              relativeTo: this.route,
+            });
+            Util.showToast(
+              "success",
+              "Acción realizada",
+              "Se ha editado el registro",
+              4000,
+              this.toastrService
+            );
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast(
+              "danger",
+              "Error " + error.status,
+              "Mientras se editaba un registro" + error.error[0],
+              0,
+              this.toastrService
+            );
+          }
+        )
     );
-  }
-
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

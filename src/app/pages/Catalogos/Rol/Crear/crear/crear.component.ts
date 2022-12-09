@@ -1,19 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  FormControl,
-  FormGroup,
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from "@angular/forms";
-import {
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-  NbToastrConfig,
-} from "@nebular/theme";
+import { FormGroup, UntypedFormBuilder, Validators } from "@angular/forms";
+import { NbToastrService, NbToastrConfig } from "@nebular/theme";
 import { RolService } from "../../rol.service";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Util } from "../../../../Globales/Util";
 
 @Component({
   selector: "ngx-crear",
@@ -49,7 +40,7 @@ export class CrearComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.maxLength(512),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
       usuarioCreacion: [usuario.uid, Validators.required],
@@ -58,11 +49,6 @@ export class CrearComponent implements OnInit, OnDestroy {
       fechaModificacion: [this.fecha, Validators.required],
     });
   }
-  public noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
-  }
 
   limpiar(): void {
     this.rolForm.get("desRol").reset();
@@ -70,45 +56,29 @@ export class CrearComponent implements OnInit, OnDestroy {
 
   guardar(): void {
     this.subscripcion.push(
-      this.rolService.guardar(this.rolForm.value).subscribe(
+      this.rolService.guardar(Util.limpiarForm(this.rolForm.value)).subscribe(
         (resp) => {
-          this.showToast(
+          Util.showToast(
             "success",
             "Acción realizada",
             "Se ha ingresado el registro",
-            4000
+            4000,
+            this.toastrService
           );
           this.limpiar();
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se realizaba un registro" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
     );
-  }
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

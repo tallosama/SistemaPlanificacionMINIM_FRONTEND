@@ -1,17 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import {
-  NbGlobalPhysicalPosition,
-  NbToastrConfig,
-  NbToastrService,
-} from "@nebular/theme";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NbToastrService } from "@nebular/theme";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Util } from "../../../../Globales/Util";
 import { AreaService } from "../../../Area/area.service";
 import { CargoService } from "../../cargo.service";
 
@@ -24,8 +16,6 @@ export class CrearComponent implements OnInit, OnDestroy {
   fecha = new Date().toISOString().slice(0, 10);
 
   cargoForm: FormGroup;
-  //inicializadores del mensaje toast
-  config: NbToastrConfig;
   subscripcion: Array<Subscription> = [];
   areas = [];
   constructor(
@@ -51,12 +41,13 @@ export class CrearComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban las áreas" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -69,7 +60,7 @@ export class CrearComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.maxLength(100),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
       areaId: ["", Validators.required],
@@ -79,11 +70,6 @@ export class CrearComponent implements OnInit, OnDestroy {
       fechaModificacion: [this.fecha, Validators.required],
     });
   }
-  private noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
-  }
 
   limpiar(): void {
     this.cargoForm.get("desCargo").reset();
@@ -91,46 +77,31 @@ export class CrearComponent implements OnInit, OnDestroy {
   }
   guardar(): void {
     this.subscripcion.push(
-      this.cargoService.guardar(this.cargoForm.value).subscribe(
-        (resp) => {
-          this.showToast(
-            "success",
-            "Acción realizada",
-            "Se ha ingresado el registro",
-            4000
-          );
+      this.cargoService
+        .guardar(Util.limpiarForm(this.cargoForm.value))
+        .subscribe(
+          (resp) => {
+            Util.showToast(
+              "success",
+              "Acción realizada",
+              "Se ha ingresado el registro",
+              4000,
+              this.toastrService
+            );
 
-          this.limpiar();
-        },
-        (error) => {
-          console.error(error);
-          this.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se realizaba un registro" + error.error[0],
-            0
-          );
-        }
-      )
+            this.limpiar();
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast(
+              "danger",
+              "Error " + error.status,
+              "Mientras se realizaba un registro" + error.error[0],
+              0,
+              this.toastrService
+            );
+          }
+        )
     );
-  }
-
-  //construccion del mensaje
-  private showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

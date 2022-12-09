@@ -27,7 +27,10 @@
                 >
                   <p
                     class="caption status-danger"
-                    *ngIf="personaForm.get('cedula').hasError('required')"
+                    *ngIf="
+                      personaForm.get('cedula').hasError('required') ||
+                      personaForm.get('cedula').hasError('incorrecto')
+                    "
                   >
                     La identificación es requerida
                   </p>
@@ -43,39 +46,29 @@
                   >
                     La identificación tiene que poseer mínimo 16 carácteres
                   </p>
-
-                  <p
-                    class="caption status-danger"
-                    *ngIf="personaForm.get('cedula').hasError('whitespace')"
-                  >
-                    Ingrese una identificación válida
-                  </p>
                 </div>
               </div>
             </div>
 
             <div class="col-md-4">
               <div class="form-group">
-                <label class="label">Área perteneciente</label>
-                <select class="form-control" formControlName="areaId">
+                <label class="label">Cargo que desempeña</label>
+                <select class="form-control" formControlName="cargoId">
                   <option value="">Seleccione</option>
-                  <option [ngValue]="item" *ngFor="let item of areas">
-                    {{ item.desArea }}
+                  <option [ngValue]="item" *ngFor="let item of cargos">
+                    {{ item.desCargo }}
                   </option>
                 </select>
-                <div
+
+                <p
+                  class="caption status-danger"
                   *ngIf="
-                    personaForm.get('areaId').hasError('required') &&
-                    personaForm.get('areaId').touched
+                    personaForm.get('cargoId').hasError('required') &&
+                    personaForm.get('cargoId').touched
                   "
                 >
-                  <p
-                    class="caption status-danger"
-                    *ngIf="personaForm.get('tipo').hasError('required')"
-                  >
-                    El área del usuario es obligatorio
-                  </p>
-                </div>
+                  El cargo del usuario es obligatorio
+                </p>
               </div>
             </div>
           </div>
@@ -97,7 +90,10 @@
                 >
                   <p
                     class="caption status-danger"
-                    *ngIf="personaForm.get('pNombre').hasError('required')"
+                    *ngIf="
+                      personaForm.get('pNombre').hasError('required') ||
+                      personaForm.get('pNombre').hasError('incorrecto')
+                    "
                   >
                     El primer nombre es obligatorio
                   </p>
@@ -106,13 +102,6 @@
                     *ngIf="personaForm.get('pNombre').hasError('maxlength')"
                   >
                     El nombre no puede ser mayor a 32 carácteres
-                  </p>
-
-                  <p
-                    class="caption status-danger"
-                    *ngIf="personaForm.get('pNombre').hasError('whitespace')"
-                  >
-                    Ingrese un nombre válido
                   </p>
                 </div>
               </div>
@@ -139,35 +128,23 @@
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-2">
               <div class="form-group">
-                <label class="label">Tipo</label>
-                <select class="form-control" formControlName="tipo">
-                  <option value="">Seleccione</option>
-                  <option [value]="item.desArea" *ngFor="let item of areas">
-                    {{ item.desArea }}
+                <label class="label">Estado</label>
+                <select class="form-control" formControlName="estado">
+                  <option *ngFor="let e of estado" [value]="e.esActivo">
+                    {{ e.Estado }}
                   </option>
                 </select>
-                <div
+                <p
+                  class="caption status-danger"
                   *ngIf="
-                    personaForm.get('tipo').invalid &&
-                    personaForm.get('tipo').touched
+                    personaForm.get('estado').hasError('required') &&
+                    personaForm.get('estado').touched
                   "
                 >
-                  <p
-                    class="caption status-danger"
-                    *ngIf="personaForm.get('tipo').hasError('required')"
-                  >
-                    El tipo de usuario es obligatorio
-                  </p>
-
-                  <p
-                    class="caption status-danger"
-                    *ngIf="personaForm.get('tipo').hasError('maxlength')"
-                  >
-                    El tipo de usuario no puede ser mayor a 32 carácteres
-                  </p>
-                </div>
+                  Debe de seleccionar un estado
+                </p>
               </div>
             </div>
           </div>
@@ -190,7 +167,10 @@
                 >
                   <p
                     class="caption status-danger"
-                    *ngIf="personaForm.get('pApellido').hasError('required')"
+                    *ngIf="
+                      personaForm.get('pApellido').hasError('required') ||
+                      personaForm.get('pApellido').hasError('incorrecto')
+                    "
                   >
                     El primer apellido es obligatorio
                   </p>
@@ -199,13 +179,6 @@
                     *ngIf="personaForm.get('pApellido').hasError('maxlength')"
                   >
                     Debe de ingresar un dato menor a 32 carácteres
-                  </p>
-
-                  <p
-                    class="caption status-danger"
-                    *ngIf="personaForm.get('pApellido').hasError('whitespace')"
-                  >
-                    Ingrese un apellido válido
                   </p>
                 </div>
               </div>
@@ -228,26 +201,6 @@
                   "
                 >
                   Debe de ingresar un dato menor a 32 carácteres
-                </p>
-              </div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="form-group">
-                <label class="label">Estado</label>
-                <select class="form-control" formControlName="estado">
-                  <option *ngFor="let e of estado" [value]="e.esActivo">
-                    {{ e.Estado }}
-                  </option>
-                </select>
-                <p
-                  class="caption status-danger"
-                  *ngIf="
-                    personaForm.get('estado').hasError('required') &&
-                    personaForm.get('estado').touched
-                  "
-                >
-                  Debe de seleccionar un estado
                 </p>
               </div>
             </div>

@@ -28,7 +28,10 @@
                   *ngIf="
                     unidadMedidaForm
                       .get('descripUnidadMedida')
-                      .hasError('required')
+                      .hasError('required') ||
+                    unidadMedidaForm
+                      .get('descripUnidadMedida')
+                      .hasError('incorrecto')
                   "
                 >
                   La descripción es requerida
@@ -42,17 +45,6 @@
                   "
                 >
                   Debe de ingresar una descripción menor a 60 carácteres
-                </p>
-
-                <p
-                  class="caption status-danger"
-                  *ngIf="
-                    unidadMedidaForm
-                      .get('descripUnidadMedida')
-                      .hasError('whitespace')
-                  "
-                >
-                  Ingrese una descripción válida
                 </p>
               </div>
             </div>

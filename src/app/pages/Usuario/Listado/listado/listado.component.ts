@@ -1,16 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import {
-  NbDialogService,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from "@nebular/theme";
+import { NbDialogService, NbToastrService } from "@nebular/theme";
 import { LocalDataSource } from "ng2-smart-table";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../auth/auth.service";
-import { AreaService } from "../../../Catalogos/Area/area.service";
-import { PersonaService } from "../../../Catalogos/Persona/persona.service";
-import { RolService } from "../../../Catalogos/Rol/rol.service";
+import { Util } from "../../../Globales/Util";
 import { DialogNamePromptComponent } from "../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 
 @Component({
@@ -65,9 +58,7 @@ export class ListadoComponent implements OnInit, OnDestroy {
   constructor(
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
-    private auth: authService,
-    private router: Router,
-    private route: ActivatedRoute
+    private auth: authService
   ) {}
   ngOnInit(): void {
     this.usuario = this.auth.getUserStorage();
@@ -114,26 +105,28 @@ export class ListadoComponent implements OnInit, OnDestroy {
     this.auth
       .updateUserDB(data.Correo, data)
       .then(() => {
-        this.showToast(
+        Util.showToast(
           "success",
           "Acción realizada",
           activar
             ? "Se ha activado el usuario"
             : "Se ha desactivado el usuario",
-          4000
+          4000,
+          this.toastrService
         );
       })
       .catch((error) => {
         console.error(error);
 
-        this.showToast(
+        Util.showToast(
           "danger",
           "Error " + error.status,
           activar
             ? "Al activar al usuario "
             : "Al desactivar al usuario " + error,
 
-          0
+          0,
+          this.toastrService
         );
       });
     this.sourceSmartUsuario.refresh();
@@ -155,21 +148,23 @@ export class ListadoComponent implements OnInit, OnDestroy {
             await this.auth
               .request(event.data.Correo)
               .then(() =>
-                this.showToast(
+                Util.showToast(
                   "primary",
                   "Acción realizada",
                   "Se ha enviado una solicitud al correo de destino, si no aparece, verifique en el apartado de spam",
-                  10000
+                  10000,
+                  this.toastrService
                 )
               )
               .catch((error) => {
-                this.showToast(
+                Util.showToast(
                   "danger",
                   "Error " + error.status,
                   "Al enviar una solicitud de reestablecimiento de clave " +
                     error,
 
-                  0
+                  0,
+                  this.toastrService
                 );
               });
           }
@@ -179,24 +174,5 @@ export class ListadoComponent implements OnInit, OnDestroy {
     // this.router.navigate(["../EditarUsuario", event.data.uId], {
     //   relativeTo: this.route,
     // });
-  }
-
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

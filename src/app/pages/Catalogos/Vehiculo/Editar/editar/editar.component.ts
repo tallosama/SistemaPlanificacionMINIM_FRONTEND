@@ -1,19 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { VehiculoService } from "../../vehiculo.service";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-  NbToastrConfig,
-} from "@nebular/theme";
+import { NbToastrService } from "@nebular/theme";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { Util } from "../../../../Globales/Util";
 
 @Component({
   selector: "ngx-editar",
@@ -24,7 +16,6 @@ export class EditarComponent implements OnInit, OnDestroy {
   fecha = new Date().toISOString().slice(0, 10);
   vehiculoForm: FormGroup;
   id: number;
-  config: NbToastrConfig;
   subscripciones: Array<Subscription> = [];
 
   constructor(
@@ -54,7 +45,7 @@ export class EditarComponent implements OnInit, OnDestroy {
               Validators.compose([
                 Validators.required,
                 Validators.maxLength(512),
-                this.noWhitespaceValidator,
+                Util.esVacio,
               ]),
             ],
             placa: [
@@ -62,7 +53,7 @@ export class EditarComponent implements OnInit, OnDestroy {
               Validators.compose([
                 Validators.required,
                 Validators.maxLength(32),
-                this.noWhitespaceValidator,
+                Util.esVacio,
               ]),
             ],
             modelo: [res.modelo, Validators.maxLength(32), ,],
@@ -80,66 +71,47 @@ export class EditarComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se buscaba un registro" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
     );
-  }
-  public noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
   }
   public editar(): void {
     this.subscripciones.push(
-      this.vehiculoService.editar(this.id, this.vehiculoForm.value).subscribe(
-        (resp) => {
-          this.router.navigate(["../../ListarVehiculo"], {
-            relativeTo: this.route,
-          });
-          this.showToast(
-            "success",
-            "Acción realizada",
-            "Se ha editado el registro",
-            4000
-          );
-        },
-        (error) => {
-          console.error(error);
-          this.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se editaba un registro" + error.error[0],
+      this.vehiculoService
+        .editar(this.id, Util.limpiarForm(this.vehiculoForm.value))
+        .subscribe(
+          (resp) => {
+            this.router.navigate(["../../ListarVehiculo"], {
+              relativeTo: this.route,
+            });
+            Util.showToast(
+              "success",
+              "Acción realizada",
+              "Se ha editado el registro",
+              4000,
+              this.toastrService
+            );
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast(
+              "danger",
+              "Error " + error.status,
+              "Mientras se editaba un registro" + error.error[0],
 
-            0
-          );
-        }
-      )
+              0,
+              this.toastrService
+            );
+          }
+        )
     );
-  }
-
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

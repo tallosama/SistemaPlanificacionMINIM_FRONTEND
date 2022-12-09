@@ -1,15 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import {
-  NbDialogService,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from "@nebular/theme";
-import { Subject, Subscription } from "rxjs";
-import { DataTableDirective } from "angular-datatables";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { NbDialogService, NbToastrService } from "@nebular/theme";
+import { Subscription } from "rxjs";
 import { SectorService } from "../../sector.service";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { LocalDataSource } from "ng2-smart-table";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Util } from "../../../../Globales/Util";
 
 @Component({
   selector: "ngx-listado",
@@ -60,12 +56,13 @@ export class ListadoComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban los registros" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -102,30 +99,33 @@ export class ListadoComponent implements OnInit, OnDestroy {
       this.sectorService.eliminar(id.idSector).subscribe(
         (res) => {
           if (res) {
-            this.showToast(
+            Util.showToast(
               "success",
               "Acción realizada",
               "Se ha eliminado el registro",
-              4000
+              4000,
+              this.toastrService
             );
           } else {
-            this.showToast(
+            Util.showToast(
               "warning",
               "Atención",
               "No se ha encontrado el registro",
-              4000
+              4000,
+              this.toastrService
             );
           }
           this.reconstruir(id);
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se eliminaba el registro" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -136,24 +136,5 @@ export class ListadoComponent implements OnInit, OnDestroy {
     this.router.navigate(["../EditarSector", event.data.idSector], {
       relativeTo: this.route,
     });
-  }
-
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

@@ -55,7 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private auth: authService,
-
+    private router: Router,
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService
   ) {}
@@ -113,7 +113,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateHome() {
-    this.menuService.navigateHome();
+    //this.menuService.navigateHome();
+    this.router.navigate(["/dashboard"]);
     return false;
   }
 }

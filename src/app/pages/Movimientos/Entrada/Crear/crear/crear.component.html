@@ -1,0 +1,199 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>Registrar entradas</nb-card-header>
+      <nb-card-body>
+        <div class="row show-grid">
+          <div class="col-md-4">
+            <form
+              [formGroup]="entradaForm"
+              *ngIf="entradaForm"
+              (ngSubmit)="agregar()"
+            >
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="label">Descripción</label>
+                    <input
+                      type="text"
+                      formControlName="descripEntrada"
+                      nbInput
+                      fullWidth
+                    />
+                    <div
+                      *ngIf="
+                        entradaForm.get('descripEntrada').invalid &&
+                        entradaForm.get('descripEntrada').touched
+                      "
+                    >
+                      <p
+                        class="caption status-danger"
+                        *ngIf="
+                          entradaForm
+                            .get('descripEntrada')
+                            .hasError('required') ||
+                          entradaForm
+                            .get('descripEntrada')
+                            .hasError('incorrecto')
+                        "
+                      >
+                        la descripción es obligatoria
+                      </p>
+
+                      <p
+                        class="caption status-danger"
+                        *ngIf="
+                          entradaForm
+                            .get('descripEntrada')
+                            .hasError('maxlength')
+                        "
+                      >
+                        Debe de ingresar descripción menor a 128 carácteres
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="label">Cantidad total</label>
+                    <input
+                      type="number"
+                      formControlName="cantTotal"
+                      nbInput
+                      fullWidth
+                    />
+                    <div
+                      *ngIf="
+                        entradaForm.get('cantTotal').invalid &&
+                        entradaForm.get('cantTotal').touched
+                      "
+                    >
+                      <p
+                        class="caption status-danger"
+                        *ngIf="
+                          entradaForm.get('cantTotal').hasError('required')
+                        "
+                      >
+                        La cantidad es obligatoria
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="label">Producto</label>
+
+                    <ng-autocomplete
+                      [data]="productos"
+                      [searchKeyword]="keyword[0]"
+                      formControlName="productoId"
+                      [initialValue]="productos[0]"
+                      [itemTemplate]="itemTemplatePro"
+                      [notFoundTemplate]="notFoundTemplatePro"
+                      placeholder="Ingrese el producto"
+                      notFoundText="No se encontró"
+                    >
+                    </ng-autocomplete>
+
+                    <ng-template #itemTemplatePro let-pro>
+                      <a [innerHTML]="pro.descripcion"></a>
+                    </ng-template>
+
+                    <ng-template #notFoundTemplatePro let-itemTemplatePro>
+                      <div [innerHTML]="itemTemplatePro"></div>
+                    </ng-template>
+
+                    <p
+                      class="caption status-danger"
+                      *ngIf="
+                        (entradaForm.get('productoId').touched &&
+                          entradaForm.get('productoId').hasError('required')) ||
+                        entradaForm.get('productoId').hasError('noObjeto')
+                      "
+                    >
+                      El producto es obligatorio
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="label">Fecha de entrada</label>
+                    <input
+                      type="date"
+                      formControlName="fechaEntrada"
+                      nbInput
+                      fullWidth
+                    />
+
+                    <p
+                      class="caption status-danger"
+                      *ngIf="
+                        entradaForm.get('fechaEntrada').hasError('required') &&
+                        entradaForm.get('fechaEntrada').touched
+                      "
+                    >
+                      la fecha de entrada es obligatoria
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <button
+                  style="margin-right: 8px"
+                  type="submit"
+                  [disabled]="entradaForm.invalid"
+                  nbButton
+                  status="primary"
+                >
+                  Añadir
+                </button>
+
+                <!-- <button
+                  type="submit"
+                  [disabled]="entradaForm.invalid"
+                  nbButton
+                  status="primary"
+                >
+                  Quitar
+                </button> -->
+              </div>
+            </form>
+          </div>
+
+          <div class="col-md-8 text-center">
+            <div class="form-group">
+              <label class="label">Detalles de entrada</label>
+              <ng2-smart-table
+                [settings]="settingsEntrada"
+                [source]="smartEntrada"
+                (edit)="editarEntrada($event)"
+                (delete)="borrarEntrada($event)"
+              >
+              </ng2-smart-table>
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+        <button
+          style="margin-right: 8px"
+          nbButton
+          class="caption status-danger"
+          (click)="limpiar()"
+        >
+          Cancelar
+        </button>
+        <button nbButton status="success">Atrás</button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>

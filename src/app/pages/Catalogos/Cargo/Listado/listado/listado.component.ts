@@ -1,12 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  NbDialogService,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from "@nebular/theme";
+import { NbDialogService, NbToastrService } from "@nebular/theme";
 import { LocalDataSource } from "ng2-smart-table";
 import { Subscription } from "rxjs";
+import { Util } from "../../../../Globales/Util";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { CargoService } from "../../cargo.service";
 
@@ -66,11 +63,12 @@ export class ListadoComponent implements OnInit {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban los registros" + error.error[0],
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -108,29 +106,32 @@ export class ListadoComponent implements OnInit {
       this.cargoService.eliminar(data.idCargo).subscribe(
         (res) => {
           if (res) {
-            this.showToast(
+            Util.showToast(
               "success",
               "Acción realizada",
               "Se ha eliminado el registro",
-              4000
+              4000,
+              this.toastrService
             );
           } else {
-            this.showToast(
+            Util.showToast(
               "warning",
               "Atención",
               "No se ha encontrado el registro",
-              4000
+              4000,
+              this.toastrService
             );
           }
           this.reconstruir(data);
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se eliminaba el registro" + error.error[0],
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -140,23 +141,5 @@ export class ListadoComponent implements OnInit {
     this.router.navigate(["../EditarCargo", event.data.idCargo], {
       relativeTo: this.route,
     });
-  }
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

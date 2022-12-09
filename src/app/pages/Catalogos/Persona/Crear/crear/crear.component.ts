@@ -1,20 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import {
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-  NbToastrConfig,
-} from "@nebular/theme";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NbToastrService } from "@nebular/theme";
 import { PersonaService } from "../../persona.service";
-import { AreaService } from "../../../Area/area.service";
-import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
+import { CargoService } from "../../../Cargo/cargo.service";
+import { Util } from "../../../../Globales/Util";
 
 @Component({
   selector: "ngx-crear",
@@ -24,36 +15,35 @@ import { authService } from "../../../../../auth/auth.service";
 export class CrearComponent implements OnInit, OnDestroy {
   fecha = new Date().toISOString().slice(0, 10);
   personaForm: FormGroup;
-  //inicializadores del mensaje toast
-  config: NbToastrConfig;
   estado = [
     { esActivo: true, Estado: "Activo" },
     { esActivo: false, Estado: "Inactivo" },
   ];
-  areas: any;
+  cargos: any;
   subscripciones: Array<Subscription> = [];
   constructor(
     private toastrService: NbToastrService,
     public fb: FormBuilder,
     public personaService: PersonaService,
-    public areaService: AreaService,
+    public cargoService: CargoService,
     private auth: authService
   ) {}
 
   private llenadoCombobox(): void {
     this.subscripciones.push(
-      this.areaService.listar().subscribe(
+      this.cargoService.listar().subscribe(
         (resp) => {
-          this.areas = resp;
+          this.cargos = resp;
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se listaban las áreas" + error.error[0],
+            "Mientras se listaban los cargos" + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
@@ -74,7 +64,7 @@ export class CrearComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.minLength(16),
           Validators.maxLength(50),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
       pNombre: [
@@ -82,7 +72,7 @@ export class CrearComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.maxLength(32),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
       sNombre: ["", Validators.maxLength(32)],
@@ -91,27 +81,19 @@ export class CrearComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.maxLength(32),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
       sApellido: ["", Validators.maxLength(32)],
-      tipo: [
-        "",
-        Validators.compose([Validators.required, Validators.maxLength(32)]),
-      ],
       poseeUsuario: [false, Validators.required],
-      areaId: ["", Validators.required],
+      cargoId: ["", Validators.required],
       estado: [this.estado[0].esActivo, Validators.required],
+
       usuarioCreacion: [usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [usuario.uid, Validators.required],
       fechaModificacion: [this.fecha, Validators.required],
     });
-  }
-  public noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
   }
 
   limpiar(): void {
@@ -124,46 +106,31 @@ export class CrearComponent implements OnInit, OnDestroy {
 
   guardar(): void {
     this.subscripciones.push(
-      this.personaService.guardar(this.personaForm.value).subscribe(
-        (resp) => {
-          this.showToast(
-            "success",
-            "Acción realizada",
-            "Se ha ingresado el registro",
-            4000
-          );
+      this.personaService
+        .guardar(Util.limpiarForm(this.personaForm.value))
+        .subscribe(
+          (resp) => {
+            Util.showToast(
+              "success",
+              "Acción realizada",
+              "Se ha ingresado el registro",
+              4000,
+              this.toastrService
+            );
 
-          this.limpiar();
-        },
-        (error) => {
-          console.error(error);
-          this.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se realizaba un registro" + error.error[0],
-            0
-          );
-        }
-      )
+            this.limpiar();
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast(
+              "danger",
+              "Error " + error.status,
+              "Mientras se realizaba un registro" + error.error[0],
+              0,
+              this.toastrService
+            );
+          }
+        )
     );
-  }
-
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

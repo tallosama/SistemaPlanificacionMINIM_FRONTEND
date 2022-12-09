@@ -1,28 +1,19 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import {
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-  NbToastrConfig,
-} from "@nebular/theme";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NbToastrService } from "@nebular/theme";
 import { PlanificacionService } from "../../planificacion.service";
 import { authService } from "../../../../auth/auth.service";
+import { Util } from "../../../Globales/Util";
 
 @Component({
   selector: "ngx-crear",
   templateUrl: "./crear.component.html",
   styleUrls: ["./crear.component.scss"],
 })
-export class CrearComponent implements OnInit {
+export class CrearComponent implements OnInit, OnDestroy {
   fecha = new Date().toISOString().slice(0, 10);
   regPlanificacionForm: FormGroup;
-  config: NbToastrConfig;
   subscripciones: Array<Subscription> = [];
 
   constructor(
@@ -46,28 +37,28 @@ export class CrearComponent implements OnInit {
         Validators.compose([
           Validators.required,
           Validators.maxLength(128),
-          this.noWhitespaceValidator,
+          Util.esVacio,
         ]),
       ],
       lema: ["", Validators.maxLength(128)],
-      fechaInicio: ["", Validators.required],
-      fechaFin: ["", Validators.required],
+      fechaInicio: [new Date().toISOString().slice(0, 10), Validators.required],
+      fechaFin: [new Date().toISOString().slice(0, 10), Validators.required],
       usuarioCreacion: [usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [usuario.uid, Validators.required],
       fechaModificacion: [this.fecha, Validators.required],
     });
   }
-  public noWhitespaceValidator(control: FormControl) {
-    const isWhitespace = (control.value || "").trim().length === 0;
-    const isValid = !isWhitespace;
-    return isValid ? null : { whitespace: true };
-  }
+
   limpiar(): void {
     this.regPlanificacionForm.get("descripcion").reset();
     this.regPlanificacionForm.get("lema").reset();
-    this.regPlanificacionForm.get("fechaInicio").reset();
-    this.regPlanificacionForm.get("fechaFin").reset();
+    this.regPlanificacionForm
+      .get("fechaInicio")
+      .setValue(new Date().toISOString().slice(0, 10));
+    this.regPlanificacionForm
+      .get("fechaFin")
+      .setValue(new Date().toISOString().slice(0, 10));
   }
 
   guardar(): void {
@@ -76,45 +67,28 @@ export class CrearComponent implements OnInit {
         .guardar(this.regPlanificacionForm.value)
         .subscribe(
           (resp) => {
-            this.showToast(
+            Util.showToast(
               "success",
               "Acción realizada",
               "Se ha ingresado el registro",
-              4000
+              4000,
+              this.toastrService
             );
 
             this.limpiar();
           },
           (error) => {
             console.error(error);
-            this.showToast(
+            Util.showToast(
               "danger",
               "Error" + error.status,
               "Mientras se realizaba un registro" + error.error[0],
 
-              0
+              0,
+              this.toastrService
             );
           }
         )
     );
-  }
-
-  //construccion del mensaje
-  public showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
   }
 }

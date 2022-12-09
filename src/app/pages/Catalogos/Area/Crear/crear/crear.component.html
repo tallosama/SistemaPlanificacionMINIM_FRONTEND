@@ -19,7 +19,10 @@
           >
             <p
               class="caption status-danger"
-              *ngIf="areaForm.get('desArea').hasError('required')"
+              *ngIf="
+                areaForm.get('desArea').hasError('required') ||
+                areaForm.get('desArea').hasError('esVacio')
+              "
             >
               La descripción es obligatoria
             </p>
@@ -28,12 +31,6 @@
               *ngIf="areaForm.get('desArea').hasError('maxlength')"
             >
               Debe de ingresar una descripción menor a 512 carácteres
-            </p>
-            <p
-              class="caption status-danger"
-              *ngIf="areaForm.get('desArea').hasError('whitespace')"
-            >
-              Ingrese una descripción válida
             </p>
           </div>
 

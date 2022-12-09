@@ -24,7 +24,7 @@
                   class="caption status-danger"
                   *ngIf="
                     cargoForm.get('desCargo').hasError('required') ||
-                    cargoForm.get('desCargo').hasError('whitespace')
+                    cargoForm.get('desCargo').hasError('incorrecto')
                   "
                 >
                   La descripción es obligatoria
