@@ -70,7 +70,7 @@ export class EditarComponent implements OnInit, OnDestroy {
               res.cedula,
               Validators.compose([
                 Validators.required,
-                Validators.minLength(16),
+                Validators.minLength(14),
                 Validators.maxLength(50),
                 Util.esVacio,
               ]),
@@ -121,6 +121,10 @@ export class EditarComponent implements OnInit, OnDestroy {
   }
 
   public editar(): void {
+    this.personaForm
+      .get("cedula")
+      .setValue(Util.aplicarMascaraCedula(this.personaForm.value.cedula));
+
     this.subscripciones.push(
       this.personaService
         .editar(this.id, Util.limpiarForm(this.personaForm.value))

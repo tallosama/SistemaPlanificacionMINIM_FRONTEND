@@ -62,7 +62,7 @@ export class CrearComponent implements OnInit, OnDestroy {
         "",
         Validators.compose([
           Validators.required,
-          Validators.minLength(16),
+          Validators.minLength(14),
           Validators.maxLength(50),
           Util.esVacio,
         ]),
@@ -105,6 +105,10 @@ export class CrearComponent implements OnInit, OnDestroy {
   }
 
   guardar(): void {
+    this.personaForm
+      .get("cedula")
+      .setValue(Util.aplicarMascaraCedula(this.personaForm.value.cedula));
+
     this.subscripciones.push(
       this.personaService
         .guardar(Util.limpiarForm(this.personaForm.value))

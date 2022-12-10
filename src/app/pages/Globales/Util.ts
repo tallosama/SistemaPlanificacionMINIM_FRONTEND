@@ -90,4 +90,13 @@ export class Util {
     };
     toastrService.show(cuerpo, titulo, config);
   }
+
+  public static aplicarMascaraCedula(input) {
+    let cadena: string = "";
+    for (let i = 0; i < input.length; i++) {
+      cadena += input[i];
+      if (i == 2 || i == 8) cadena += "-";
+    }
+    return cadena;
+  }
 }

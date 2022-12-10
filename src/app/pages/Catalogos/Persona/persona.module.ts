@@ -13,8 +13,8 @@ import {
 } from "@nebular/theme";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { DataTablesModule } from "angular-datatables";
 import { Ng2SmartTableModule } from "ng2-smart-table";
+import { NgxMaskModule } from "ngx-mask";
 
 @NgModule({
   declarations: [CrearComponent, EditarComponent, ListadoComponent],
@@ -40,6 +40,9 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
     // DataTablesModule,
     //Stmarttable
     Ng2SmartTableModule,
+
+    //Mascaras
+    NgxMaskModule.forRoot(), //import { NgxMaskModule, IConfig } from 'ngx-mask'; imports: [ NgxMaskModule.forRoot(), ],
   ],
 })
 export class PersonaModule {}
