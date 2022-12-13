@@ -17,9 +17,15 @@ export class PersonaService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "persona/");
   }
+  listarPorAreaUsuario(areaId): Observable<any> {
+    return this.httpclient.get(
+      ApiServe.API_SERVER + "persona/areaYUsuario/" + areaId
+    );
+  }
   listarPorArea(areaId): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "persona/area/" + areaId);
   }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "persona/" + id);
   }

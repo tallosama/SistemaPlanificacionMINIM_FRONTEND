@@ -1,0 +1,42 @@
+<nb-card>
+  <nb-card-header>Asignar personas</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-6">
+        <label class="label">Personal</label>
+        <ng-autocomplete
+          [data]="areas"
+          [searchKeyword]="keyword"
+          [itemTemplate]="itemTemplate"
+          [notFoundTemplate]="notFoundTemplate"
+          placeholder="Ingrese el área"
+          (selected)="reconstruir($event)"
+          notFoundText="No se encontró"
+        >
+        </ng-autocomplete>
+
+        <ng-template #itemTemplate let-item>
+          <a [innerHTML]="item.desArea"></a>
+        </ng-template>
+
+        <ng-template #notFoundTemplate let-notFound>
+          <div [innerHTML]="notFound"></div>
+        </ng-template>
+
+        <!-- <ng2-smart-table
+          [settings]="settingsPersonalTotal"
+          [source]="smartPersonalTotal"
+        >
+        </ng2-smart-table> -->
+      </div>
+
+      <div class="col-md-6">
+        <label class="label">Personal asignado</label>
+      </div>
+    </div>
+  </nb-card-body>
+
+  <nb-card-footer>
+    <button nbButton status="danger" (click)="cerrar()">Cancelar</button>
+  </nb-card-footer>
+</nb-card>

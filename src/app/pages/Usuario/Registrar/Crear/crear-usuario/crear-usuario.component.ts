@@ -140,7 +140,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
   }
   reconstruir(area: any): void {
     this.subscripciones.push(
-      this.personaService.listarPorArea(area.idArea).subscribe(
+      this.personaService.listarPorAreaUsuario(area.idArea).subscribe(
         (resp: any) => {
           this.sourceSmartUsuario.load(resp);
         },
@@ -161,7 +161,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
 
   construir(area: any): void {
     this.subscripciones.push(
-      this.personaService.listarPorArea(area.idArea).subscribe(
+      this.personaService.listarPorAreaUsuario(area.idArea).subscribe(
         (resp: any) => {
           this.sourceSmartUsuario.load(resp);
         },

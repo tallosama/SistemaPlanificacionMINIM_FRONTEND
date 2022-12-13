@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { BuscarComponent } from "./Buscar/buscar/buscar.component";
+import { PersonasAsignadasComponent } from "./Buscar/personas-asignadas/personas-asignadas.component";
 import { EventosComponent } from "./eventos/eventos.component";
 
 const routes: Routes = [
@@ -12,10 +13,10 @@ const routes: Routes = [
     path: "BuscarEventos",
     component: BuscarComponent,
   },
-  // {
-  //   path: 'RegistrarArea',
-  //   component: CrearComponent,
-  // },
+  {
+    path: "Eventos",
+    component: PersonasAsignadasComponent,
+  },
   // {
   //   path: 'EditarArea/:id',
   //   component: EditarComponent

@@ -21,6 +21,8 @@ import { MunicipioService } from "../../../Globales/Servicios/municipio.service"
 import { DetalleEventoService } from "../../detalle-evento.service";
 import { EventosService } from "../../eventos.service";
 import { Util } from "../../../Globales/Util";
+import { RenderComponent } from "../../../Globales/render/render.component";
+import { PersonasAsignadasComponent } from "../personas-asignadas/personas-asignadas.component";
 
 @Component({
   selector: "ngx-buscar",
@@ -126,6 +128,23 @@ export class BuscarComponent implements OnInit, OnDestroy {
           return data.desMunicipio;
         },
       },
+
+      button: {
+        filter: false,
+        title: "Asignar personal",
+        type: "custom",
+        renderComponent: RenderComponent,
+        onComponentInitFunction: (instance) => {
+          instance.eventData.subscribe((r) => {
+            this.abrirModal(r);
+          });
+        },
+
+        // onComponentInitFunction(instance) {
+        //
+        //   //  instance.save.subscribe((row) => {});
+        // },
+      },
     },
   };
 
@@ -156,7 +175,13 @@ export class BuscarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
-
+  abrirModal(r) {
+    this.dialogService.open(PersonasAsignadasComponent, {
+      // context: {
+      //   data: r,
+      // },
+    });
+  }
   autoCompletados(): void {
     this.subscripciones.push(
       this.areaService.listar().subscribe(

@@ -7,7 +7,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   NbButtonModule,
   NbCardModule,
-  NbDatepickerModule,
   NbDialogModule,
   NbInputModule,
   NbStepperModule,
@@ -17,10 +16,11 @@ import { DataTablesModule } from "angular-datatables";
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
 import { EventosComponent } from "./eventos/eventos.component";
 import { Ng2SmartTableModule } from "ng2-smart-table";
-import { BuscarComponent } from './Buscar/buscar/buscar.component';
+import { BuscarComponent } from "./Buscar/buscar/buscar.component";
+import { PersonasAsignadasComponent } from "./Buscar/personas-asignadas/personas-asignadas.component";
 
 @NgModule({
-  declarations: [EventosComponent, BuscarComponent],
+  declarations: [EventosComponent, BuscarComponent, PersonasAsignadasComponent],
   imports: [
     CommonModule,
     EventosRoutingModule,

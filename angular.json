@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+          
             "preserveSymlinks": true,
             "outputPath": "dist",
             "index": "src/index.html",
@@ -67,7 +68,7 @@
               "echarts",
               "lodash",
               "zrender/lib/svg/svg",
-              "zrender/lib/vml/vml"
+              "zrender/lib/vml/vml", "leaflet","eva-icons"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
