@@ -1,0 +1,51 @@
+<nb-card _nghost-jmd-c37="">
+  <nb-card-header>{{ titulo }}</nb-card-header>
+
+  <nb-card-body>
+    <form [formGroup]="motivoAnulacionForm" *ngIf="motivoAnulacionForm">
+      <input
+        formControlName="motivoAnulacion"
+        nbinput=""
+        placeholder="Ingrese un motivo de anulación"
+        class="size-medium status-basic shape-rectangle nb-transition"
+      />
+      <div
+        *ngIf="
+          motivoAnulacionForm.get('motivoAnulacion').invalid &&
+          motivoAnulacionForm.get('motivoAnulacion').touched
+        "
+      >
+        <p
+          class="caption status-danger"
+          *ngIf="
+            motivoAnulacionForm.get('motivoAnulacion').hasError('required') ||
+            motivoAnulacionForm.get('motivoAnulacion').hasError('esVacio')
+          "
+        >
+          El motivo de anulación es obligatorio
+        </p>
+        <p
+          class="caption status-danger"
+          *ngIf="
+            motivoAnulacionForm.get('motivoAnulacion').hasError('maxlength')
+          "
+        >
+          Debe de ingresar un motivo menor a 255 carácteres
+        </p>
+      </div>
+    </form>
+  </nb-card-body>
+  <nb-card-footer>
+    <button class="cancel" nbButton status="danger" (click)="cancel()">
+      Cancelar
+    </button>
+    <button
+      nbButton
+      status="success"
+      [disabled]="motivoAnulacionForm.invalid"
+      (click)="submit()"
+    >
+      Aceptar
+    </button>
+  </nb-card-footer>
+</nb-card>

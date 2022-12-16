@@ -17,6 +17,10 @@ export class PersonaService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "persona/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "persona/activos");
+  }
+
   listarPorAreaUsuario(areaId): Observable<any> {
     return this.httpclient.get(
       ApiServe.API_SERVER + "persona/areaYUsuario/" + areaId
@@ -31,5 +35,11 @@ export class PersonaService {
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "persona/" + id);
+  }
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "persona/anular/" + id,
+      motivo
+    );
   }
 }

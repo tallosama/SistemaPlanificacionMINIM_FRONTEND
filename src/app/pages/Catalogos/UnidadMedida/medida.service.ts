@@ -25,10 +25,20 @@ export class MedidaService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "unidadMedida/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "unidadMedida/activos");
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "unidadMedida/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "unidadMedida/" + id);
+  }
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "unidadMedida/anular/" + id,
+      motivo
+    );
   }
 }

@@ -23,10 +23,20 @@ export class CategoriaService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "categoria/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "categoria/activos");
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "categoria/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "categoria/" + id);
+  }
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "categoria/anular/" + id,
+      motivo
+    );
   }
 }

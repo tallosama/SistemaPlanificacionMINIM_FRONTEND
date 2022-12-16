@@ -21,10 +21,21 @@ export class VehiculoService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "vehiculo/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "vehiculo/activos");
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "vehiculo/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "vehiculo/" + id);
+  }
+
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "vehiculo/anular/" + id,
+      motivo
+    );
   }
 }

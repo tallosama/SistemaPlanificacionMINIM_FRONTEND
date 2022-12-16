@@ -18,12 +18,24 @@ export class EventosService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "evento/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "evento/activos");
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "evento/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "evento/" + id);
   }
+
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "evento/anular/" + id,
+      motivo
+    );
+  }
+
   listarPorPlan(planId): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "evento/plan/" + planId);
   }

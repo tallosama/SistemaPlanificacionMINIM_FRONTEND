@@ -20,11 +20,22 @@ export class DetalleEventoService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "detalleEvento/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "detalleEvento/activos");
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "detalleEvento/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "detalleEvento/" + id);
+  }
+
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "detalleEvento/anular/" + id,
+      motivo
+    );
   }
 
   listarPorEvento(eventoId): Observable<any> {

@@ -22,8 +22,9 @@ import { RolModule } from "./Catalogos/Rol/rol.module";
 import { UsuarioModule } from "./Usuario/usuario.module";
 import { EventosModule } from "./Eventos/eventos.module";
 import { CargoModule } from "./Catalogos/Cargo/cargo.module";
-import { EntradaModule } from './Movimientos/Entrada/entrada.module';
-import { SalidaModule } from './Movimientos/Salida/salida.module';
+import { EntradaModule } from "./Movimientos/Entrada/entrada.module";
+import { SalidaModule } from "./Movimientos/Salida/salida.module";
+import { MensajeEntradaModule } from "./Globales/Modulo/mensaje-entrada.module";
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { SalidaModule } from './Movimientos/Salida/salida.module';
     NbDatepickerModule.forRoot(),
     EntradaModule,
     SalidaModule,
+    MensajeEntradaModule,
   ],
   declarations: [PagesComponent],
 })

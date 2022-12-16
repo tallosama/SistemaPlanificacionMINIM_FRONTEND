@@ -3,35 +3,57 @@
   <nb-card-body>
     <div class="row">
       <div class="col-md-6">
-        <label class="label">Personal</label>
-        <ng-autocomplete
-          [data]="areas"
-          [searchKeyword]="keyword"
-          [itemTemplate]="itemTemplate"
-          [notFoundTemplate]="notFoundTemplate"
-          placeholder="Ingrese el área"
-          (selected)="reconstruir($event)"
-          notFoundText="No se encontró"
-        >
-        </ng-autocomplete>
+        <div class="text-center">
+          <label class="label">Personal</label>
+          <br />
+          <!-- <ng-autocomplete
+            [data]="areas"
+            [searchKeyword]="keyword"
+            [itemTemplate]="itemTemplate"
+            [notFoundTemplate]="notFoundTemplate"
+            placeholder="Ingrese el área"
+            (selected)="reconstruir($event)"
+            notFoundText="No se encontró"
+          >
+          </ng-autocomplete>
+  
+          <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.desArea"></a>
+          </ng-template>
+  
+          <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+          </ng-template> -->
+          <nb-select placeholder="Área" class="col-md-12" shape="semi-round">
+            <nb-option
+              *ngFor="let a of areas"
+              (click)="reconstruir(a)"
+              [value]="a.idArea"
+              >{{ a.desArea }}</nb-option
+            >
+          </nb-select>
+        </div>
+        <br />
 
-        <ng-template #itemTemplate let-item>
-          <a [innerHTML]="item.desArea"></a>
-        </ng-template>
-
-        <ng-template #notFoundTemplate let-notFound>
-          <div [innerHTML]="notFound"></div>
-        </ng-template>
-
-        <!-- <ng2-smart-table
+        <ng2-smart-table
           [settings]="settingsPersonalTotal"
           [source]="smartPersonalTotal"
+          (edit)="agregar($event)"
         >
-        </ng2-smart-table> -->
+        </ng2-smart-table>
       </div>
 
       <div class="col-md-6">
-        <label class="label">Personal asignado</label>
+        <div class="text-center">
+          <label class="label">Personal asignado</label>
+          <br />
+          <ng2-smart-table
+            [settings]="settingsPersonalAsignado"
+            [source]="smartPersonalAsignado"
+            (delete)="quitar($event)"
+          >
+          </ng2-smart-table>
+        </div>
       </div>
     </div>
   </nb-card-body>

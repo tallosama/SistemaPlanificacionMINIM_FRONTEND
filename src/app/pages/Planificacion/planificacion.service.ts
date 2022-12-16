@@ -24,10 +24,20 @@ export class PlanificacionService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "planificacion/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "planificacion/activos");
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "planificacion/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "planificacion/" + id);
+  }
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "planificacion/anular/" + id,
+      motivo
+    );
   }
 }

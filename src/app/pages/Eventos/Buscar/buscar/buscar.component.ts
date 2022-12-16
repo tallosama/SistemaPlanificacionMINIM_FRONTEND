@@ -135,8 +135,8 @@ export class BuscarComponent implements OnInit, OnDestroy {
         type: "custom",
         renderComponent: RenderComponent,
         onComponentInitFunction: (instance) => {
-          instance.eventData.subscribe((r) => {
-            this.abrirModal(r);
+          instance.eventData.subscribe((detalleEvento) => {
+            this.abrirModal(detalleEvento);
           });
         },
 
@@ -175,11 +175,11 @@ export class BuscarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
-  abrirModal(r) {
+  abrirModal(detalleEvento) {
     this.dialogService.open(PersonasAsignadasComponent, {
-      // context: {
-      //   data: r,
-      // },
+      context: {
+        data: detalleEvento,
+      },
     });
   }
   autoCompletados(): void {

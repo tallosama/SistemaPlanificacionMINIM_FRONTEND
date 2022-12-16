@@ -9,6 +9,7 @@ import {
   NbCardModule,
   NbDialogModule,
   NbInputModule,
+  NbSelectModule,
   NbStepperModule,
   NbTimepickerModule,
 } from "@nebular/theme";
@@ -52,6 +53,7 @@ import { PersonasAsignadasComponent } from "./Buscar/personas-asignadas/personas
 
     //Stmarttable
     Ng2SmartTableModule,
+    NbSelectModule,
   ],
 })
 export class EventosModule {}

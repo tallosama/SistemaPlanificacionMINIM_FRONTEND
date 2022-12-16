@@ -18,10 +18,20 @@ export class RolService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "rol/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "rol/activos");
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "rol/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "rol/" + id);
+  }
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "rol/anular/" + id,
+      motivo
+    );
   }
 }

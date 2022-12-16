@@ -18,10 +18,20 @@ export class CargoService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "cargo/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "cargo/activos");
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "cargo/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "cargo/" + id);
+  }
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "cargo/anular/" + id,
+      motivo
+    );
   }
 }

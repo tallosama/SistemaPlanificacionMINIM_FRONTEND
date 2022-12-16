@@ -30,10 +30,19 @@ export class AreaService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "area/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "area/activos");
+  }
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "area/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "area/" + id);
+  }
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "area/anular/" + id,
+      motivo
+    );
   }
 }

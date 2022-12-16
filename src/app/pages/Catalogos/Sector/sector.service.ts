@@ -19,10 +19,21 @@ export class SectorService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "sector/");
   }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "sector/activos");
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "sector/" + id);
   }
   eliminar(id): Observable<any> {
     return this.httpclient.delete(ApiServe.API_SERVER + "sector/" + id);
+  }
+
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "sector/anular/" + id,
+      motivo
+    );
   }
 }
