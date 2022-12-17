@@ -15,10 +15,10 @@ import { Util } from "../../../../Globales/Util";
 export class CrearComponent implements OnInit, OnDestroy {
   fecha = new Date().toISOString().slice(0, 10);
   personaForm: FormGroup;
-  estado = [
-    { esActivo: true, Estado: "Activo" },
-    { esActivo: false, Estado: "Inactivo" },
-  ];
+  // estado = [
+  //   { esActivo: true, Estado: "Activo" },
+  //   { esActivo: false, Estado: "Inactivo" },
+  // ];
   cargos: any;
   subscripciones: Array<Subscription> = [];
   constructor(
@@ -87,7 +87,8 @@ export class CrearComponent implements OnInit, OnDestroy {
       sApellido: ["", Validators.maxLength(32)],
       poseeUsuario: [false, Validators.required],
       cargoId: ["", Validators.required],
-      estado: [this.estado[0].esActivo, Validators.required],
+      anulacion: [false, Validators.required],
+      motivoAnulacion: [""],
 
       usuarioCreacion: [usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],

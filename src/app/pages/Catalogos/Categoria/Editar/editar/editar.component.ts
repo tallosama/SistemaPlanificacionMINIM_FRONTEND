@@ -49,6 +49,9 @@ export class EditarComponent implements OnInit, OnDestroy {
                 Util.esVacio,
               ]),
             ],
+            anulacion: [res.anulacion, Validators.required],
+            motivoAnulacion: [res.motivoAnulacion],
+
             usuarioModificacion: [usuario.uid, Validators.required],
             fechaModificacion: [this.fecha, Validators.required],
           });

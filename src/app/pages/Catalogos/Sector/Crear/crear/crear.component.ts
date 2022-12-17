@@ -38,6 +38,9 @@ export class CrearComponent implements OnInit, OnDestroy {
           Util.esVacio,
         ]),
       ],
+      anulacion: [false, Validators.required],
+      motivoAnulacion: [""],
+
       usuarioCreacion: [usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [usuario.uid, Validators.required],

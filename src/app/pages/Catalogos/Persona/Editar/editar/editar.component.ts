@@ -17,10 +17,10 @@ export class EditarComponent implements OnInit, OnDestroy {
   fecha = new Date().toISOString().slice(0, 10);
   personaForm: FormGroup;
   id: number;
-  estado = [
-    { esActivo: true, Estado: "Activo" },
-    { esActivo: false, Estado: "Inactivo" },
-  ];
+  // estado = [
+  //   { esActivo: true, Estado: "Activo" },
+  //   { esActivo: false, Estado: "Inactivo" },
+  // ];
   cargos: any;
   subscripciones: Array<Subscription> = [];
   constructor(
@@ -95,7 +95,9 @@ export class EditarComponent implements OnInit, OnDestroy {
             sApellido: [res.sApellido, Validators.maxLength(32)],
 
             poseeUsuario: [res.poseeUsuario, Validators.required],
-            estado: [res.estado, Validators.required],
+            anulacion: [res.anulacion, Validators.required],
+            motivoAnulacion: [res.motivoAnulacion],
+
             cargoId: [
               this.cargos.find((c) => c.idCargo == res.cargoId.idCargo),
               Validators.required,

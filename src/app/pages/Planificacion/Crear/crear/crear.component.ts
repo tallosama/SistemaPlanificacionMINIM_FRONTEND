@@ -43,6 +43,9 @@ export class CrearComponent implements OnInit, OnDestroy {
       lema: ["", Validators.maxLength(128)],
       fechaInicio: [new Date().toISOString().slice(0, 10), Validators.required],
       fechaFin: [new Date().toISOString().slice(0, 10), Validators.required],
+      anulacion: [false, Validators.required],
+      motivoAnulacion: [""],
+
       usuarioCreacion: [usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [usuario.uid, Validators.required],

@@ -6,6 +6,8 @@ import { MedidaService } from "../../medida.service";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { LocalDataSource } from "ng2-smart-table";
 import { Util } from "../../../../Globales/Util";
+import { authService } from "../../../../../auth/auth.service";
+import { MensajeEntradaComponent } from "../../../../Globales/mensaje-entrada/mensaje-entrada.component";
 
 @Component({
   selector: "ngx-listado",
@@ -22,7 +24,7 @@ export class ListadoComponent implements OnInit, OnDestroy {
       editButtonContent: '<i class="nb-edit"></i>',
     },
     delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
+      deleteButtonContent: '<i class="nb-alert"></i>',
     },
     actions: {
       columnTitle: "Acción",
@@ -38,6 +40,18 @@ export class ListadoComponent implements OnInit, OnDestroy {
         title: "Descripción",
         type: "string",
       },
+
+      anulacion: {
+        title: "Estado",
+        valuePrepareFunction: (data) => {
+          return data ? "Anulado" : "Activo";
+        },
+      },
+
+      motivoAnulacion: {
+        title: "Motivo",
+        type: "string",
+      },
     },
   };
 
@@ -46,7 +60,8 @@ export class ListadoComponent implements OnInit, OnDestroy {
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private auth: authService
   ) {}
 
   construir(): void {
@@ -70,8 +85,9 @@ export class ListadoComponent implements OnInit, OnDestroy {
     );
   }
 
-  reconstruir(id: any): void {
-    this.sourceSmart.remove(id);
+  reconstruir(elementoAnterior: any, elementoNuevo: any): void {
+    this.sourceSmart.remove(elementoAnterior);
+    this.sourceSmart.add(elementoNuevo);
     this.sourceSmart.refresh();
   }
 
@@ -81,59 +97,68 @@ export class ListadoComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscripciones.forEach((subs) => subs.unsubscribe());
   }
-  confirmacion(id): void {
+  confirmacion(elemento): void {
+    let mensaje: string = elemento.data.anulacion
+      ? "¿Desea reactivar el registro?"
+      : "¿Desea anular el registro?";
+
     this.subscripciones.push(
       this.dialogService
-        .open(DialogNamePromptComponent, {
+        .open(MensajeEntradaComponent, {
           context: {
-            cuerpo: "¿Desea eliminar el registro?",
+            titulo: mensaje,
           },
         })
         .onClose.subscribe((res) => {
           if (res) {
-            this.eliminar(id.data);
+            this.anular(
+              elemento.data,
+              "'" +
+                res +
+                "', por " +
+                this.auth.getUserStorage().email +
+                " el " +
+                new Date().toLocaleString()
+            );
           }
         })
     );
   }
 
-  eliminar(id): void {
+  anular(elemento: any, motivoAnulacion: string): void {
     this.subscripciones.push(
-      this.medidaService.eliminar(id.idUnidadMedida).subscribe(
-        (res) => {
-          if (res) {
+      this.medidaService
+        .anular(elemento.idUnidadMedida, motivoAnulacion)
+        .subscribe(
+          (res) => {
+            let mensaje: string = res.anulacion
+              ? "Se ha anulado el registro"
+              : "Se ha reactivado el registro";
+
             Util.showToast(
               "success",
               "Acción realizada",
-              "Se ha eliminado el registro",
+              mensaje,
               4000,
               this.toastrService
             );
-          } else {
+
+            this.reconstruir(elemento, res);
+          },
+          (error) => {
+            console.error(error);
             Util.showToast(
-              "warning",
-              "Atención",
-              "No se ha encontrado el registro",
-              4000,
+              "danger",
+              "Error " + error.status,
+              "Mientras se anulaba el registro" + error.error[0],
+              0,
               this.toastrService
             );
           }
-          this.reconstruir(id);
-        },
-        (error) => {
-          console.error(error);
-          Util.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se eliminaba el registro" + error.error[0],
-
-            0,
-            this.toastrService
-          );
-        }
-      )
+        )
     );
   }
+
   editarRegistro(event) {
     this.router.navigate(["../EditarUnidadMedida", event.data.idUnidadMedida], {
       relativeTo: this.route,

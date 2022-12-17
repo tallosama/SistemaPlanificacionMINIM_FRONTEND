@@ -51,6 +51,9 @@ export class EditarComponent implements OnInit, OnDestroy {
             lema: [res.lema, Validators.maxLength(128)],
             fechaInicio: [res.fechaInicio, Validators.required],
             fechaFin: [res.fechaFin, Validators.required],
+            anulacion: [res.anulacion, Validators.required],
+            motivoAnulacion: [res.motivoAnulacion],
+
             usuarioModificacion: [usuario.uid, Validators.required],
             fechaModificacion: [this.fecha, Validators.required],
           });

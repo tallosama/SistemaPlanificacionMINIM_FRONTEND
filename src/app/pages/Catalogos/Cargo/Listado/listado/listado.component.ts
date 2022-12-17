@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NbDialogService, NbToastrService } from "@nebular/theme";
 import { LocalDataSource } from "ng2-smart-table";
 import { Subscription } from "rxjs";
+import { authService } from "../../../../../auth/auth.service";
+import { MensajeEntradaComponent } from "../../../../Globales/mensaje-entrada/mensaje-entrada.component";
 import { Util } from "../../../../Globales/Util";
 import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { CargoService } from "../../cargo.service";
@@ -21,7 +23,7 @@ export class ListadoComponent implements OnInit {
       editButtonContent: '<i class="nb-edit"></i>',
     },
     delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
+      deleteButtonContent: '<i class="nb-alert"></i>',
     },
     actions: {
       columnTitle: "Acción",
@@ -42,6 +44,18 @@ export class ListadoComponent implements OnInit {
           return data.desArea;
         },
       },
+
+      anulacion: {
+        title: "Estado",
+        valuePrepareFunction: (data) => {
+          return data ? "Anulado" : "Activo";
+        },
+      },
+
+      motivoAnulacion: {
+        title: "Motivo",
+        type: "string",
+      },
     },
   };
 
@@ -53,7 +67,8 @@ export class ListadoComponent implements OnInit {
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private auth: authService
   ) {}
   construir(): void {
     this.subscripciones.push(
@@ -75,8 +90,9 @@ export class ListadoComponent implements OnInit {
     );
   }
 
-  reconstruir(id: any): void {
-    this.smartCargo.remove(id);
+  reconstruir(elementoAnterior: any, elementoNuevo: any): void {
+    this.smartCargo.remove(elementoAnterior);
+    this.smartCargo.add(elementoNuevo);
     this.smartCargo.refresh();
   }
 
@@ -86,50 +102,58 @@ export class ListadoComponent implements OnInit {
   ngOnDestroy(): void {
     this.subscripciones.forEach((subs) => subs.unsubscribe());
   }
-  confirmacion(id): void {
+  confirmacion(elemento): void {
+    let mensaje: string = elemento.data.anulacion
+      ? "¿Desea reactivar el registro?"
+      : "¿Desea anular el registro?";
+
     this.subscripciones.push(
       this.dialogService
-        .open(DialogNamePromptComponent, {
+        .open(MensajeEntradaComponent, {
           context: {
-            cuerpo: "¿Desea eliminar el registro?",
+            titulo: mensaje,
           },
         })
         .onClose.subscribe((res) => {
           if (res) {
-            this.eliminar(id.data);
+            this.anular(
+              elemento.data,
+              "'" +
+                res +
+                "', por " +
+                this.auth.getUserStorage().email +
+                " el " +
+                new Date().toLocaleString()
+            );
           }
         })
     );
   }
-  eliminar(data): void {
+
+  anular(elemento: any, motivoAnulacion: string): void {
     this.subscripciones.push(
-      this.cargoService.eliminar(data.idCargo).subscribe(
+      this.cargoService.anular(elemento.idCargo, motivoAnulacion).subscribe(
         (res) => {
-          if (res) {
-            Util.showToast(
-              "success",
-              "Acción realizada",
-              "Se ha eliminado el registro",
-              4000,
-              this.toastrService
-            );
-          } else {
-            Util.showToast(
-              "warning",
-              "Atención",
-              "No se ha encontrado el registro",
-              4000,
-              this.toastrService
-            );
-          }
-          this.reconstruir(data);
+          let mensaje: string = res.anulacion
+            ? "Se ha anulado el registro"
+            : "Se ha reactivado el registro";
+
+          Util.showToast(
+            "success",
+            "Acción realizada",
+            mensaje,
+            4000,
+            this.toastrService
+          );
+
+          this.reconstruir(elemento, res);
         },
         (error) => {
           console.error(error);
           Util.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se eliminaba el registro" + error.error[0],
+            "Mientras se anulaba el registro" + error.error[0],
             0,
             this.toastrService
           );
@@ -137,6 +161,7 @@ export class ListadoComponent implements OnInit {
       )
     );
   }
+
   editarRegistro(event) {
     this.router.navigate(["../EditarCargo", event.data.idCargo], {
       relativeTo: this.route,

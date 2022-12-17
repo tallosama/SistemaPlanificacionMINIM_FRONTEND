@@ -54,6 +54,9 @@ export class CrearComponent implements OnInit, OnDestroy {
         "",
         Validators.compose([Validators.required, Validators.maxLength(32)]),
       ],
+      anulacion: [false, Validators.required],
+      motivoAnulacion: [""],
+
       usuarioCreacion: [usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [usuario.uid, Validators.required],

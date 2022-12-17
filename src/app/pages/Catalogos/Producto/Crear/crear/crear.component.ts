@@ -97,6 +97,9 @@ export class CrearComponent implements OnInit, OnDestroy {
       ],
       unidadMedidaId: ["", Validators.required],
       categoriaId: ["", Validators.required],
+      anulacion: [false, Validators.required],
+      motivoAnulacion: [""],
+
       usuarioCreacion: [usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [usuario.uid, Validators.required],
