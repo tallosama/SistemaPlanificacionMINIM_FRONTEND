@@ -14,9 +14,11 @@ import { MunicipioService } from "../../../Globales/Servicios/municipio.service"
 import { DetalleEventoService } from "../../detalle-evento.service";
 import { EventosService } from "../../eventos.service";
 import { Util } from "../../../Globales/Util";
-import { RenderComponent } from "../../../Globales/render/render.component";
+import { RenderPersonalComponent } from "./renders/renderPersonal/render-personal.component";
 import { PersonasAsignadasComponent } from "../personas-asignadas/personas-asignadas.component";
 import { MensajeEntradaComponent } from "../../../Globales/mensaje-entrada/mensaje-entrada.component";
+import { AsignarSectoresComponent } from "../asignar-sectores/asignar-sectores.component";
+import { RenderSectorComponent } from "./renders/renderSector/render-sector.component";
 
 @Component({
   selector: "ngx-buscar",
@@ -138,10 +140,21 @@ export class BuscarComponent implements OnInit, OnDestroy {
         filter: false,
         title: "Asignar personal",
         type: "custom",
-        renderComponent: RenderComponent,
+        renderComponent: RenderPersonalComponent,
         onComponentInitFunction: (instance) => {
           instance.eventData.subscribe((detalleEvento) => {
-            this.abrirModal(detalleEvento);
+            this.abrirModal(detalleEvento, PersonasAsignadasComponent);
+          });
+        },
+      },
+      buttonAsignarSector: {
+        filter: false,
+        title: "Asignar sector",
+        type: "custom",
+        renderComponent: RenderSectorComponent,
+        onComponentInitFunction: (instance) => {
+          instance.eventData.subscribe((detalleEvento) => {
+            this.abrirModal(detalleEvento, AsignarSectoresComponent);
           });
         },
       },
@@ -186,8 +199,8 @@ export class BuscarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
-  abrirModal(detalleEvento) {
-    this.dialogService.open(PersonasAsignadasComponent, {
+  abrirModal(detalleEvento, componenteAbrir) {
+    this.dialogService.open(componenteAbrir, {
       context: {
         data: detalleEvento,
       },
