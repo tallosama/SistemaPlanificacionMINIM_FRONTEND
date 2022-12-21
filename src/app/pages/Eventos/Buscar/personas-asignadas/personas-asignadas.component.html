@@ -27,7 +27,7 @@
           <nb-select placeholder="Área" class="col-md-12" shape="semi-round">
             <nb-option
               *ngFor="let a of areas"
-              (click)="reconstruir(a)"
+              (click)="reconstruirPersonalTotal(a)"
               [value]="a.idArea"
               >{{ a.desArea }}</nb-option
             >
@@ -38,7 +38,7 @@
         <ng2-smart-table
           [settings]="settingsPersonalTotal"
           [source]="smartPersonalTotal"
-          (edit)="agregar($event)"
+          (edit)="agregarATablaPersonalAsignado($event)"
         >
         </ng2-smart-table>
       </div>
@@ -46,7 +46,32 @@
       <div class="col-md-6">
         <div class="text-center">
           <label class="label">Personal asignado</label>
+
           <br />
+          <div class="text-left">
+            <div *ngIf="tablaEsllenadoDB">
+              <button
+                nbButton
+                [disabled]="nuevosElementos.length == 0"
+                status="info"
+                (click)="actualizarDetalles()"
+              >
+                Actualizar
+              </button>
+            </div>
+
+            <div *ngIf="tablaEsllenadoDB == false">
+              <button
+                nbButton
+                [disabled]="tablaEsllenadoDB"
+                status="success"
+                (click)="grabarDetalles()"
+              >
+                Grabar
+              </button>
+            </div>
+          </div>
+
           <ng2-smart-table
             [settings]="settingsPersonalAsignado"
             [source]="smartPersonalAsignado"

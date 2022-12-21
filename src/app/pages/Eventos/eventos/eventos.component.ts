@@ -122,6 +122,9 @@ export class EventosComponent implements OnInit, OnDestroy {
         "",
         Validators.compose([Validators.required, Util.noObjeto]),
       ],
+      anulacion: [false, Validators.required],
+      motivoAnulacion: [""],
+
       usuarioCreacion: [this.usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [this.usuario.uid, Validators.required],
@@ -237,7 +240,8 @@ export class EventosComponent implements OnInit, OnDestroy {
         "",
         Validators.compose([Validators.required, Util.noObjeto]),
       ],
-
+      anulacion: [false, Validators.required],
+      motivoAnulacion: [""],
       usuarioCreacion: [this.usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [this.usuario.uid, Validators.required],

@@ -14,21 +14,21 @@ export const MENU_ITEMS: NbMenuItem[] = [
   // },
   {
     title: "Eventos",
-    icon: "book-open-outline",
-    link: "/pages",
-    children: [
-      {
-        title: "Eventos",
-        icon: "award-outline",
-        link: "/pages/Eventos",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/Eventos/RegistrarEventos",
-          },
-        ],
-      },
-    ],
+    icon: "award-outline",
+    link: "/pages/Eventos/RegistrarEventos",
+    // children: [
+    //   {
+    //     title: "Eventos",
+    //     icon: "award-outline",
+    //     link: "/pages/Eventos",
+    //     children: [
+    //       {
+    //         title: "Registrar",
+    //         link: "/pages/Eventos/RegistrarEventos",
+    //       },
+    //     ],
+    //   },
+    // ],
   },
 
   {
@@ -62,147 +62,147 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: "Areas",
         icon: "grid-outline",
-        link: "/pages/Area",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/Area/RegistrarArea",
-          },
+        link: "/pages/Area/ListarAreas",
+        // children: [
+        //   {
+        //     title: "Registrar",
+        //     link: "/pages/Area/RegistrarArea",
+        //   },
 
-          {
-            title: "Listar",
-            link: "/pages/Area/ListarAreas",
-          },
-        ],
+        //   {
+        //     title: "Listar",
+        //     link: "/pages/Area/ListarAreas",
+        //   },
+        // ],
       },
       {
         title: "Categorías",
         icon: "folder-add-outline",
-        link: "/pages/Categoria",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/Categoria/RegistrarCategoria",
-          },
+        link: "/pages/Categoria/ListarCategoria",
+        // children: [
+        //   {
+        //     title: "Registrar",
+        //     link: "/pages/Categoria/RegistrarCategoria",
+        //   },
 
-          {
-            title: "Listar",
-            link: "/pages/Categoria/ListarCategoria",
-          },
-        ],
+        //   {
+        //     title: "Listar",
+        //     link: "/pages/Categoria/ListarCategoria",
+        //   },
+        // ],
       },
       {
         title: "Sector",
         icon: "globe-outline",
-        link: "/pages/Sector",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/Sector/RegistrarSector",
-          },
+        link: "/pages/Sector/ListarSector",
+        // children: [
+        //   {
+        //     title: "Registrar",
+        //     link: "/pages/Sector/RegistrarSector",
+        //   },
 
-          {
-            title: "Listar",
-            link: "/pages/Sector/ListarSector",
-          },
-        ],
+        //   {
+        //     title: "Listar",
+        //     link: "/pages/Sector/ListarSector",
+        //   },
+        // ],
       },
       {
         title: "Unidad de medida",
         icon: "pantone-outline",
-        link: "/pages/UnidadMedida",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/UnidadMedida/RegistrarUnidadMedida",
-          },
+        link: "/pages/UnidadMedida/ListarUnidadMedida",
+        // children: [
+        //   {
+        //     title: "Registrar",
+        //     link: "/pages/UnidadMedida/RegistrarUnidadMedida",
+        //   },
 
-          {
-            title: "Listar",
-            link: "/pages/UnidadMedida/ListarUnidadMedida",
-          },
-        ],
+        //   {
+        //     title: "Listar",
+        //     link: "/pages/UnidadMedida/ListarUnidadMedida",
+        //   },
+        // ],
       },
       {
         title: "Productos",
         icon: "map-outline",
-        link: "/pages/Producto",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/Producto/RegistrarProducto",
-          },
+        link: "/pages/Producto/ListarProducto",
+        // children: [
+        //   {
+        //     title: "Registrar",
+        //     link: "/pages/Producto/RegistrarProducto",
+        //   },
 
-          {
-            title: "Listar",
-            link: "/pages/Producto/ListarProducto",
-          },
-        ],
+        //   {
+        //     title: "Listar",
+        //     link: "/pages/Producto/ListarProducto",
+        //   },
+        // ],
       },
       {
         title: "Personal",
         icon: "people-outline",
-        link: "/pages/Persona",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/Persona/RegistrarPersona",
-          },
+        link: "/pages/Persona/ListarPersona",
+        // children: [
+        //   {
+        //     title: "Registrar",
+        //     link: "/pages/Persona/RegistrarPersona",
+        //   },
 
-          {
-            title: "Listar",
-            link: "/pages/Persona/ListarPersona",
-          },
-        ],
+        //   {
+        //     title: "Listar",
+        //     link: "/pages/Persona/ListarPersona",
+        //   },
+        // ],
       },
       {
         title: "Vehículo",
         icon: "car-outline",
-        link: "/pages/Vehiculo",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/Vehiculo/RegistrarVehiculo",
-          },
+        link: "/pages/Vehiculo/ListarVehiculo",
+        // children: [
+        //   {
+        //     title: "Registrar",
+        //     link: "/pages/Vehiculo/RegistrarVehiculo",
+        //   },
 
-          {
-            title: "Listar",
-            link: "/pages/Vehiculo/ListarVehiculo",
-          },
-        ],
+        //   {
+        //     title: "Listar",
+        //     link: "/pages/Vehiculo/ListarVehiculo",
+        //   },
+        // ],
       },
       {
         title: "Rol",
         icon: "award-outline",
-        link: "/pages/Rol",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/Rol/RegistrarRol",
-          },
+        link: "/pages/Rol/ListarRol",
+        // children: [
+        //   {
+        //     title: "Registrar",
+        //     link: "/pages/Rol/RegistrarRol",
+        //   },
 
-          {
-            title: "Listar",
-            link: "/pages/Rol/ListarRol",
-          },
-        ],
+        //   {
+        //     title: "Listar",
+        //     link: "/pages/Rol/ListarRol",
+        //   },
+        // ],
       },
 
       {
         title: "Cargos",
         icon: "pantone-outline",
-        link: "/pages/Cargo",
-        children: [
-          {
-            title: "Registrar",
-            link: "/pages/Cargo/RegistrarCargo",
-          },
+        link: "/pages/Cargo/ListarCargo",
+        // children: [
+        //   {
+        //     title: "Registrar",
+        //     link: "/pages/Cargo/RegistrarCargo",
+        //   },
 
-          {
-            title: "Listar",
-            link: "/pages/Cargo/ListarCargo",
-          },
-        ],
+        //   {
+        //     title: "Listar",
+        //     link: "/pages/Cargo/ListarCargo",
+        //   },
+        // ],
       },
     ],
   },
@@ -213,19 +213,19 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: "Usuarios",
     icon: "person-add-outline",
-    link: "/pages/Usuario",
-    children: [
-      {
-        title: "Registrar",
-        link: "/pages/Usuario/RegistrarUsuario",
-      },
-      // ,
+    link: "/pages/Usuario/VerUsuarios",
+    // children: [
+    //   {
+    //     title: "Registrar",
+    //     link: "/pages/Usuario/RegistrarUsuario",
+    //   },
+    //   // ,
 
-      {
-        title: "Ver usuarios",
-        link: "/pages/Usuario/VerUsuarios",
-      },
-    ],
+    //   {
+    //     title: "Ver usuarios",
+    //     link: "/pages/Usuario/VerUsuarios",
+    //   },
+    // ],
   },
   // {
   //   title: "Layout",

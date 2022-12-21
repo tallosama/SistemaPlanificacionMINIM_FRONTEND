@@ -80,10 +80,10 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
         type: "string",
       },
 
-      estado: {
+      anulacion: {
         title: "Estado",
         valuePrepareFunction: (data) => {
-          return data ? "Activo" : "Inactivo";
+          return data ? "Inactivo" : "Activo";
         },
       },
     },
@@ -182,7 +182,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
 
   validarPersona(p) {
     let datosPersona = p.data;
-    if (datosPersona.estado === true) {
+    if (!datosPersona.anulacion) {
       this.asignarPersona(datosPersona);
       this.stepper.next();
     } else {

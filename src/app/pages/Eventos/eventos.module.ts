@@ -19,9 +19,10 @@ import { EventosComponent } from "./eventos/eventos.component";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { BuscarComponent } from "./Buscar/buscar/buscar.component";
 import { PersonasAsignadasComponent } from "./Buscar/personas-asignadas/personas-asignadas.component";
+import { AsignarSectoresComponent } from './Buscar/asignar-sectores/asignar-sectores.component';
 
 @NgModule({
-  declarations: [EventosComponent, BuscarComponent, PersonasAsignadasComponent],
+  declarations: [EventosComponent, BuscarComponent, PersonasAsignadasComponent, AsignarSectoresComponent],
   imports: [
     CommonModule,
     EventosRoutingModule,

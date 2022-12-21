@@ -1,13 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import {
   NbDialogService,
-  NbGlobalPhysicalPosition,
   NbStepperComponent,
   NbToastrService,
 } from "@nebular/theme";
@@ -15,7 +9,6 @@ import { LocalDataSource } from "ng2-smart-table";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../auth/auth.service";
 import { AreaService } from "../../../Catalogos/Area/area.service";
-import { DialogNamePromptComponent } from "../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { PlanificacionService } from "../../../Planificacion/planificacion.service";
 import { MunicipioService } from "../../../Globales/Servicios/municipio.service";
 import { DetalleEventoService } from "../../detalle-evento.service";
@@ -23,6 +16,7 @@ import { EventosService } from "../../eventos.service";
 import { Util } from "../../../Globales/Util";
 import { RenderComponent } from "../../../Globales/render/render.component";
 import { PersonasAsignadasComponent } from "../personas-asignadas/personas-asignadas.component";
+import { MensajeEntradaComponent } from "../../../Globales/mensaje-entrada/mensaje-entrada.component";
 
 @Component({
   selector: "ngx-buscar",
@@ -52,7 +46,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
       editButtonContent: '<i class="nb-edit"></i>',
     },
     delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
+      deleteButtonContent: '<i class="nb-alert"></i>',
     },
     actions: {
       columnTitle: "Acción",
@@ -80,6 +74,17 @@ export class BuscarComponent implements OnInit, OnDestroy {
           return data.descripcion;
         },
       },
+      anulacion: {
+        title: "Estado",
+        valuePrepareFunction: (data) => {
+          return data ? "Anulado" : "Activo";
+        },
+      },
+
+      motivoAnulacion: {
+        title: "Motivo",
+        type: "string",
+      },
     },
   };
 
@@ -90,7 +95,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
       editButtonContent: '<i class="nb-edit"></i>',
     },
     delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
+      deleteButtonContent: '<i class="nb-alert"></i>',
     },
     // hideSubHeader: true,
     actions: {
@@ -139,11 +144,17 @@ export class BuscarComponent implements OnInit, OnDestroy {
             this.abrirModal(detalleEvento);
           });
         },
+      },
+      anulacion: {
+        title: "Estado",
+        valuePrepareFunction: (data) => {
+          return data ? "Anulado" : "Activo";
+        },
+      },
 
-        // onComponentInitFunction(instance) {
-        //
-        //   //  instance.save.subscribe((row) => {});
-        // },
+      motivoAnulacion: {
+        title: "Motivo",
+        type: "string",
       },
     },
   };
@@ -255,6 +266,8 @@ export class BuscarComponent implements OnInit, OnDestroy {
         this.eventoSeleccionado.planificacionId,
         Validators.compose([Util.noObjeto, Validators.required]),
       ],
+      anulacion: [this.eventoSeleccionado.anulacion, Validators.required],
+      motivoAnulacion: [this.eventoSeleccionado.motivoAnulacion],
       usuarioModificacion: [this.usuario.uid, Validators.required],
       fechaModificacion: [this.fecha, Validators.required],
     });
@@ -359,7 +372,8 @@ export class BuscarComponent implements OnInit, OnDestroy {
         "",
         Validators.compose([Util.noObjeto, Validators.required]),
       ],
-
+      anulacion: [false, Validators.required],
+      motivoAnulacion: [""],
       usuarioCreacion: [this.usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
       usuarioModificacion: [this.usuario.uid, Validators.required],
@@ -416,6 +430,14 @@ export class BuscarComponent implements OnInit, OnDestroy {
     this.detalleEventoForm
       .get("municipioId")
       .setValue(this.detalleSeleccionado.municipioId);
+
+    this.detalleEventoForm
+      .get("anulacion")
+      .setValue(this.detalleSeleccionado.anulacion);
+
+    this.detalleEventoForm
+      .get("motivoAnulacion")
+      .setValue(this.detalleSeleccionado.motivoAnulacion);
   }
 
   agregarTabla() {
@@ -504,89 +526,213 @@ export class BuscarComponent implements OnInit, OnDestroy {
     this.detalleEventoForm.get("eventoId").reset();
     this.detalleSeleccionado = null;
   }
-  onBorrarDetalle(event) {
+  onBorrarDetalle(elemento) {
+    let mensaje: string = elemento.data.anulacion
+      ? "¿Desea reactivar el registro?"
+      : "¿Desea anular el registro?";
+
     this.subscripciones.push(
       this.dialogService
-        .open(DialogNamePromptComponent, {
+        .open(MensajeEntradaComponent, {
           context: {
-            cuerpo: "¿Desea eliminar el registro?",
+            titulo: mensaje,
           },
         })
         .onClose.subscribe((res) => {
           if (res) {
-            this.subscripciones.push(
-              this.detalleEventoService
-                .eliminar(event.data.idDetalleEvento)
-                .subscribe(
-                  (r) => {
-                    if (r) {
-                      Util.showToast(
-                        "success",
-                        "Acción realizada",
-                        "Se ha eliminado el registro",
-                        4000,
-                        this.toastrService
-                      );
-                    } else {
-                      Util.showToast(
-                        "warning",
-                        "Atención",
-                        "No se ha encontrado el registro",
-                        4000,
-                        this.toastrService
-                      );
-                    }
-                    this.smartDetalle.remove(event.data);
-                    this.smartDetalle.refresh();
-                  },
-                  (error) => {
-                    console.error(error);
-                    Util.showToast(
-                      "danger",
-                      "Error " + error.status,
-                      "Mientras se eliminaba el registro" + error.error[0],
+            this.anularDetalle(
+              elemento.data,
+              "'" +
+                res +
+                "', por " +
+                this.auth.getUserStorage().email +
+                " el " +
+                new Date().toLocaleString()
+            );
+          }
+        })
+    );
 
-                      0,
-                      this.toastrService
-                    );
-                  }
-                )
+    // this.subscripciones.push(
+    //   this.dialogService
+    //     .open(DialogNamePromptComponent, {
+    //       context: {
+    //         cuerpo: "¿Desea eliminar el registro?",
+    //       },
+    //     })
+    //     .onClose.subscribe((res) => {
+    //       if (res) {
+    //         this.subscripciones.push(
+    //           this.detalleEventoService
+    //             .eliminar(event.data.idDetalleEvento)
+    //             .subscribe(
+    //               (r) => {
+    //                 if (r) {
+    //                   Util.showToast(
+    //                     "success",
+    //                     "Acción realizada",
+    //                     "Se ha eliminado el registro",
+    //                     4000,
+    //                     this.toastrService
+    //                   );
+    //                 } else {
+    //                   Util.showToast(
+    //                     "warning",
+    //                     "Atención",
+    //                     "No se ha encontrado el registro",
+    //                     4000,
+    //                     this.toastrService
+    //                   );
+    //                 }
+    //                 this.smartDetalle.remove(event.data);
+    //                 this.smartDetalle.refresh();
+    //               },
+    //               (error) => {
+    //                 console.error(error);
+    //                 Util.showToast(
+    //                   "danger",
+    //                   "Error " + error.status,
+    //                   "Mientras se eliminaba el registro" + error.error[0],
+
+    //                   0,
+    //                   this.toastrService
+    //                 );
+    //               }
+    //             )
+    //         );
+    //       }
+    //     })
+    // );
+  }
+  anularDetalle(elemento: any, motivoAnulacion: string): void {
+    this.subscripciones.push(
+      this.detalleEventoService
+        .anular(elemento.idDetalleEvento, motivoAnulacion)
+        .subscribe(
+          (res) => {
+            let mensaje: string = res.anulacion
+              ? "Se ha anulado el registro"
+              : "Se ha reactivado el registro";
+
+            Util.showToast(
+              "success",
+              "Acción realizada",
+              mensaje,
+              4000,
+              this.toastrService
+            );
+
+            this.reconstruirDetalle(elemento, res);
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast(
+              "danger",
+              "Error " + error.status,
+              "Mientras se anulaba el registro" + error.error[0],
+              0,
+              this.toastrService
+            );
+          }
+        )
+    );
+  }
+  reconstruirDetalle(elementoAnterior: any, elementoNuevo: any): void {
+    this.smartDetalle.remove(elementoAnterior);
+    this.smartDetalle.add(elementoNuevo);
+    this.smartDetalle.refresh();
+  }
+
+  // public eliminar(data) {
+  //   this.subscripciones.push(
+  //     this.eventoService.eliminar(data.idEvento).subscribe(
+  //       (r) => {
+  //         if (r) {
+  //           Util.showToast(
+  //             "success",
+  //             "Acción realizada",
+  //             "Se ha eliminado el registro",
+  //             4000,
+  //             this.toastrService
+  //           );
+  //         } else {
+  //           Util.showToast(
+  //             "warning",
+  //             "Atención",
+  //             "No se ha encontrado el registro",
+  //             4000,
+  //             this.toastrService
+  //           );
+  //         }
+  //         this.smartEvento.remove(data);
+  //         this.smartEvento.refresh();
+  //       },
+  //       (error) => {
+  //         console.error(error);
+  //         Util.showToast(
+  //           "danger",
+  //           "Error " + error.status,
+  //           "Mientras se eliminaba el registro" + error.error[0],
+
+  //           0,
+  //           this.toastrService
+  //         );
+  //       }
+  //     )
+  //   );
+  // }
+
+  confirmacion(elemento): void {
+    let mensaje: string = elemento.data.anulacion
+      ? "¿Desea reactivar el registro?"
+      : "¿Desea anular el registro?";
+
+    this.subscripciones.push(
+      this.dialogService
+        .open(MensajeEntradaComponent, {
+          context: {
+            titulo: mensaje,
+          },
+        })
+        .onClose.subscribe((res) => {
+          if (res) {
+            this.anularEvento(
+              elemento.data,
+              "'" +
+                res +
+                "', por " +
+                this.auth.getUserStorage().email +
+                " el " +
+                new Date().toLocaleString()
             );
           }
         })
     );
   }
-  public eliminar(data) {
+  anularEvento(elemento: any, motivoAnulacion: string): void {
     this.subscripciones.push(
-      this.eventoService.eliminar(data.idEvento).subscribe(
-        (r) => {
-          if (r) {
-            Util.showToast(
-              "success",
-              "Acción realizada",
-              "Se ha eliminado el registro",
-              4000,
-              this.toastrService
-            );
-          } else {
-            Util.showToast(
-              "warning",
-              "Atención",
-              "No se ha encontrado el registro",
-              4000,
-              this.toastrService
-            );
-          }
-          this.smartEvento.remove(data);
-          this.smartEvento.refresh();
+      this.eventoService.anular(elemento.idEvento, motivoAnulacion).subscribe(
+        (res) => {
+          let mensaje: string = res.anulacion
+            ? "Se ha anulado el registro"
+            : "Se ha reactivado el registro";
+
+          Util.showToast(
+            "success",
+            "Acción realizada",
+            mensaje,
+            4000,
+            this.toastrService
+          );
+
+          this.reconstruirEvento(elemento, res);
         },
         (error) => {
           console.error(error);
           Util.showToast(
             "danger",
             "Error " + error.status,
-            "Mientras se eliminaba el registro" + error.error[0],
-
+            "Mientras se anulaba el registro" + error.error[0],
             0,
             this.toastrService
           );
@@ -594,20 +740,25 @@ export class BuscarComponent implements OnInit, OnDestroy {
       )
     );
   }
-
-  confirmacion(event): void {
-    this.subscripciones.push(
-      this.dialogService
-        .open(DialogNamePromptComponent, {
-          context: {
-            cuerpo: "¿Desea eliminar el registro?",
-          },
-        })
-        .onClose.subscribe((res) => {
-          if (res) {
-            this.eliminar(event.data);
-          }
-        })
-    );
+  reconstruirEvento(elementoAnterior: any, elementoNuevo: any): void {
+    this.smartEvento.remove(elementoAnterior);
+    this.smartEvento.add(elementoNuevo);
+    this.smartEvento.refresh();
   }
+
+  // confirmacion(event): void {
+  //   this.subscripciones.push(
+  //     this.dialogService
+  //       .open(DialogNamePromptComponent, {
+  //         context: {
+  //           cuerpo: "¿Desea eliminar el registro?",
+  //         },
+  //       })
+  //       .onClose.subscribe((res) => {
+  //         if (res) {
+  //           this.eliminar(event.data);
+  //         }
+  //       })
+  //   );
+  // }
 }

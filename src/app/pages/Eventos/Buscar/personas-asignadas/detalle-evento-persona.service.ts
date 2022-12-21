@@ -18,6 +18,25 @@ export class detalleEventoPersonaPersonaService {
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "detalleEventoPersona/");
   }
+
+  horasPorPersonaDetalleEvento(personaId: number, fecha: any): Observable<any> {
+    return this.httpclient.get(
+      ApiServe.API_SERVER +
+        "detalleEventoPersona/horasPorPersonaDetalleEvento/" +
+        personaId +
+        "/" +
+        fecha
+    );
+    // http://localhost:8080/detalleEventoPersona/horasPorPersonaDetalleEvento/?personaId=8?fecha=2022-12-17
+    // return this.httpclient.get(
+    //   ApiServe.API_SERVER +
+    //     "detalleEventoPersona/horasPorPersonaDetalleEvento/?personaId=" +
+    //     personaId +
+    //     "&?fecha=" +
+    //     fecha
+    // );
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(
       ApiServe.API_SERVER + "detalleEventoPersona/" + id
@@ -32,6 +51,13 @@ export class detalleEventoPersonaPersonaService {
   eliminar(id): Observable<any> {
     return this.httpclient.delete(
       ApiServe.API_SERVER + "detalleEventoPersona/" + id
+    );
+  }
+
+  anular(id: number, motivo: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "detalleEventoPersona/anular/" + id,
+      motivo
     );
   }
 }
