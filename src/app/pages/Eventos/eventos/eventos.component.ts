@@ -109,7 +109,7 @@ export class EventosComponent implements OnInit, OnDestroy {
   }
   cargarForm() {
     this.eventoForm = this.fb.group({
-      desEveto: [
+      desEvento: [
         "",
         Validators.compose([
           Validators.required,
@@ -133,7 +133,7 @@ export class EventosComponent implements OnInit, OnDestroy {
   }
 
   limpiarEvento(): void {
-    this.eventoForm.get("desEveto").reset();
+    this.eventoForm.get("desEvento").reset();
   }
 
   /**

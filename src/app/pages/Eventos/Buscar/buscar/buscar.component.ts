@@ -263,7 +263,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
   }
   cargarEventoForm() {
     this.eventoForm = this.fb.group({
-      desEveto: [
+      desEvento: [
         this.eventoSeleccionado.desEvento,
         Validators.compose([
           Validators.required,
@@ -329,7 +329,7 @@ export class BuscarComponent implements OnInit, OnDestroy {
     }
   }
   limpiarEvento(): void {
-    this.eventoForm.get("desEveto").reset();
+    this.eventoForm.get("desEvento").reset();
     this.eventoForm.get("areaId").reset();
     this.eventoForm.get("planificacionId").reset();
     this.eventoSeleccionado = null;

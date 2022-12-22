@@ -1,0 +1,78 @@
+<nb-card class="col-md-12 col-lg-12 col-xxxl-12">
+  <nb-card-header>Seguimiento de eventos</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="label">Planificación</label>
+          <ng-autocomplete
+            [data]="planes"
+            [searchKeyword]="keyword[1]"
+            [itemTemplate]="itemTemplatePlan"
+            [notFoundTemplate]="notFoundTemplatePlan"
+            placeholder="Ingrese el plan"
+            (selected)="construirEventos($event)"
+            [initialValue]="planes[0]"
+            notFoundText="No se encontró"
+          >
+          </ng-autocomplete>
+
+          <ng-template #itemTemplatePlan let-plan>
+            <a [innerHTML]="plan.descripcion"></a>
+          </ng-template>
+
+          <ng-template #notFoundTemplatePlan let-notFoundPlan>
+            <div [innerHTML]="notFoundPlan"></div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="label">Eventos</label>
+          <ng-autocomplete
+            [data]="eventos"
+            [searchKeyword]="keyword[0]"
+            [itemTemplate]="itemTemplateEvento"
+            [notFoundTemplate]="notFoundTemplateEvento"
+            placeholder="Ingrese el evento"
+            notFoundText="No se encontró"
+            [initialValue]="eventos[0]"
+            (selected)="construirDetalles($event)"
+          >
+          </ng-autocomplete>
+
+          <ng-template #itemTemplateEvento let-evento>
+            <a [innerHTML]="evento.desEvento"></a>
+          </ng-template>
+
+          <ng-template #notFoundTemplateEvento let-notFoundEvento>
+            <div [innerHTML]="notFoundEvento"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="label">Detalles de eventos</label>
+          <ng2-smart-table
+            [settings]="settingsDetalle"
+            [source]="smartDetalle"
+            (edit)="asignarSeguimiento($event)"
+          >
+          </ng2-smart-table>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+
+  <nb-card-footer>
+    <!-- <button [routerLink]="['../ListarAreas']" nbButton status="success">
+            Atrás
+          </button> -->
+  </nb-card-footer>
+</nb-card>

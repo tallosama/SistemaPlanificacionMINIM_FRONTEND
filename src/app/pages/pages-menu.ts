@@ -15,20 +15,20 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: "Eventos",
     icon: "award-outline",
-    link: "/pages/Eventos/RegistrarEventos",
-    // children: [
-    //   {
-    //     title: "Eventos",
-    //     icon: "award-outline",
-    //     link: "/pages/Eventos",
-    //     children: [
-    //       {
-    //         title: "Registrar",
-    //         link: "/pages/Eventos/RegistrarEventos",
-    //       },
-    //     ],
-    //   },
-    // ],
+    link: "/pages",
+    children: [
+      {
+        title: "Admon. eventos",
+        icon: "award-outline",
+        link: "/pages/Eventos/RegistrarEventos",
+      },
+
+      {
+        title: "Seguimiento de eventos",
+        icon: "award-outline",
+        link: "/pages/Eventos/SeguimientoEvento",
+      },
+    ],
   },
 
   {

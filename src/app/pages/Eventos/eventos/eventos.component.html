@@ -12,7 +12,7 @@
               <div class="col-md-10">
                 <textarea
                   rows="2"
-                  formControlName="desEveto"
+                  formControlName="desEvento"
                   nbInput
                   fullWidth
                   shape="round"
@@ -26,15 +26,15 @@
               </div>
               <div
                 *ngIf="
-                  eventoForm.get('desEveto').invalid &&
-                  eventoForm.get('desEveto').touched
+                  eventoForm.get('desEvento').invalid &&
+                  eventoForm.get('desEvento').touched
                 "
               >
                 <p
                   class="caption status-danger"
                   *ngIf="
-                    eventoForm.get('desEveto').hasError('required') ||
-                    eventoForm.get('desEveto').hasError('incorrecto')
+                    eventoForm.get('desEvento').hasError('required') ||
+                    eventoForm.get('desEvento').hasError('incorrecto')
                   "
                 >
                   La descripción es obligatoria
@@ -42,7 +42,7 @@
 
                 <p
                   class="caption status-danger"
-                  *ngIf="eventoForm.get('desEveto').hasError('maxlength')"
+                  *ngIf="eventoForm.get('desEvento').hasError('maxlength')"
                 >
                   Debe de ingresar descripción menor o igual a 124 carácteres
                 </p>
