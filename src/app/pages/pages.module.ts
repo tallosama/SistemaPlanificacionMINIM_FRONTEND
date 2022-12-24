@@ -25,6 +25,7 @@ import { CargoModule } from "./Catalogos/Cargo/cargo.module";
 import { EntradaModule } from "./Movimientos/Entrada/entrada.module";
 import { SalidaModule } from "./Movimientos/Salida/salida.module";
 import { MensajeEntradaModule } from "./Globales/Modulo/mensaje-entrada.module";
+import { RequerimientosModule } from './Requerimientos/requerimientos.module';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { MensajeEntradaModule } from "./Globales/Modulo/mensaje-entrada.module";
     EntradaModule,
     SalidaModule,
     MensajeEntradaModule,
+    RequerimientosModule,
   ],
   declarations: [PagesComponent],
 })

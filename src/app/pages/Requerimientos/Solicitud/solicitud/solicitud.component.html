@@ -1,8 +1,8 @@
 <nb-card>
-  <nb-card-header>Seguimiento de eventos</nb-card-header>
+  <nb-card-header>Solicitud de requerimientos</nb-card-header>
   <nb-card-body>
     <div class="row">
-      <div class="col-md-5">
+      <div class="col-md-6">
         <div class="form-group">
           <label class="label">Planificación</label>
           <ng-autocomplete
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="col-md-5">
+      <div class="col-md-6">
         <div class="form-group">
           <label class="label">Eventos</label>
           <ng-autocomplete
@@ -52,9 +52,9 @@
         </div>
       </div>
 
-      <div class="col-md-2">
+      <!-- <div class="col-md-2">
         <button (click)="registros()" nbButton status="primary">Buscar</button>
-      </div>
+      </div> -->
     </div>
 
     <br />
@@ -63,11 +63,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label class="label">Detalles de eventos</label>
-          <ng2-smart-table
-            [settings]="settingsDetalle"
-            [source]="smartDetalle"
-            (edit)="asignarSeguimiento($event)"
-          >
+          <ng2-smart-table [settings]="settingsDetalle" [source]="smartDetalle">
           </ng2-smart-table>
         </div>
       </div>
@@ -76,7 +72,7 @@
 
   <nb-card-footer>
     <!-- <button [routerLink]="['../ListarAreas']" nbButton status="success">
-            Atrás
-          </button> -->
+              Atrás
+            </button> -->
   </nb-card-footer>
 </nb-card>

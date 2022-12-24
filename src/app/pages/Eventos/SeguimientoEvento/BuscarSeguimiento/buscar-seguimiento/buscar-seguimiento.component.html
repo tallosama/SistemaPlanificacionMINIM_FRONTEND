@@ -1,0 +1,189 @@
+<nb-card>
+  <nb-card-header>Seguimiento de eventos realizados</nb-card-header>
+  <nb-card-body>
+    <br />
+
+    <div class="row">
+      <div class="col-md-8">
+        <div class="form-group">
+          <label class="label">Detalles de eventos</label>
+          <ng2-smart-table
+            [settings]="settingsSeguimiento"
+            [source]="smartSeguimiento"
+            (edit)="cargarForm($event)"
+            (delete)="confirmacion($event)"
+          >
+          </ng2-smart-table>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <form [formGroup]="asignacionForm" *ngIf="asignacionForm">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Resultados</label>
+                <textarea
+                  rows="5"
+                  formControlName="resultados"
+                  nbInput
+                  fullWidth
+                  shape="round"
+                  placeholder="Resultados obtenidos"
+                ></textarea>
+
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    asignacionForm.get('resultados').touched &&
+                    asignacionForm.get('resultados').hasError('maxlength')
+                  "
+                >
+                  Debe de ingresar un resultado menor a 1024 carácteres
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Incidencias</label>
+                <textarea
+                  rows="5"
+                  formControlName="incidencias"
+                  nbInput
+                  fullWidth
+                  shape="round"
+                  placeholder="Incidencias presentadas"
+                ></textarea>
+
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    asignacionForm.get('incidencias').touched &&
+                    asignacionForm.get('incidencias').hasError('maxlength')
+                  "
+                >
+                  Debe de ingresar una incidencia menor a 1024 carácteres
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label">Cantidad de mujeres</label>
+                <input
+                  type="number"
+                  formControlName="cantMujeres"
+                  nbInput
+                  fullWidth
+                  (keyup)="actualizarTotal()"
+                  (click)="actualizarTotal()"
+                />
+                <!-- <input
+            #cantMujeres
+            type="number"
+            formControlName="cantMujeres"
+            nbInput
+            fullWidth
+          /> -->
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    asignacionForm.get('cantMujeres').hasError('required') &&
+                    asignacionForm.get('cantMujeres').touched &&
+                    asignacionForm.get('cantMujeres').invalid
+                  "
+                >
+                  Debe de ingresar una cantidad de mujeres
+                </p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label">Cantidad de varones</label>
+                <input
+                  type="number"
+                  formControlName="cantVarones"
+                  nbInput
+                  fullWidth
+                  (keyup)="actualizarTotal()"
+                  (click)="actualizarTotal()"
+                />
+
+                <!-- <input
+            type="number"
+            #cantVarones
+            formControlName="cantVarones"
+            nbInput
+            fullWidth
+          /> -->
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    asignacionForm.get('cantVarones').hasError('required') &&
+                    asignacionForm.get('cantVarones').touched &&
+                    asignacionForm.get('cantVarones').invalid
+                  "
+                >
+                  Debe de ingresar una cantidad de mujeres
+                </p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label">Cantidad total</label>
+                <input
+                  type="number"
+                  formControlName="participantesReal"
+                  nbInput
+                  fullWidth
+                  [attr.disabled]="true"
+                  #participantesReales
+                />
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    asignacionForm
+                      .get('participantesReal')
+                      .hasError('required') &&
+                    asignacionForm.get('participantesReal').touched &&
+                    asignacionForm.get('participantesReal').invalid
+                  "
+                >
+                  Debe de ingresar una cantidad de participantes total
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="asignacionForm.invalid"
+            nbButton
+            status="success"
+            (click)="editar()"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            (click)="cancelar()"
+            [disabled]="seguimientoSeleccionado == null"
+            nbButton
+            status="warning"
+          >
+            Cancelar
+          </button>
+        </form>
+      </div>
+    </div>
+  </nb-card-body>
+
+  <nb-card-footer>
+    <button type="button" (click)="cerrar()" nbButton status="danger">
+      Cerrar
+    </button></nb-card-footer
+  >
+</nb-card>

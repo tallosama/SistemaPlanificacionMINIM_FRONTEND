@@ -1,20 +1,18 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NbDialogService, NbToastrService } from "@nebular/theme";
 import { LocalDataSource } from "ng2-smart-table";
-import { Subscription } from "rxjs";
-import { Util } from "../../Globales/Util";
-import { PlanificacionService } from "../../Planificacion/planificacion.service";
-import { DetalleEventoService } from "../detalle-evento.service";
-import { EventosService } from "../eventos.service";
-import { AsignarSeguimientoComponent } from "../SeguimientoEvento/Asignacion/asignar-seguimiento/asignar-seguimiento.component";
-import { BuscarSeguimientoComponent } from "../SeguimientoEvento/BuscarSeguimiento/buscar-seguimiento/buscar-seguimiento.component";
+import { Subscription } from "rxjs-compat";
+import { DetalleEventoService } from "../../../Eventos/detalle-evento.service";
+import { EventosService } from "../../../Eventos/eventos.service";
+import { Util } from "../../../Globales/Util";
+import { PlanificacionService } from "../../../Planificacion/planificacion.service";
 
 @Component({
-  selector: "ngx-seguimiento-evento",
-  templateUrl: "./seguimiento-evento.component.html",
-  styleUrls: ["./seguimiento-evento.component.scss"],
+  selector: "ngx-solicitud",
+  templateUrl: "./solicitud.component.html",
+  styleUrls: ["./solicitud.component.scss"],
 })
-export class SeguimientoEventoComponent implements OnInit, OnDestroy {
+export class SolicitudComponent implements OnInit, OnDestroy {
   keyword = ["desEvento", "descripcion"];
   usuario: any;
   fecha = new Date().toISOString().slice(0, 10);
@@ -35,6 +33,7 @@ export class SeguimientoEventoComponent implements OnInit, OnDestroy {
       columnTitle: "Agregar seguimiento",
       add: false,
       delete: false,
+      edit: false,
     },
     pager: {
       display: true,
@@ -141,52 +140,7 @@ export class SeguimientoEventoComponent implements OnInit, OnDestroy {
       )
     );
   }
-  public asignarSeguimiento(elemento) {
-    let detalleSeleccionado = elemento.data;
-    if (detalleSeleccionado.estado === "Pendiente") {
-      this.subscripciones.push(
-        this.dialogService
-          .open(AsignarSeguimientoComponent, {
-            context: {
-              detalleEvento: detalleSeleccionado,
-            },
-          })
-          .onClose.subscribe((res) => {
-            if (res) {
-              this.construirDetalles(this.eventoSeleccionado);
-              Util.showToast(
-                "success",
-                "Acción realizada",
-                "Se ha ingresado el registro",
-                4000,
-                this.toastrService
-              );
-            }
-          })
-      );
-    } else {
-      Util.showToast(
-        "warning",
-        "Atención",
-        "El evento seleccionado ya posee un seguimiento ",
-        4000,
-        this.toastrService
-      );
-    }
-  }
-  public registros(): void {
-    this.subscripciones.push(
-      this.dialogService
-        .open(BuscarSeguimientoComponent, {
-          context: {
-            eventoId: this.eventoSeleccionado,
-          },
-        })
-        .onClose.subscribe(() => {
-          this.construirDetalles(this.eventoSeleccionado);
-        })
-    );
-  }
+
   ngOnInit(): void {
     this.autocompletadoPlan();
   }

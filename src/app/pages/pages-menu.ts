@@ -30,7 +30,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  {
+    title: "Requerimientos",
+    icon: "award-outline",
+    link: "/pages",
+    children: [
+      {
+        title: "Solicitud",
+        icon: "award-outline",
+        link: "/pages/Requerimientos/SolicitudRequerimientos",
+      },
 
+      {
+        title: "Seguimiento de eventos",
+        icon: "award-outline",
+        link: "/pages/Eventos/SeguimientoEvento",
+      },
+    ],
+  },
   {
     title: "Planificación",
     icon: "book-open-outline",

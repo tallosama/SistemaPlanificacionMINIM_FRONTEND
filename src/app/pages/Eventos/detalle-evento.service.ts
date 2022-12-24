@@ -17,6 +17,12 @@ export class DetalleEventoService {
       evento
     );
   }
+  cambiarEstado(id: number, estado: string): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "detalleEvento/estado/" + id,
+      estado
+    );
+  }
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "detalleEvento/");
   }

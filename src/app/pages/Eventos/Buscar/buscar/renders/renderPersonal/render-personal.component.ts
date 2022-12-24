@@ -14,7 +14,6 @@ export class RenderPersonalComponent implements ViewCell, OnInit {
   //@Input() icono: string;
   @Input() rowData: any;
   //rowData: any;
-
   @Output() eventData: EventEmitter<any> = new EventEmitter();
 
   ngOnInit() {

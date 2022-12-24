@@ -22,9 +22,12 @@ import { PersonasAsignadasComponent } from "./Buscar/personas-asignadas/personas
 import { AsignarSectoresComponent } from './Buscar/asignar-sectores/asignar-sectores.component';
 import { SeguimientoEventoComponent } from './seguimiento-evento/seguimiento-evento.component';
 import { AsignarSeguimientoComponent } from './SeguimientoEvento/Asignacion/asignar-seguimiento/asignar-seguimiento.component';
+import { BuscarSeguimientoComponent } from './SeguimientoEvento/BuscarSeguimiento/buscar-seguimiento/buscar-seguimiento.component';
+import { RenderSeguimientoComponent } from './SeguimientoEvento/BuscarSeguimiento/Renders/render-seguimiento/render-seguimiento.component';
+import { RenderSeguimientoMunicipioComponent } from './SeguimientoEvento/BuscarSeguimiento/Renders/render-seguimiento-municipio/render-seguimiento-municipio.component';
 
 @NgModule({
-  declarations: [EventosComponent, BuscarComponent, PersonasAsignadasComponent, AsignarSectoresComponent, SeguimientoEventoComponent, AsignarSeguimientoComponent],
+  declarations: [EventosComponent, BuscarComponent, PersonasAsignadasComponent, AsignarSectoresComponent, SeguimientoEventoComponent, AsignarSeguimientoComponent, BuscarSeguimientoComponent, RenderSeguimientoComponent, RenderSeguimientoMunicipioComponent],
   imports: [
     CommonModule,
     EventosRoutingModule,
