@@ -6,6 +6,8 @@ import { DetalleEventoService } from "../../../Eventos/detalle-evento.service";
 import { EventosService } from "../../../Eventos/eventos.service";
 import { Util } from "../../../Globales/Util";
 import { PlanificacionService } from "../../../Planificacion/planificacion.service";
+import { SolicitudRequerimientoComponent } from "../Modales/solicitud-requerimiento/solicitud-requerimiento.component";
+import { RenderRequerimientoComponent } from "../Renders/render-requerimiento/render-requerimiento.component";
 
 @Component({
   selector: "ngx-solicitud",
@@ -46,10 +48,6 @@ export class SolicitudComponent implements OnInit, OnDestroy {
           return data.desMunicipio;
         },
       },
-      observaciones: {
-        title: "Observación",
-        type: "string",
-      },
       fecha: {
         title: "Fecha",
         type: "string",
@@ -58,6 +56,11 @@ export class SolicitudComponent implements OnInit, OnDestroy {
         title: "Hora",
         type: "string",
       },
+      observaciones: {
+        title: "Observación",
+        type: "string",
+      },
+
       participantesProyectado: {
         title: "Participantes",
         type: "number",
@@ -66,6 +69,39 @@ export class SolicitudComponent implements OnInit, OnDestroy {
         title: "Estado",
         type: "string",
       },
+      renderRequerimiento: {
+        filter: false,
+        title: "Solicitar requerimientos",
+        type: "custom",
+        renderComponent: RenderRequerimientoComponent,
+        onComponentInitFunction: (instance) => {
+          instance.eventData.subscribe((detalleEvento) => {
+            this.abrirModal(detalleEvento, SolicitudRequerimientoComponent);
+          });
+        },
+      },
+      // renderMaterial: {
+      //   filter: false,
+      //   title: "Solicitar materiales",
+      //   type: "custom",
+      //   renderComponent: RenderMaterialesComponent,
+      //   onComponentInitFunction: (instance) => {
+      //     instance.eventData.subscribe((detalleEvento) => {
+      //       this.abrirModal(detalleEvento, SolicitudMaterialComponent);
+      //     });
+      //   },
+      // },
+      // renderTransporte: {
+      //   filter: false,
+      //   title: "Solicitar Transporte",
+      //   type: "custom",
+      //   renderComponent: RenderTransporteComponent,
+      //   onComponentInitFunction: (instance) => {
+      //     instance.eventData.subscribe((detalleEvento) => {
+      //       this.abrirModal(detalleEvento, SolicitudTransporteComponent);
+      //     });
+      //   },
+      // },
     },
   };
 
@@ -76,7 +112,19 @@ export class SolicitudComponent implements OnInit, OnDestroy {
     private toastrService: NbToastrService,
     private dialogService: NbDialogService
   ) {}
-
+  ngOnInit(): void {
+    this.autocompletadoPlan();
+  }
+  ngOnDestroy(): void {
+    this.subscripciones.forEach((s) => s.unsubscribe());
+  }
+  abrirModal(detalleEvento, componenteAbrir) {
+    this.dialogService.open(componenteAbrir, {
+      context: {
+        data: detalleEvento,
+      },
+    });
+  }
   autocompletadoPlan(): void {
     this.subscripciones.push(
       this.planService.listar().subscribe(
@@ -139,12 +187,5 @@ export class SolicitudComponent implements OnInit, OnDestroy {
         }
       )
     );
-  }
-
-  ngOnInit(): void {
-    this.autocompletadoPlan();
-  }
-  ngOnDestroy(): void {
-    this.subscripciones.forEach((s) => s.unsubscribe());
   }
 }

@@ -10,12 +10,18 @@ import {
   NbCardModule,
   NbDialogModule,
   NbInputModule,
+  NbSelectModule,
 } from "@nebular/theme";
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { RenderEquipoComponent } from "./Solicitud/Renders/render-equipo/render-equipo.component";
 import { RenderMaterialesComponent } from "./Solicitud/Renders/render-materiales/render-materiales.component";
 import { RenderTransporteComponent } from "./Solicitud/Renders/render-transporte/render-transporte.component";
+import { SolicitudEquipoComponent } from "./Solicitud/Modales/solicitud-equipo/solicitud-equipo.component";
+import { SolicitudMaterialComponent } from "./Solicitud/Modales/solicitud-material/solicitud-material.component";
+import { SolicitudTransporteComponent } from "./Solicitud/Modales/solicitud-transporte/solicitud-transporte.component";
+import { SolicitudRequerimientoComponent } from "./Solicitud/Modales/solicitud-requerimiento/solicitud-requerimiento.component";
+import { RenderRequerimientoComponent } from "./Solicitud/Renders/render-requerimiento/render-requerimiento.component";
 
 @NgModule({
   declarations: [
@@ -23,6 +29,11 @@ import { RenderTransporteComponent } from "./Solicitud/Renders/render-transporte
     RenderEquipoComponent,
     RenderMaterialesComponent,
     RenderTransporteComponent,
+    SolicitudEquipoComponent,
+    SolicitudMaterialComponent,
+    SolicitudTransporteComponent,
+    SolicitudRequerimientoComponent,
+    RenderRequerimientoComponent,
   ],
   imports: [
     CommonModule,
@@ -54,7 +65,7 @@ import { RenderTransporteComponent } from "./Solicitud/Renders/render-transporte
 
     //Stmarttable
     Ng2SmartTableModule,
-    // NbSelectModule,
+    NbSelectModule,
   ],
 })
 export class RequerimientosModule {}

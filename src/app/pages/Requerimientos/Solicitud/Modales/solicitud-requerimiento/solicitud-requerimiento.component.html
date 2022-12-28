@@ -1,0 +1,98 @@
+<nb-card>
+  <nb-card-header>Formulario de solicitud</nb-card-header>
+  <nb-card-body>
+    <form
+      [formGroup]="requerimientoForm"
+      *ngIf="requerimientoForm"
+      (ngSubmit)="guardar()"
+    >
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="label">Tipo de requerimiento</label>
+            <nb-select
+              formControlName="tipoRequerimiento"
+              placeholder="Tipos"
+              class="col-md-12"
+              shape="semi-round"
+              (selectedChange)="reconstruirAutoCompletado($event)"
+            >
+              <nb-option *ngFor="let t of tipos" [value]="t">{{ t }}</nb-option>
+            </nb-select>
+
+            <div
+              *ngIf="
+                requerimientoForm.get('desRequerimiento').touched &&
+                requerimientoForm.get('desRequerimiento').invalid
+              "
+            >
+              <p
+                class="caption status-danger"
+                *ngIf="
+                  requerimientoForm
+                    .get('desRequerimiento')
+                    .hasError('maxlength')
+                "
+              >
+                Debe de ingresar un requerimiento menor a 512 carácteres
+              </p>
+              <p
+                class="caption status-danger"
+                *ngIf="
+                  requerimientoForm.get('desRequerimiento').hasError('required')
+                "
+              >
+                Debe de seleccionar un requerimiento
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="label"
+              >Listado de material, equipo y transporte</label
+            >
+            <ng-autocomplete
+              [data]="data"
+              [searchKeyword]="keyword"
+              [itemTemplate]="itemTemplate"
+              [notFoundTemplate]="notFoundTemplate"
+              placeholder="Ingrese la descripción"
+              notFoundText="No se encontró"
+              formControlName="desRequerimiento"
+            >
+            </ng-autocomplete>
+
+            <ng-template #itemTemplate let-item>
+              <div *ngIf="keyword == 'descripcion'">
+                <a [innerHTML]="item.descripcion"></a>
+              </div>
+
+              <div *ngIf="keyword == 'desVehiculo'">
+                <a [innerHTML]="item.desVehiculo"></a>
+              </div>
+            </ng-template>
+
+            <ng-template #notFoundTemplate let-notFound>
+              <div [innerHTML]="notFound"></div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="requerimientoForm.invalid"
+        nbButton
+        status="success"
+      >
+        Guardar
+      </button>
+    </form>
+  </nb-card-body>
+
+  <nb-card-footer>
+    <button nbButton status="danger" (click)="cerrar()">Cancelar</button>
+  </nb-card-footer>
+</nb-card>

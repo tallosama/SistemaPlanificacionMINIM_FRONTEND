@@ -47,10 +47,6 @@ export class SeguimientoEventoComponent implements OnInit, OnDestroy {
           return data.desMunicipio;
         },
       },
-      observaciones: {
-        title: "Observación",
-        type: "string",
-      },
       fecha: {
         title: "Fecha",
         type: "string",
@@ -59,6 +55,11 @@ export class SeguimientoEventoComponent implements OnInit, OnDestroy {
         title: "Hora",
         type: "string",
       },
+      observaciones: {
+        title: "Observación",
+        type: "string",
+      },
+
       participantesProyectado: {
         title: "Participantes",
         type: "number",
