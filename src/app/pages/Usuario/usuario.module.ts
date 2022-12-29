@@ -12,11 +12,10 @@ import {
   NbSelectModule,
   NbStepperModule,
 } from "@nebular/theme";
-import { DataTablesModule } from "angular-datatables";
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
 import { Ng2SmartTableModule } from "ng2-smart-table";
-import { ListadoComponent } from './Listado/listado/listado.component';
-import { EditarComponent } from './Editar/editar/editar.component';
+import { ListadoComponent } from "./Listado/listado/listado.component";
+import { EditarComponent } from "./Editar/editar/editar.component";
 
 @NgModule({
   declarations: [CrearUsuarioComponent, ListadoComponent, EditarComponent],
@@ -36,8 +35,6 @@ import { EditarComponent } from './Editar/editar/editar.component';
     NbButtonModule,
 
     NbDialogModule.forChild(),
-    //Datatables
-    DataTablesModule,
     //para mostrar paso a paso
     NbStepperModule,
     //Modulo de autocompletado

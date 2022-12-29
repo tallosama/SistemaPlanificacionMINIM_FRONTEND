@@ -13,7 +13,6 @@ import {
 } from "@nebular/theme";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { DataTablesModule } from "angular-datatables";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 
 @NgModule({
@@ -36,8 +35,6 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
     NbButtonModule,
 
     NbDialogModule.forChild(),
-    //Datatables
-    DataTablesModule,
 
     ////Stmarttable
     Ng2SmartTableModule,

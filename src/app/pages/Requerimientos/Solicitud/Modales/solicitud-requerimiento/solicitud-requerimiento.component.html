@@ -1,98 +1,199 @@
 <nb-card>
   <nb-card-header>Formulario de solicitud</nb-card-header>
   <nb-card-body>
-    <form
-      [formGroup]="requerimientoForm"
-      *ngIf="requerimientoForm"
-      (ngSubmit)="guardar()"
-    >
+    <form [formGroup]="requerimientoForm" *ngIf="requerimientoForm">
       <div class="row">
         <div class="col-md-6">
-          <div class="form-group">
-            <label class="label">Tipo de requerimiento</label>
-            <nb-select
-              formControlName="tipoRequerimiento"
-              placeholder="Tipos"
-              class="col-md-12"
-              shape="semi-round"
-              (selectedChange)="reconstruirAutoCompletado($event)"
-            >
-              <nb-option *ngFor="let t of tipos" [value]="t">{{ t }}</nb-option>
-            </nb-select>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Tipo de requerimiento</label>
+                <nb-select
+                  formControlName="tipoRequerimiento"
+                  placeholder="Tipos"
+                  class="col-md-12"
+                  shape="semi-round"
+                  (selectedChange)="reconstruirAutoCompletado($event)"
+                >
+                  <nb-option *ngFor="let t of tipos" [value]="t">{{
+                    t
+                  }}</nb-option>
+                </nb-select>
 
-            <div
-              *ngIf="
-                requerimientoForm.get('desRequerimiento').touched &&
-                requerimientoForm.get('desRequerimiento').invalid
-              "
-            >
-              <p
-                class="caption status-danger"
-                *ngIf="
-                  requerimientoForm
-                    .get('desRequerimiento')
-                    .hasError('maxlength')
-                "
-              >
-                Debe de ingresar un requerimiento menor a 512 carácteres
-              </p>
-              <p
-                class="caption status-danger"
-                *ngIf="
-                  requerimientoForm.get('desRequerimiento').hasError('required')
-                "
-              >
-                Debe de seleccionar un requerimiento
-              </p>
+                <div
+                  *ngIf="
+                    requerimientoForm.get('tipoRequerimiento').touched &&
+                    requerimientoForm.get('tipoRequerimiento').invalid
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      requerimientoForm
+                        .get('tipoRequerimiento')
+                        .hasError('maxlength')
+                    "
+                  >
+                    Debe de ingresar un tipo de requerimiento menor a 32
+                    carácteres
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      requerimientoForm
+
+                        .get('tipoRequerimiento')
+                        .hasError('required')
+                    "
+                  >
+                    Debe de seleccionar un tipo de requerimiento
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label"
+                  >Listado de material, equipo y transporte</label
+                >
+                <ng-autocomplete
+                  [data]="data"
+                  [searchKeyword]="keyword"
+                  [itemTemplate]="itemTemplate"
+                  [notFoundTemplate]="notFoundTemplate"
+                  placeholder="Ingrese la descripción"
+                  notFoundText="No se encontró"
+                  formControlName="desRequerimiento"
+                >
+                </ng-autocomplete>
+
+                <ng-template #itemTemplate let-item>
+                  <div *ngIf="keyword == 'descripcion'">
+                    <a [innerHTML]="item.descripcion"></a>
+                  </div>
+
+                  <div *ngIf="keyword == 'desVehiculo'">
+                    <a [innerHTML]="item.desVehiculo"></a>
+                  </div>
+                </ng-template>
+
+                <ng-template #notFoundTemplate let-notFound>
+                  <div [innerHTML]="notFound"></div>
+                </ng-template>
+
+                <div
+                  *ngIf="
+                    requerimientoForm.get('desRequerimiento').touched &&
+                    requerimientoForm.get('desRequerimiento').invalid
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      requerimientoForm
+                        .get('desRequerimiento')
+                        .hasError('maxlength')
+                    "
+                  >
+                    Debe de ingresar un requerimiento menor a 512 carácteres
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      requerimientoForm
+                        .get('desRequerimiento')
+                        .hasError('incorrecto') ||
+                      requerimientoForm
+                        .get('desRequerimiento')
+                        .hasError('required')
+                    "
+                  >
+                    Debe de seleccionar un requerimiento
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Cantidad solicitada</label>
+                <input
+                  type="number"
+                  formControlName="cantidadSolicitada"
+                  nbInput
+                  fullWidth
+                />
+
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    requerimientoForm
+                      .get('cantidadSolicitada')
+                      .hasError('required') &&
+                    requerimientoForm.get('cantidadSolicitada').touched &&
+                    requerimientoForm.get('cantidadSolicitada').invalid
+                  "
+                >
+                  Debe de ingresar una cantidad a solicitar
+                </p>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="label">Estado</label>
+                <input
+                  type="text"
+                  formControlName="estado"
+                  [attr.disabled]="true"
+                  nbInput
+                  fullWidth
+                />
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    requerimientoForm.get('estado').hasError('required') &&
+                    requerimientoForm.get('estado').touched &&
+                    requerimientoForm.get('estado').invalid
+                  "
+                >
+                  Debe de ingresar un estado
+                </p>
+              </div>
             </div>
           </div>
         </div>
-
         <div class="col-md-6">
-          <div class="form-group">
-            <label class="label"
-              >Listado de material, equipo y transporte</label
-            >
-            <ng-autocomplete
-              [data]="data"
-              [searchKeyword]="keyword"
-              [itemTemplate]="itemTemplate"
-              [notFoundTemplate]="notFoundTemplate"
-              placeholder="Ingrese la descripción"
-              notFoundText="No se encontró"
-              formControlName="desRequerimiento"
-            >
-            </ng-autocomplete>
-
-            <ng-template #itemTemplate let-item>
-              <div *ngIf="keyword == 'descripcion'">
-                <a [innerHTML]="item.descripcion"></a>
-              </div>
-
-              <div *ngIf="keyword == 'desVehiculo'">
-                <a [innerHTML]="item.desVehiculo"></a>
-              </div>
-            </ng-template>
-
-            <ng-template #notFoundTemplate let-notFound>
-              <div [innerHTML]="notFound"></div>
-            </ng-template>
-          </div>
+          <ng2-smart-table
+            [settings]="settingsRequerimientos"
+            [source]="smartRequerimientosAsignados"
+            (edit)="editarRegistro($event)"
+            (delete)="confirmacion($event)"
+          >
+          </ng2-smart-table>
         </div>
       </div>
+      <div class="row">
+        <button
+          nbButton
+          [disabled]="requerimientoForm.invalid"
+          status="success"
+          (click)="agregar()"
+        >
+          Agregar
+        </button>
+        <button nbButton status="warning" (click)="cargarForm()">
+          Cancelar
+        </button>
 
-      <button
-        type="submit"
-        [disabled]="requerimientoForm.invalid"
-        nbButton
-        status="success"
-      >
-        Guardar
-      </button>
+        <button nbButton status="info" (click)="guardar()">Guardar todo</button>
+      </div>
     </form>
   </nb-card-body>
 
   <nb-card-footer>
-    <button nbButton status="danger" (click)="cerrar()">Cancelar</button>
+    <button nbButton status="danger" (click)="cerrar()">Cerrar</button>
   </nb-card-footer>
 </nb-card>

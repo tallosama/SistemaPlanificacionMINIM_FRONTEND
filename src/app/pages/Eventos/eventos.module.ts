@@ -13,21 +13,30 @@ import {
   NbStepperModule,
   NbTimepickerModule,
 } from "@nebular/theme";
-import { DataTablesModule } from "angular-datatables";
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
 import { EventosComponent } from "./eventos/eventos.component";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { BuscarComponent } from "./Buscar/buscar/buscar.component";
 import { PersonasAsignadasComponent } from "./Buscar/personas-asignadas/personas-asignadas.component";
-import { AsignarSectoresComponent } from './Buscar/asignar-sectores/asignar-sectores.component';
-import { SeguimientoEventoComponent } from './seguimiento-evento/seguimiento-evento.component';
-import { AsignarSeguimientoComponent } from './SeguimientoEvento/Asignacion/asignar-seguimiento/asignar-seguimiento.component';
-import { BuscarSeguimientoComponent } from './SeguimientoEvento/BuscarSeguimiento/buscar-seguimiento/buscar-seguimiento.component';
-import { RenderSeguimientoComponent } from './SeguimientoEvento/BuscarSeguimiento/Renders/render-seguimiento/render-seguimiento.component';
-import { RenderSeguimientoMunicipioComponent } from './SeguimientoEvento/BuscarSeguimiento/Renders/render-seguimiento-municipio/render-seguimiento-municipio.component';
+import { AsignarSectoresComponent } from "./Buscar/asignar-sectores/asignar-sectores.component";
+import { SeguimientoEventoComponent } from "./seguimiento-evento/seguimiento-evento.component";
+import { AsignarSeguimientoComponent } from "./SeguimientoEvento/Asignacion/asignar-seguimiento/asignar-seguimiento.component";
+import { BuscarSeguimientoComponent } from "./SeguimientoEvento/BuscarSeguimiento/buscar-seguimiento/buscar-seguimiento.component";
+import { RenderSeguimientoComponent } from "./SeguimientoEvento/BuscarSeguimiento/Renders/render-seguimiento/render-seguimiento.component";
+import { RenderSeguimientoMunicipioComponent } from "./SeguimientoEvento/BuscarSeguimiento/Renders/render-seguimiento-municipio/render-seguimiento-municipio.component";
 
 @NgModule({
-  declarations: [EventosComponent, BuscarComponent, PersonasAsignadasComponent, AsignarSectoresComponent, SeguimientoEventoComponent, AsignarSeguimientoComponent, BuscarSeguimientoComponent, RenderSeguimientoComponent, RenderSeguimientoMunicipioComponent],
+  declarations: [
+    EventosComponent,
+    BuscarComponent,
+    PersonasAsignadasComponent,
+    AsignarSectoresComponent,
+    SeguimientoEventoComponent,
+    AsignarSeguimientoComponent,
+    BuscarSeguimientoComponent,
+    RenderSeguimientoComponent,
+    RenderSeguimientoMunicipioComponent,
+  ],
   imports: [
     CommonModule,
     EventosRoutingModule,
@@ -44,8 +53,6 @@ import { RenderSeguimientoMunicipioComponent } from './SeguimientoEvento/BuscarS
     NbButtonModule,
 
     NbDialogModule.forChild(),
-    //Datatables
-    DataTablesModule,
     //para mostrar paso a paso
     NbStepperModule,
     //Modulo de autocompletado

@@ -36,7 +36,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: "/pages",
     children: [
       {
-        title: "Solicitud",
+        title: "Solicitar",
         icon: "award-outline",
         link: "/pages/Requerimientos/SolicitudRequerimientos",
       },

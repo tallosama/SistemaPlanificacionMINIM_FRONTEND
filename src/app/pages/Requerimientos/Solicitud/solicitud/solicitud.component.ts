@@ -118,10 +118,10 @@ export class SolicitudComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
-  abrirModal(detalleEvento, componenteAbrir) {
+  abrirModal(detalleEventoParam, componenteAbrir) {
     this.dialogService.open(componenteAbrir, {
       context: {
-        data: detalleEvento,
+        detalleEvento: detalleEventoParam,
       },
     });
   }
