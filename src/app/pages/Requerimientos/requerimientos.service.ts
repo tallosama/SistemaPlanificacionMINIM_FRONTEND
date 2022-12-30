@@ -47,4 +47,9 @@ export class RequerimientosService {
       ApiServe.API_SERVER + "requerimiento/detalleEvento/" + detalleId
     );
   }
+  listarPorTipoYEstado(tipo: string, estado: string): Observable<any> {
+    return this.httpclient.get(
+      ApiServe.API_SERVER + "requerimiento/tipoYEstado/" + tipo + "/" + estado
+    );
+  }
 }

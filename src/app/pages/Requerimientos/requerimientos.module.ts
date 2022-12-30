@@ -14,10 +14,6 @@ import {
 } from "@nebular/theme";
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
 import { Ng2SmartTableModule } from "ng2-smart-table";
-import { RenderEquipoComponent } from "./Solicitud/Renders/render-equipo/render-equipo.component";
-import { RenderTransporteComponent } from "./Solicitud/Renders/render-transporte/render-transporte.component";
-import { SolicitudEquipoComponent } from "./Solicitud/Modales/solicitud-equipo/solicitud-equipo.component";
-import { SolicitudTransporteComponent } from "./Solicitud/Modales/solicitud-transporte/solicitud-transporte.component";
 import { SolicitudRequerimientoComponent } from "./Solicitud/Modales/solicitud-requerimiento/solicitud-requerimiento.component";
 import { RenderRequerimientoComponent } from "./Solicitud/Renders/render-requerimiento/render-requerimiento.component";
 import { RenderAprobacionComponent } from "./Solicitud/Renders/render-aprobacion/render-aprobacion.component";
@@ -26,12 +22,8 @@ import { AprobacionComponent } from "./Solicitud/Modales/aprobacion/aprobacion.c
 @NgModule({
   declarations: [
     SolicitudComponent,
-    RenderEquipoComponent,
     RenderAprobacionComponent,
-    RenderTransporteComponent,
-    SolicitudEquipoComponent,
     AprobacionComponent,
-    SolicitudTransporteComponent,
     SolicitudRequerimientoComponent,
     RenderRequerimientoComponent,
   ],

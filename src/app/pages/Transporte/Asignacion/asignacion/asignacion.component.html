@@ -1,0 +1,22 @@
+<nb-card>
+  <nb-card-header>Asignación de transportes</nb-card-header>
+  <nb-card-body>
+    <br />
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="label">Requerimientos de transportes</label>
+          <ng2-smart-table
+            [settings]="settingsRequerimientos"
+            [source]="smartRequerimientos"
+            (edit)="asignarTransporte($event)"
+          >
+          </ng2-smart-table>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+
+  <nb-card-footer> </nb-card-footer>
+</nb-card>

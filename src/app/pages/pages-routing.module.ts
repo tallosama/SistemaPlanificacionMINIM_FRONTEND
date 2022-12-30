@@ -129,6 +129,13 @@ const routes: Routes = [
             (a) => a.RequerimientosModule
           ),
       },
+      {
+        path: "Transporte",
+        loadChildren: () =>
+          import("./Transporte/transporte.module").then(
+            (a) => a.TransporteModule
+          ),
+      },
 
       {
         path: "forms",

@@ -13,64 +13,27 @@ export const MENU_ITEMS: NbMenuItem[] = [
   //   link: "/pages/iot-dashboard",
   // },
   {
-    title: "Eventos",
-    icon: "award-outline",
-    link: "/pages",
+    title: "Asignación de recursos",
+    icon: "checkmark-circle-2-outline",
+    link: "/pages/Asignacion",
     children: [
       {
-        title: "Admon. eventos",
-        icon: "award-outline",
-        link: "/pages/Eventos/RegistrarEventos",
+        title: "Equipos",
+        icon: "speaker-outline",
+        link: "/pages/Planificacion/ListarPlanificacion",
       },
-
       {
-        title: "Seguimiento de eventos",
-        icon: "award-outline",
-        link: "/pages/Eventos/SeguimientoEvento",
+        title: "Materiales",
+        icon: "umbrella-outline",
+        link: "/pages/Planificacion/ListarPlanificacion",
+      },
+      {
+        title: "Transporte",
+        icon: "paper-plane-outline",
+        link: "/pages/Transporte/Asignacion",
       },
     ],
   },
-  {
-    title: "Requerimientos",
-    icon: "award-outline",
-    link: "/pages",
-    children: [
-      {
-        title: "Solicitar",
-        icon: "award-outline",
-        link: "/pages/Requerimientos/SolicitudRequerimientos",
-      },
-
-      {
-        title: "Seguimiento de eventos",
-        icon: "award-outline",
-        link: "/pages/Eventos/SeguimientoEvento",
-      },
-    ],
-  },
-  {
-    title: "Planificación",
-    icon: "book-open-outline",
-    link: "/pages",
-    children: [
-      {
-        title: "Programación",
-        icon: "calendar-outline",
-        link: "/pages/Planificacion",
-        children: [
-          {
-            title: "Nueva programación",
-            link: "/pages/Planificacion/RegistrarPlanificacion",
-          },
-          {
-            title: "Listar",
-            link: "/pages/Planificacion/ListarPlanificacion",
-          },
-        ],
-      },
-    ],
-  },
-
   {
     title: "Catálogos",
     icon: "book-open-outline",
@@ -207,7 +170,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
 
       {
         title: "Cargos",
-        icon: "pantone-outline",
+        icon: "person-done-outline",
         link: "/pages/Cargo/ListarCargo",
         // children: [
         //   {
@@ -223,6 +186,54 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+
+  {
+    title: "Eventos",
+    icon: "award-outline",
+    link: "/pages",
+    children: [
+      {
+        title: "Admon. eventos",
+        icon: "award-outline",
+        link: "/pages/Eventos/RegistrarEventos",
+      },
+
+      {
+        title: "Seguimiento de eventos",
+        icon: "award-outline",
+        link: "/pages/Eventos/SeguimientoEvento",
+      },
+    ],
+  },
+  {
+    title: "Requerimientos",
+    icon: "clipboard-outline",
+    link: "/pages/Requerimientos/SolicitudRequerimientos",
+  },
+
+  {
+    title: "Planificación",
+    icon: "bookmark-outline",
+    link: "/pages",
+    children: [
+      {
+        title: "Programación",
+        icon: "calendar-outline",
+        link: "/pages/Planificacion",
+        children: [
+          {
+            title: "Nueva programación",
+            link: "/pages/Planificacion/RegistrarPlanificacion",
+          },
+          {
+            title: "Listar",
+            link: "/pages/Planificacion/ListarPlanificacion",
+          },
+        ],
+      },
+    ],
+  },
+
   {
     title: "Avanzados",
     group: true,

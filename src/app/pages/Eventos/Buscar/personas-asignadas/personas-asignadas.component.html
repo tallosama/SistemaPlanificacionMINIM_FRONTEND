@@ -24,6 +24,17 @@
           <ng-template #notFoundTemplate let-notFound>
             <div [innerHTML]="notFound"></div>
           </ng-template> -->
+
+          <!-- Segunda manera de ejecutar un método, tras la selección de una opción -->
+          <!-- <nb-select placeholder="Área" class="col-md-12" shape="semi-round" (selectedChange)="reconstruirPersonalTotal($event)">
+            <nb-option
+            *ngFor="let a of areas"
+           
+            [value]="a.idArea"
+            >{{ a.desArea }}</nb-option
+          >
+          </nb-select> -->
+
           <nb-select placeholder="Área" class="col-md-12" shape="semi-round">
             <nb-option
               *ngFor="let a of areas"

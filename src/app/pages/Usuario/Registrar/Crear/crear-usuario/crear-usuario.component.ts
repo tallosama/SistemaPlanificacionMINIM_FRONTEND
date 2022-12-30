@@ -221,7 +221,7 @@ export class CrearUsuarioComponent implements OnInit, OnDestroy {
         Validators.compose([Validators.required, Validators.maxLength(128)]),
       ],
       Estado: [this.estado[0].Estado, Validators.required],
-      Rol: ["", Validators.required],
+      Rol: [this.roles[0].desRol, Validators.required],
       PersonaId: [persona.idPersona, Validators.required],
       usuarioCreacion: [this.usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
