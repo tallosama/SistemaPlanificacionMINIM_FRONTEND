@@ -6,7 +6,9 @@ import { DetalleEventoService } from "../../../Eventos/detalle-evento.service";
 import { EventosService } from "../../../Eventos/eventos.service";
 import { Util } from "../../../Globales/Util";
 import { PlanificacionService } from "../../../Planificacion/planificacion.service";
+import { AprobacionComponent } from "../Modales/aprobacion/aprobacion.component";
 import { SolicitudRequerimientoComponent } from "../Modales/solicitud-requerimiento/solicitud-requerimiento.component";
+import { RenderAprobacionComponent } from "../Renders/render-aprobacion/render-aprobacion.component";
 import { RenderRequerimientoComponent } from "../Renders/render-requerimiento/render-requerimiento.component";
 
 @Component({
@@ -80,17 +82,17 @@ export class SolicitudComponent implements OnInit, OnDestroy {
           });
         },
       },
-      // renderMaterial: {
-      //   filter: false,
-      //   title: "Solicitar materiales",
-      //   type: "custom",
-      //   renderComponent: RenderMaterialesComponent,
-      //   onComponentInitFunction: (instance) => {
-      //     instance.eventData.subscribe((detalleEvento) => {
-      //       this.abrirModal(detalleEvento, SolicitudMaterialComponent);
-      //     });
-      //   },
-      // },
+      renderAprobacion: {
+        filter: false,
+        title: "Aprobación de requerimientos",
+        type: "custom",
+        renderComponent: RenderAprobacionComponent,
+        onComponentInitFunction: (instance) => {
+          instance.eventData.subscribe((detalleEvento) => {
+            this.abrirModal(detalleEvento, AprobacionComponent);
+          });
+        },
+      },
       // renderTransporte: {
       //   filter: false,
       //   title: "Solicitar Transporte",

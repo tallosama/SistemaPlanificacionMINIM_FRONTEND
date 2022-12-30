@@ -1,0 +1,135 @@
+<nb-card>
+  <nb-card-header>Aprobación de requerimientos</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="requerimientoForm" *ngIf="requerimientoForm">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label">Estado del requerimiento</label>
+                <nb-select
+                  formControlName="estado"
+                  placeholder="Estado"
+                  class="col-md-12"
+                  shape="semi-round"
+                >
+                  <nb-option *ngFor="let e of estado" [value]="e">{{
+                    e
+                  }}</nb-option>
+                </nb-select>
+
+                <div
+                  *ngIf="
+                    requerimientoForm.get('tipoRequerimiento').touched &&
+                    requerimientoForm.get('tipoRequerimiento').invalid
+                  "
+                >
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      requerimientoForm
+                        .get('tipoRequerimiento')
+                        .hasError('maxlength')
+                    "
+                  >
+                    Debe de ingresar un tipo de requerimiento menor a 32
+                    carácteres
+                  </p>
+                  <p
+                    class="caption status-danger"
+                    *ngIf="
+                      requerimientoForm
+
+                        .get('tipoRequerimiento')
+                        .hasError('required')
+                    "
+                  >
+                    Debe de seleccionar un tipo de requerimiento
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label">Cantidad solicitada</label>
+                <input
+                  type="number"
+                  formControlName="cantidadSolicitada"
+                  nbInput
+                  fullWidth
+                  [attr.disabled]="true"
+                />
+
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    requerimientoForm
+                      .get('cantidadSolicitada')
+                      .hasError('required') &&
+                    requerimientoForm.get('cantidadSolicitada').touched &&
+                    requerimientoForm.get('cantidadSolicitada').invalid
+                  "
+                >
+                  Debe de ingresar una cantidad a solicitar
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label">Cantidad a aprobar</label>
+                <input
+                  type="number"
+                  formControlName="cantidadAprobada"
+                  nbInput
+                  fullWidth
+                />
+
+                <p
+                  class="caption status-danger"
+                  *ngIf="
+                    requerimientoForm
+                      .get('cantidadAprobada')
+                      .hasError('required') &&
+                    requerimientoForm.get('cantidadAprobada').touched &&
+                    requerimientoForm.get('cantidadAprobada').invalid
+                  "
+                >
+                  Debe de ingresar una cantidad a aprobar
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <ng2-smart-table
+            [settings]="settingsRequerimientos"
+            [source]="smartRequerimientosAsignados"
+            (edit)="aprobacion($event)"
+            (delete)="confirmacion($event)"
+          >
+          </ng2-smart-table>
+        </div>
+      </div>
+      <div class="row">
+        <button nbButton status="warning" (click)="cargarForm()">
+          Cancelar
+        </button>
+
+        <button
+          [disabled]="requerimientoForm.invalid"
+          nbButton
+          status="info"
+          (click)="guardar()"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </nb-card-body>
+
+  <nb-card-footer>
+    <button nbButton status="danger" (click)="cerrar()">Cerrar</button>
+  </nb-card-footer>
+</nb-card>

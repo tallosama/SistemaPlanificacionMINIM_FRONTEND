@@ -169,24 +169,33 @@
           <ng2-smart-table
             [settings]="settingsRequerimientos"
             [source]="smartRequerimientosAsignados"
-            (edit)="editarRegistro($event)"
+            (edit)="modificar($event)"
             (delete)="confirmacion($event)"
           >
           </ng2-smart-table>
         </div>
       </div>
       <div class="row">
-        <button
-          nbButton
-          [disabled]="requerimientoForm.invalid"
-          status="success"
-          (click)="agregar()"
-        >
-          Agregar
-        </button>
-        <button nbButton status="warning" (click)="cargarForm()">
-          Cancelar
-        </button>
+        <div *ngIf="isModificacion">
+          <button
+            nbButton
+            [disabled]="requerimientoForm.invalid"
+            status="success"
+            (click)="editar()"
+          >
+            Modificar
+          </button>
+        </div>
+        <div *ngIf="!isModificacion">
+          <button
+            nbButton
+            [disabled]="requerimientoForm.invalid"
+            status="success"
+            (click)="agregar()"
+          >
+            Agregar
+          </button>
+        </div>
 
         <button nbButton status="info" (click)="guardar()">Guardar todo</button>
       </div>

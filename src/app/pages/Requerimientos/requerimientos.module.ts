@@ -15,22 +15,22 @@ import {
 import { AutocompleteLibModule } from "angular-ng-autocomplete";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { RenderEquipoComponent } from "./Solicitud/Renders/render-equipo/render-equipo.component";
-import { RenderMaterialesComponent } from "./Solicitud/Renders/render-materiales/render-materiales.component";
 import { RenderTransporteComponent } from "./Solicitud/Renders/render-transporte/render-transporte.component";
 import { SolicitudEquipoComponent } from "./Solicitud/Modales/solicitud-equipo/solicitud-equipo.component";
-import { SolicitudMaterialComponent } from "./Solicitud/Modales/solicitud-material/solicitud-material.component";
 import { SolicitudTransporteComponent } from "./Solicitud/Modales/solicitud-transporte/solicitud-transporte.component";
 import { SolicitudRequerimientoComponent } from "./Solicitud/Modales/solicitud-requerimiento/solicitud-requerimiento.component";
 import { RenderRequerimientoComponent } from "./Solicitud/Renders/render-requerimiento/render-requerimiento.component";
+import { RenderAprobacionComponent } from "./Solicitud/Renders/render-aprobacion/render-aprobacion.component";
+import { AprobacionComponent } from "./Solicitud/Modales/aprobacion/aprobacion.component";
 
 @NgModule({
   declarations: [
     SolicitudComponent,
     RenderEquipoComponent,
-    RenderMaterialesComponent,
+    RenderAprobacionComponent,
     RenderTransporteComponent,
     SolicitudEquipoComponent,
-    SolicitudMaterialComponent,
+    AprobacionComponent,
     SolicitudTransporteComponent,
     SolicitudRequerimientoComponent,
     RenderRequerimientoComponent,
