@@ -1,0 +1,64 @@
+<nb-card>
+  <nb-card-header>Asignar sectores</nb-card-header>
+  <nb-card-body>
+    <!-- <div class="row">
+      <div class="col-md-6">
+        <div class="text-center">
+          <label class="label">Sectores</label>
+          <br />
+        </div>
+        <br />
+        <br />
+
+        <ng2-smart-table
+          [settings]="settingsSectorTotal"
+          [source]="smartSectorTotal"
+          (edit)="agregarATablaSectoreslAsignado($event)"
+        >
+        </ng2-smart-table>
+      </div>
+
+      <div class="col-md-6">
+        <div class="text-center">
+          <label class="label">Sectores asignados</label>
+
+          <br />
+          <div class="text-left">
+            <div *ngIf="tablaEsllenadoDB">
+              <button
+                nbButton
+                [disabled]="nuevosElementos.length == 0"
+                status="info"
+                (click)="actualizarSectores()"
+              >
+                Actualizar
+              </button>
+            </div>
+
+            <div *ngIf="tablaEsllenadoDB == false">
+              <button
+                nbButton
+                [disabled]="tablaEsllenadoDB"
+                status="success"
+                (click)="grabarSectores()"
+              >
+                Grabar
+              </button>
+            </div>
+          </div>
+
+          <ng2-smart-table
+            [settings]="settingsSectoresAsignados"
+            [source]="smartSectoresAsignados"
+            (delete)="quitar($event)"
+          >
+          </ng2-smart-table>
+        </div>
+      </div>
+    </div> -->
+  </nb-card-body>
+
+  <nb-card-footer>
+    <button nbButton status="danger" (click)="cerrar()">Cancelar</button>
+  </nb-card-footer>
+</nb-card>

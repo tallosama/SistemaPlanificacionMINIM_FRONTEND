@@ -8,6 +8,7 @@ import {
   NbCardModule,
   NbDialogModule,
   NbInputModule,
+  NbSelectModule,
 } from "@nebular/theme";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 
@@ -38,6 +39,7 @@ import { VehiculoRoutingModule } from "./vehiculo-routing.module";
     NbDialogModule.forChild(),
     //Stmarttable
     Ng2SmartTableModule,
+    NbSelectModule,
   ],
 })
 export class VehiculoModule {}

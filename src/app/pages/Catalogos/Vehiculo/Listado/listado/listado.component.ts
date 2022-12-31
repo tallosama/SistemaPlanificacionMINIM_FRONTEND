@@ -53,9 +53,12 @@ export class ListadoComponent implements OnInit {
         title: "Marca",
         type: "string",
       },
+
       estado: {
-        title: "Estado",
-        type: "string",
+        title: "Estado del vehículo",
+        valuePrepareFunction: (data) => {
+          return data ? "Disponible" : "No disponible";
+        },
       },
       anulacion: {
         title: "Estado de registro",

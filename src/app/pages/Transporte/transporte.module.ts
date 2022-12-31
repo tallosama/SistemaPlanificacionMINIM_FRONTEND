@@ -12,14 +12,17 @@ import {
   NbCardModule,
   NbDialogModule,
   NbInputModule,
+  NbSelectModule,
 } from "@nebular/theme";
 import { Ng2SmartTableModule } from "ng2-smart-table";
+import { AsignarTransporteComponent } from './Asignacion/Modales/asignar-transporte/asignar-transporte.component';
 
 @NgModule({
   declarations: [
     AsignacionComponent,
     DetalleEventoHoraComponent,
     DetalleEventoFechaComponent,
+    AsignarTransporteComponent,
   ],
   imports: [
     CommonModule,
@@ -47,7 +50,7 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
 
     //Stmarttable
     Ng2SmartTableModule,
-    // NbSelectModule,
+    NbSelectModule,
   ],
 })
 export class TransporteModule {}

@@ -16,6 +16,7 @@ export class AsignacionComponent implements OnInit, OnDestroy {
   data = [];
   subscripciones: Array<Subscription> = [];
   tipos = ["Material", "Equipo", "Transporte"];
+  tipoSeleccionado = "";
   smartRequerimientos: LocalDataSource = new LocalDataSource();
   settingsRequerimientos = {
     mode: "external",
@@ -78,17 +79,16 @@ export class AsignacionComponent implements OnInit, OnDestroy {
     private requerimientosService: RequerimientosService
   ) {}
 
-  ngOnInit(): void {
-    this.llenadoTablaRequerimiento();
-  }
+  ngOnInit(): void {}
   ngOnDestroy(): void {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
 
-  private llenadoTablaRequerimiento(): void {
+  public llenadoTablaRequerimiento(tipo: string): void {
+    this.tipoSeleccionado = tipo;
     this.subscripciones.push(
       this.requerimientosService
-        .listarPorTipoYEstado("Transporte", "Aprobado")
+        .listarPorTipoYEstado(tipo, "Aprobado")
         .subscribe(
           (resp) => {
             this.smartRequerimientos.load(resp);
@@ -108,5 +108,20 @@ export class AsignacionComponent implements OnInit, OnDestroy {
         )
     );
   }
-  public asignarTransporte(elemento): void {}
+  public asignarTransporte(elemento): void {
+    if (this.tipoSeleccionado === "Material") {
+      this.abrirModal(elemento.data, this.asignarTransporte);
+    } else if (this.tipoSeleccionado === "Equipo") {
+      this.abrirModal(elemento.data, this.asignarTransporte);
+    } else {
+      this.abrirModal(elemento.data, this.asignarTransporte);
+    }
+  }
+  private abrirModal(requerimientoSeleccionado, componenteAbrir) {
+    this.dialogService.open(componenteAbrir, {
+      context: {
+        requerimiento: requerimientoSeleccionado,
+      },
+    });
+  }
 }

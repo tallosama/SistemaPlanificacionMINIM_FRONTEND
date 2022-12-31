@@ -15,6 +15,10 @@ import { Util } from "../../../../Globales/Util";
 export class EditarComponent implements OnInit, OnDestroy {
   fecha = new Date().toISOString().slice(0, 10);
   vehiculoForm: FormGroup;
+  estadoVehiculo = [
+    { estado: "Disponible", esDisponible: true },
+    { estado: "No disponible", esDisponible: false },
+  ];
   id: number;
   subscripciones: Array<Subscription> = [];
 
@@ -56,7 +60,7 @@ export class EditarComponent implements OnInit, OnDestroy {
                 Util.esVacio,
               ]),
             ],
-            modelo: [res.modelo, Validators.maxLength(32), ,],
+            modelo: [res.modelo, Validators.maxLength(32)],
             marca: [res.marca, Validators.maxLength(32)],
             estado: [
               res.estado,

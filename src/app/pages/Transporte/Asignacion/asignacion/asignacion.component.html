@@ -2,11 +2,28 @@
   <nb-card-header>Asignación de transportes</nb-card-header>
   <nb-card-body>
     <br />
-
+    <div class="text-center">
+      <div class="row">
+        <div class="col-md-12">
+          <nb-select
+            shape="semi-round"
+            placeholder="Seleccione un tipo de requerimiento"
+          >
+            <nb-option
+              *ngFor="let t of tipos"
+              (click)="llenadoTablaRequerimiento(t)"
+              [value]="t"
+              >{{ t }}</nb-option
+            >
+          </nb-select>
+        </div>
+      </div>
+    </div>
+    <br /><br />
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
-          <label class="label">Requerimientos de transportes</label>
+          <label class="label">Requerimientos</label>
           <ng2-smart-table
             [settings]="settingsRequerimientos"
             [source]="smartRequerimientos"

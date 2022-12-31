@@ -106,30 +106,29 @@
                 </p>
               </div>
             </div>
-            <div class="col-md-3">
-              <div class="form-group">
+            <div class="form-group">
+              <div class="col-md-3">
                 <label class="label">Estado</label>
-                <input type="text" formControlName="estado" nbInput fullWidth />
-                <div
+                <nb-select
+                  shape="semi-round"
+                  placeholder="Seleccione un estado del vehículo"
+                  formControlName="estado"
+                >
+                  <nb-option
+                    *ngFor="let e of estadoVehiculo"
+                    [value]="e.esDisponible"
+                    >{{ e.estado }}</nb-option
+                  >
+                </nb-select>
+                <p
                   *ngIf="
                     vehiculoForm.get('estado').invalid &&
-                    vehiculoForm.get('estado').touched
+                    vehiculoForm.get('estado').touched &&
+                    vehiculoForm.get('estado').hasError('required')
                   "
                 >
-                  <p
-                    class="caption status-danger"
-                    *ngIf="vehiculoForm.get('estado').hasError('required')"
-                  >
-                    El estado es requerido
-                  </p>
-
-                  <p
-                    class="caption status-danger"
-                    *ngIf="vehiculoForm.get('placa').hasError('maxlength')"
-                  >
-                    Debe de ingresar un estado menor a 32 carácteres
-                  </p>
-                </div>
+                  El estado es requerido
+                </p>
               </div>
             </div>
           </div>

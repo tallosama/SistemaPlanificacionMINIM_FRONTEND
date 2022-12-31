@@ -50,10 +50,7 @@ export class CrearComponent implements OnInit, OnDestroy {
       ],
       modelo: ["", Validators.maxLength(32)],
       marca: ["", Validators.maxLength(32)],
-      estado: [
-        "",
-        Validators.compose([Validators.required, Validators.maxLength(32)]),
-      ],
+      estado: [true, Validators.required],
       anulacion: [false, Validators.required],
       motivoAnulacion: [""],
 
