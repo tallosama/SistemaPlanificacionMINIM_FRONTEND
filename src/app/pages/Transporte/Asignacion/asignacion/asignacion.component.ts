@@ -6,6 +6,7 @@ import { Util } from "../../../Globales/Util";
 import { RequerimientosService } from "../../../Requerimientos/requerimientos.service";
 import { DetalleEventoFechaComponent } from "../Renders/detalle-evento-fecha/detalle-evento-fecha.component";
 import { DetalleEventoHoraComponent } from "../Renders/detalle-evento-hora/detalle-evento-hora.component";
+import { AsignarTransporteComponent } from "./Modales/asignar-transporte/asignar-transporte.component";
 
 @Component({
   selector: "ngx-asignacion",
@@ -110,11 +111,11 @@ export class AsignacionComponent implements OnInit, OnDestroy {
   }
   public asignarTransporte(elemento): void {
     if (this.tipoSeleccionado === "Material") {
-      this.abrirModal(elemento.data, this.asignarTransporte);
+      this.abrirModal(elemento.data, AsignarTransporteComponent);
     } else if (this.tipoSeleccionado === "Equipo") {
-      this.abrirModal(elemento.data, this.asignarTransporte);
+      this.abrirModal(elemento.data, AsignarTransporteComponent);
     } else {
-      this.abrirModal(elemento.data, this.asignarTransporte);
+      this.abrirModal(elemento.data, AsignarTransporteComponent);
     }
   }
   private abrirModal(requerimientoSeleccionado, componenteAbrir) {

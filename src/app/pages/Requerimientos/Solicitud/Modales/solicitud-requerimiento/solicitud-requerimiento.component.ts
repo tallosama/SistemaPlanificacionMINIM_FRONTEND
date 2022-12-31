@@ -22,10 +22,8 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
   requerimientoForm: FormGroup;
   subscripciones: Array<Subscription> = [];
   tipos = ["Material", "Equipo", "Transporte"];
-  //keywords = ["descripcion","tipo"];
   keyword = "descripcion";
   data = [];
-  //requerimientosDB = [];
   nuevosRequerimientos = [];
   requerimientoSeleccionado: any = null;
   smartRequerimientosAsignados: LocalDataSource = new LocalDataSource();
@@ -129,63 +127,9 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
       this.smartRequerimientosAsignados.refresh();
 
       this.cargarDataForm();
-
-      this.valTipo(this.requerimientoSeleccionado.tipoRequerimiento);
     }
   }
-  private valTipo(tipo: string): void {
-    if (tipo === "Material") {
-      this.keyword = "descripcion";
-      this.buscar(this.productoService, tipo);
-    } else if (tipo === "Transporte") {
-      this.keyword = "desVehiculo";
-      this.buscar(this.vehiculoService, tipo);
-    } else {
-    }
-  }
-  private buscar(service, tipo: string) {
-    this.subscripciones.push(
-      service.listar().subscribe(
-        (resp) => {
-          let descripcionRequerimiento = null;
 
-          if (tipo === "Material") {
-            descripcionRequerimiento = resp.find(
-              (e) =>
-                e.descripcion ===
-                this.requerimientoSeleccionado.desRequerimiento
-            );
-          } else if (tipo === "Transporte") {
-            descripcionRequerimiento = resp.find(
-              (e) =>
-                e.desVehiculo ===
-                this.requerimientoSeleccionado.desRequerimiento
-            );
-          } else {
-            descripcionRequerimiento = resp.find(
-              (e) =>
-                e.desVehiculo ===
-                this.requerimientoSeleccionado.desRequerimiento
-            );
-          }
-          this.requerimientoForm
-            .get("desRequerimiento")
-            .setValue(descripcionRequerimiento);
-        },
-        (error) => {
-          console.error(error);
-          Util.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se listaban los autocompletados " + error.error[0],
-
-            0,
-            this.toastrService
-          );
-        }
-      )
-    );
-  }
   private cargarDataForm(): void {
     let user = this.auth.getUserStorage();
     this.requerimientoForm = this.fb.group({
@@ -194,7 +138,7 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
         Validators.compose([Validators.required, Validators.maxLength(32)]),
       ],
       desRequerimiento: [
-        "",
+        this.requerimientoSeleccionado.desRequerimiento,
         Validators.compose([Validators.required, Validators.maxLength(512)]),
       ],
       cantidadSolicitada: [
@@ -226,7 +170,6 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
     });
   }
   editar(): void {
-    this.eliminarObjetoRequerimiento();
     if (this.requerimientoSeleccionado.idRequerimiento != null) {
       this.subscripciones.push(
         this.requerimientosService
@@ -266,46 +209,12 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
     this.isModificacion = false;
   }
 
-  reconstruirAutoCompletado(tipo): void {
-    if (tipo === "Material") {
-      this.keyword = "descripcion";
-      this.reconstruirDatos(this.productoService);
-    } else if (tipo === "Transporte") {
-      this.keyword = "desVehiculo";
-      this.reconstruirDatos(this.vehiculoService);
-    } else {
-    }
-  }
-  private reconstruirDatos(service) {
-    this.subscripciones.push(
-      service.listar().subscribe(
-        (resp) => {
-          this.data = resp;
-        },
-        (error) => {
-          console.error(error);
-          Util.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se listaban los autocompletados " + error.error[0],
-
-            0,
-            this.toastrService
-          );
-        }
-      )
-    );
-  }
   reiniciarForm(): void {
     let user = this.auth.getUserStorage();
     this.requerimientoForm = this.fb.group({
       desRequerimiento: [
         "",
-        Validators.compose([
-          Validators.required,
-          Validators.maxLength(512),
-          Util.noObjeto,
-        ]),
+        Validators.compose([Validators.required, Validators.maxLength(512)]),
       ],
       cantidadSolicitada: ["0", Validators.required],
       cantidadAprobada: ["0", Validators.required],
@@ -328,7 +237,6 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
   }
 
   agregar(): void {
-    this.eliminarObjetoRequerimiento();
     this.agregarATabla(this.requerimientoForm.value);
     this.nuevosRequerimientos.push(this.requerimientoForm.value);
     this.reiniciarForm();
@@ -437,20 +345,7 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
     this.smartRequerimientosAsignados.add(requerimiento);
     this.smartRequerimientosAsignados.refresh();
   }
-  private eliminarObjetoRequerimiento(): void {
-    let tipoRequerimiento = this.requerimientoForm.value.tipoRequerimiento;
 
-    if (tipoRequerimiento === "Material") {
-      this.requerimientoForm
-        .get("desRequerimiento")
-        .setValue(this.requerimientoForm.value.desRequerimiento.descripcion);
-    } else if (tipoRequerimiento === "Transporte") {
-      this.requerimientoForm
-        .get("desRequerimiento")
-        .setValue(this.requerimientoForm.value.desRequerimiento.desVehiculo);
-    } else {
-    }
-  }
   cerrar() {
     this.ref.close();
   }

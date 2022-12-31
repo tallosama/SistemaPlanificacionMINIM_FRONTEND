@@ -13,7 +13,6 @@
                   placeholder="Tipos"
                   class="col-md-12"
                   shape="semi-round"
-                  (selectedChange)="reconstruirAutoCompletado($event)"
                 >
                   <nb-option *ngFor="let t of tipos" [value]="t">{{
                     t
@@ -53,10 +52,14 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label class="label"
-                  >Listado de material, equipo y transporte</label
-                >
-                <ng-autocomplete
+                <label class="label">Descripción del requerimiento</label>
+                <input
+                  type="text"
+                  formControlName="desRequerimiento"
+                  nbInput
+                  fullWidth
+                />
+                <!-- <ng-autocomplete
                   [data]="data"
                   [searchKeyword]="keyword"
                   [itemTemplate]="itemTemplate"
@@ -79,7 +82,7 @@
 
                 <ng-template #notFoundTemplate let-notFound>
                   <div [innerHTML]="notFound"></div>
-                </ng-template>
+                </ng-template> -->
 
                 <div
                   *ngIf="
@@ -102,13 +105,10 @@
                     *ngIf="
                       requerimientoForm
                         .get('desRequerimiento')
-                        .hasError('incorrecto') ||
-                      requerimientoForm
-                        .get('desRequerimiento')
                         .hasError('required')
                     "
                   >
-                    Debe de seleccionar un requerimiento
+                    Debe de ingresar un requerimiento
                   </p>
                 </div>
               </div>

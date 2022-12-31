@@ -2,8 +2,8 @@ import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { NbDialogRef, NbDialogService, NbToastrService } from "@nebular/theme";
 import { LocalDataSource } from "ng2-smart-table";
 import { Subscription } from "rxjs-compat";
-import { authService } from "../../../../../auth/auth.service";
-import { ShowcaseDialogComponent } from "../../../../modal-overlays/dialog/showcase-dialog/showcase-dialog.component";
+import { authService } from "../../../../../../auth/auth.service";
+import { ShowcaseDialogComponent } from "../../../../../modal-overlays/dialog/showcase-dialog/showcase-dialog.component";
 
 @Component({
   selector: "ngx-asignar-transporte",

@@ -15,7 +15,7 @@ import {
   NbSelectModule,
 } from "@nebular/theme";
 import { Ng2SmartTableModule } from "ng2-smart-table";
-import { AsignarTransporteComponent } from './Asignacion/Modales/asignar-transporte/asignar-transporte.component';
+import { AsignarTransporteComponent } from "./Asignacion/asignacion/Modales/asignar-transporte/asignar-transporte.component";
 
 @NgModule({
   declarations: [
