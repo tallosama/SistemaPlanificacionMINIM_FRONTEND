@@ -25,6 +25,12 @@ export class VehiculoService {
     return this.httpclient.get(ApiServe.API_SERVER + "vehiculo/activos");
   }
 
+  listarActivosDisponibles(): Observable<any> {
+    return this.httpclient.get(
+      ApiServe.API_SERVER + "vehiculo/activosYDisponibles"
+    );
+  }
+
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "vehiculo/" + id);
   }

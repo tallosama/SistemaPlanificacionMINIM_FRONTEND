@@ -3,7 +3,11 @@ import { NbDialogRef, NbDialogService, NbToastrService } from "@nebular/theme";
 import { LocalDataSource } from "ng2-smart-table";
 import { Subscription } from "rxjs-compat";
 import { authService } from "../../../../../../auth/auth.service";
+import { VehiculoService } from "../../../../../Catalogos/Vehiculo/vehiculo.service";
+import { Util } from "../../../../../Globales/Util";
 import { ShowcaseDialogComponent } from "../../../../../modal-overlays/dialog/showcase-dialog/showcase-dialog.component";
+import { RequerimientosService } from "../../../../../Requerimientos/requerimientos.service";
+import { TransporteService } from "../../../../transporte.service";
 
 @Component({
   selector: "ngx-asignar-transporte",
@@ -13,10 +17,10 @@ import { ShowcaseDialogComponent } from "../../../../../modal-overlays/dialog/sh
 export class AsignarTransporteComponent implements OnInit, OnDestroy {
   @Input() requerimiento: any;
   subscripciones: Array<Subscription> = [];
-
-  nuevosElementos = [];
+  fecha = new Date().toISOString().slice(0, 10);
+  usuario;
+  elementosSeleccionados = [];
   smartTransporteTotales: LocalDataSource = new LocalDataSource();
-  smartTransporteAsignados: LocalDataSource = new LocalDataSource();
   settingsTransporteTotal = {
     mode: "external",
     edit: {
@@ -25,7 +29,7 @@ export class AsignarTransporteComponent implements OnInit, OnDestroy {
 
     actions: {
       add: false,
-
+      edit: false,
       delete: false,
     },
 
@@ -33,73 +37,162 @@ export class AsignarTransporteComponent implements OnInit, OnDestroy {
       display: true,
       perPage: 5,
     },
-
+    selectMode: "multi",
     columns: {
-      desSector: {
+      desVehiculo: {
         title: "Descripción",
         type: "string",
       },
-
-      anulacion: {
-        title: "Estado",
-        valuePrepareFunction: (data) => {
-          return data ? "Inactivo" : "Activo";
-        },
+      placa: {
+        title: "Placa",
+        type: "string",
       },
-      motivoAnulacion: {
-        title: "Motivo",
+      modelo: {
+        title: "Modelo",
+        type: "string",
+      },
+      marca: {
+        title: "Marca",
         type: "string",
       },
     },
   };
 
-  settingsTransporteAsinado = {
-    mode: "external",
-
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
-    },
-    actions: {
-      add: false,
-      edit: false,
-    },
-
-    pager: {
-      display: true,
-      perPage: 5,
-    },
-
-    columns: {
-      desSector: {
-        title: "Descripción",
-        type: "string",
-      },
-
-      anulacion: {
-        title: "Estado",
-        valuePrepareFunction: (data) => {
-          return data ? "Inactivo" : "Activo";
-        },
-      },
-      motivoAnulacion: {
-        title: "Motivo",
-        type: "string",
-      },
-    },
-  };
   constructor(
     protected ref: NbDialogRef<ShowcaseDialogComponent>,
-
+    private vehiculoService: VehiculoService,
+    private transporteService: TransporteService,
     private toastrService: NbToastrService,
     private auth: authService,
-    private dialogService: NbDialogService
+    private requerimientoService: RequerimientosService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.usuario = this.auth.getUserStorage();
+    this.cargarVehiculos();
+  }
   ngOnDestroy(): void {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
-  cerrar() {
-    this.ref.close();
+
+  agregarArreglo(elementos) {
+    this.elementosSeleccionados = elementos.selected;
+  }
+  public guardar() {
+    try {
+      this.elementosSeleccionados.forEach((v) => {
+        this.subscripciones.push(
+          this.transporteService
+            .guardar({
+              anulacion: false,
+              motivoAnulacion: "",
+              vehiculoId: v,
+              requerimientoId: this.requerimiento,
+              usuarioCreacion: this.usuario.uid,
+              usuarioModificacion: this.usuario.uid,
+              fechaCreacion: this.fecha,
+              fechaModificacion: this.fecha,
+            })
+            .subscribe(
+              () => {
+                this.cambiarEstadoVehiculo(v);
+              },
+              (error) => {
+                console.error(error);
+                Util.showToast(
+                  "danger",
+                  "Error " + error.status,
+                  "Mientras se ingresaba el registro " + error.error[0],
+
+                  0,
+                  this.toastrService
+                );
+              }
+            )
+        );
+      });
+      this.cambiarEstadoRequerimiento();
+    } catch (e) {
+      console.error(e);
+      Util.showToast(
+        "danger",
+        "Error " + e.status,
+        "Mientras se ingresaban el/los registros " + e.error[0],
+
+        0,
+        this.toastrService
+      );
+    }
+  }
+  private cargarVehiculos(): void {
+    this.subscripciones.push(
+      this.vehiculoService.listarActivosDisponibles().subscribe(
+        (resp) => {
+          this.smartTransporteTotales.load(resp);
+          this.smartTransporteTotales.refresh();
+        },
+        (error) => {
+          console.error(error);
+          Util.showToast(
+            "danger",
+            "Error " + error.status,
+            "Mientras se listaban los vehículos " + error.error[0],
+
+            0,
+            this.toastrService
+          );
+        }
+      )
+    );
+  }
+
+  private cambiarEstadoVehiculo(vehiculo: any) {
+    vehiculo["estado"] = false;
+
+    this.subscripciones.push(
+      this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo).subscribe(
+        () => {},
+        (error) => {
+          console.error(error);
+          Util.showToast(
+            "danger",
+            "Error " + error.status,
+            "Mientras se cambiaba el estado al vehículo " + error.error[0],
+
+            0,
+            this.toastrService
+          );
+        }
+      )
+    );
+  }
+  private cambiarEstadoRequerimiento() {
+    this.requerimiento["estado"] = "Asignado";
+
+    this.subscripciones.push(
+      this.requerimientoService
+        .editar(this.requerimiento.idRequerimiento, this.requerimiento)
+        .subscribe(
+          () => {
+            this.cerrar(true);
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast(
+              "danger",
+              "Error " + error.status,
+              "Mientras se cambiaba el estado al requerimiento " +
+                error.error[0],
+
+              0,
+              this.toastrService
+            );
+          }
+        )
+    );
+  }
+
+  public cerrar(esCompletado: boolean = false): void {
+    this.ref.close(esCompletado);
   }
 }

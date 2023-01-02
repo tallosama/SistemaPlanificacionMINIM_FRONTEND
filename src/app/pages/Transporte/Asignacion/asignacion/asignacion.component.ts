@@ -16,7 +16,10 @@ import { AsignarTransporteComponent } from "./Modales/asignar-transporte/asignar
 export class AsignacionComponent implements OnInit, OnDestroy {
   data = [];
   subscripciones: Array<Subscription> = [];
-  tipos = ["Material", "Equipo", "Transporte"];
+  tipos = [
+    { titulo: "Transportes pendientes", valor: "Aprobado" },
+    { titulo: "Transportes asignados", valor: "Asignado" },
+  ];
   tipoSeleccionado = "";
   smartRequerimientos: LocalDataSource = new LocalDataSource();
   settingsRequerimientos = {
@@ -85,11 +88,11 @@ export class AsignacionComponent implements OnInit, OnDestroy {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
 
-  public llenadoTablaRequerimiento(tipo: string): void {
-    this.tipoSeleccionado = tipo;
+  public llenadoTablaRequerimiento(tipo): void {
+    this.tipoSeleccionado = tipo.valor;
     this.subscripciones.push(
       this.requerimientosService
-        .listarPorTipoYEstado(tipo, "Aprobado")
+        .listarPorTipoYEstado("Transporte", this.tipoSeleccionado)
         .subscribe(
           (resp) => {
             this.smartRequerimientos.load(resp);
@@ -110,19 +113,34 @@ export class AsignacionComponent implements OnInit, OnDestroy {
     );
   }
   public asignarTransporte(elemento): void {
-    if (this.tipoSeleccionado === "Material") {
-      this.abrirModal(elemento.data, AsignarTransporteComponent);
-    } else if (this.tipoSeleccionado === "Equipo") {
+    if (this.tipoSeleccionado === "Aprobado") {
       this.abrirModal(elemento.data, AsignarTransporteComponent);
     } else {
       this.abrirModal(elemento.data, AsignarTransporteComponent);
     }
   }
   private abrirModal(requerimientoSeleccionado, componenteAbrir) {
-    this.dialogService.open(componenteAbrir, {
-      context: {
-        requerimiento: requerimientoSeleccionado,
-      },
-    });
+    this.dialogService
+      .open(componenteAbrir, {
+        context: {
+          requerimiento: requerimientoSeleccionado,
+        },
+      })
+      .onClose.subscribe((r) => {
+        if (r) {
+          Util.showToast(
+            "success",
+            "Acción realizada",
+            "Se han asignado los recursos",
+            4000,
+            this.toastrService
+          );
+          this.removerDeTabla(requerimientoSeleccionado);
+        }
+      });
+  }
+  private removerDeTabla(elemento): void {
+    this.smartRequerimientos.remove(elemento);
+    this.smartRequerimientos.refresh();
   }
 }

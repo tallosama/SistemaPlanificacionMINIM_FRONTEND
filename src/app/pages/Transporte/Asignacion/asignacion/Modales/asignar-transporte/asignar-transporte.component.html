@@ -1,24 +1,26 @@
 <nb-card>
-  <nb-card-header>Asignar sectores</nb-card-header>
+  <nb-card-header>Asignar transporte</nb-card-header>
   <nb-card-body>
-    <!-- <div class="row">
-      <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
         <div class="text-center">
-          <label class="label">Sectores</label>
+          <label class="label">Vehículos activos y disponibles</label>
           <br />
         </div>
         <br />
         <br />
 
         <ng2-smart-table
-          [settings]="settingsSectorTotal"
-          [source]="smartSectorTotal"
-          (edit)="agregarATablaSectoreslAsignado($event)"
+          [settings]="settingsTransporteTotal"
+          [source]="smartTransporteTotales"
+          (userRowSelect)="agregarArreglo($event)"
         >
         </ng2-smart-table>
       </div>
-
-      <div class="col-md-6">
+      <button nbButton status="info" (click)="guardar()">
+        Guardar seleccionados
+      </button>
+      <!-- <div class="col-md-6">
         <div class="text-center">
           <label class="label">Sectores asignados</label>
 
@@ -54,8 +56,8 @@
           >
           </ng2-smart-table>
         </div>
-      </div>
-    </div> -->
+      </div> -->
+    </div>
   </nb-card-body>
 
   <nb-card-footer>

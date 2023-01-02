@@ -12,8 +12,8 @@
             <nb-option
               *ngFor="let t of tipos"
               (click)="llenadoTablaRequerimiento(t)"
-              [value]="t"
-              >{{ t }}</nb-option
+              [value]="t.valor"
+              >{{ t.titulo }}</nb-option
             >
           </nb-select>
         </div>
