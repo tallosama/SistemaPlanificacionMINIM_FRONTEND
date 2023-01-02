@@ -3,16 +3,16 @@
   <nb-card-body>
     <form [formGroup]="requerimientoForm" *ngIf="requerimientoForm">
       <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
           <div class="row">
             <div class="col-md-6">
+              <label class="label">Tipo de requerimiento</label>
               <div class="form-group">
-                <label class="label">Tipo de requerimiento</label>
                 <nb-select
                   formControlName="tipoRequerimiento"
                   placeholder="Tipos"
-                  class="col-md-12"
                   shape="semi-round"
+                  fullWidth
                 >
                   <nb-option *ngFor="let t of tipos" [value]="t">{{
                     t
@@ -58,6 +58,7 @@
                   formControlName="desRequerimiento"
                   nbInput
                   fullWidth
+                  shape="semi-round"
                 />
                 <!-- <ng-autocomplete
                   [data]="data"
@@ -124,6 +125,7 @@
                   formControlName="cantidadSolicitada"
                   nbInput
                   fullWidth
+                  shape="semi-round"
                 />
 
                 <p
@@ -150,6 +152,7 @@
                   [attr.disabled]="true"
                   nbInput
                   fullWidth
+                  shape="semi-round"
                 />
                 <p
                   class="caption status-danger"
@@ -166,8 +169,9 @@
           </div>
         </div>
       </div>
+      <br />
       <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
           <ng2-smart-table
             [settings]="settingsRequerimientos"
             [source]="smartRequerimientosAsignados"
@@ -177,6 +181,7 @@
           </ng2-smart-table>
         </div>
       </div>
+
       <div class="row">
         <div *ngIf="isModificacion">
           <button
