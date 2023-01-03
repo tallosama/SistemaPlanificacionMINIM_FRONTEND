@@ -1,0 +1,38 @@
+<nb-card>
+  <nb-card-header>Historial de transportes</nb-card-header>
+  <nb-card-body>
+    <div class="form-inline">
+      <div class="col-md-5">
+        <div class="form-group">
+          <label class="label">Fecha de inicio</label>
+          <input type="date" [(ngModel)]="fechaInicio" nbInput fullWidth />
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="form-group">
+          <label class="label">Fecha final</label>
+          <input type="date" [(ngModel)]="fechaFin" nbInput fullWidth />
+        </div>
+      </div>
+
+      <button
+        nbButton
+        status="primary"
+        (click)="mostrar()"
+        [disabled]="fechaInicio == null || fechaFin == null"
+      >
+        Buscar
+      </button>
+    </div>
+    <br />
+    <label class="label">Transportes asignados</label>
+    <ng2-smart-table
+      [settings]="settingsTransporte"
+      [source]="smartTransporte"
+      (edit)="modificarTransporte($event)"
+    >
+    </ng2-smart-table>
+  </nb-card-body>
+
+  <nb-card-footer> </nb-card-footer>
+</nb-card>

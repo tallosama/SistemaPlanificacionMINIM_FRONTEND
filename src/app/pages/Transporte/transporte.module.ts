@@ -17,6 +17,10 @@ import {
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { AsignarTransporteComponent } from "./Asignacion/asignacion/Modales/asignar-transporte/asignar-transporte.component";
 import { TerminarRequerimientoComponent } from "./Asignacion/asignacion/Modales/terminar-requerimiento/terminar-requerimiento.component";
+import { HistorialComponent } from "./Historial/historial/historial.component";
+import { RenderRequerimientoCantidadAprobadaComponent } from "./Historial/historial/Renders/render-requerimiento-cantidad-aprobada/render-requerimiento-cantidad-aprobada.component";
+import { RenderVehiculoPlacaComponent } from "./Historial/historial/Renders/render-vehiculo-placa/render-vehiculo-placa.component";
+import { RenderVehiculoMarcaComponent } from "./Historial/historial/Renders/render-vehiculo-marca/render-vehiculo-marca.component";
 
 @NgModule({
   declarations: [
@@ -25,6 +29,10 @@ import { TerminarRequerimientoComponent } from "./Asignacion/asignacion/Modales/
     DetalleEventoFechaComponent,
     AsignarTransporteComponent,
     TerminarRequerimientoComponent,
+    HistorialComponent,
+    RenderVehiculoPlacaComponent,
+    RenderVehiculoMarcaComponent,
+    RenderRequerimientoCantidadAprobadaComponent,
   ],
   imports: [
     CommonModule,

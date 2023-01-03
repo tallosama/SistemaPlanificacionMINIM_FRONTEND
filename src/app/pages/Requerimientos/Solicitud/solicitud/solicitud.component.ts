@@ -73,7 +73,7 @@ export class SolicitudComponent implements OnInit, OnDestroy {
       },
       renderRequerimiento: {
         filter: false,
-        title: "Solicitar requerimientos",
+        title: "Solicitar/Ver requerimientos",
         type: "custom",
         renderComponent: RenderRequerimientoComponent,
         onComponentInitFunction: (instance) => {

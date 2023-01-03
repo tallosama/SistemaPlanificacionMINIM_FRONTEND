@@ -19,7 +19,15 @@ export class TransporteService {
       ApiServe.API_SERVER + "transporte/requerimiento/" + idRequerimiento
     );
   }
-
+  listarPorFechas(fechaInicio: string, fechaFinal: string): Observable<any> {
+    return this.httpclient.get(
+      ApiServe.API_SERVER +
+        "transporte/porFechas/" +
+        fechaInicio +
+        "/" +
+        fechaFinal
+    );
+  }
   guardar(transporte: any): Observable<any> {
     return this.httpclient.post(
       ApiServe.API_SERVER + "transporte/",

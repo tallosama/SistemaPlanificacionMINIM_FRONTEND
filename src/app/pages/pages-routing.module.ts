@@ -76,7 +76,7 @@ const routes: Routes = [
       {
         path: "Vehiculo",
         loadChildren: () =>
-          import("./Catalogos/Vehiculo/Vehiculo.module").then(
+          import("./Catalogos/Vehiculo/vehiculo.module").then(
             (a) => a.VehiculoModule
           ),
       },
@@ -118,7 +118,7 @@ const routes: Routes = [
       {
         path: "Salida",
         loadChildren: () =>
-          import("./Movimientos/Salida/Salida.module").then(
+          import("./Movimientos/Salida/salida.module").then(
             (a) => a.SalidaModule
           ),
       },

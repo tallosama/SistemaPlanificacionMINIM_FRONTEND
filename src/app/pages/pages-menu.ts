@@ -30,7 +30,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: "Transporte",
         icon: "paper-plane-outline",
-        link: "/pages/Transporte/Asignacion",
+        children: [
+          {
+            title: "Control de transporte",
+            link: "/pages/Transporte/Asignacion",
+          },
+          {
+            title: "Historial de transporte",
+            link: "/pages/Transporte/Historial",
+          },
+        ],
       },
     ],
   },
