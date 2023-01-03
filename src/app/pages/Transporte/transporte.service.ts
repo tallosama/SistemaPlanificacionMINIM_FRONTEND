@@ -8,6 +8,17 @@ import { ApiServe } from "../Globales/ApiServe";
 })
 export class TransporteService {
   constructor(public httpclient: HttpClient) {}
+  listar(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "transporte/");
+  }
+  listarActivos(): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "transporte/activos");
+  }
+  listarPorRequerimiento(idRequerimiento: number): Observable<any> {
+    return this.httpclient.get(
+      ApiServe.API_SERVER + "transporte/requerimiento/" + idRequerimiento
+    );
+  }
 
   guardar(transporte: any): Observable<any> {
     return this.httpclient.post(
@@ -21,18 +32,6 @@ export class TransporteService {
       transporte
     );
   }
-  listar(): Observable<any> {
-    return this.httpclient.get(ApiServe.API_SERVER + "transporte/");
-  }
-  listarActivos(): Observable<any> {
-    return this.httpclient.get(ApiServe.API_SERVER + "transporte/activos");
-  }
-
-  // listarActivosDisponibles(): Observable<any> {
-  //   return this.httpclient.get(
-  //     ApiServe.API_SERVER + "transporte/activosYDisponibles"
-  //   );
-  // }
 
   buscar(id): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "transporte/" + id);

@@ -1,10 +1,10 @@
 <nb-card>
-  <nb-card-header>Asignar transporte</nb-card-header>
+  <nb-card-header>Transportes asignados</nb-card-header>
   <nb-card-body>
     <div class="row">
       <div class="col-md-12">
         <div class="text-center">
-          <label class="label">Vehículos activos y disponibles</label>
+          <label class="label">Vehículos activos y asignados</label>
           <br />
         </div>
         <br />
@@ -12,7 +12,7 @@
 
         <ng2-smart-table
           [settings]="settingsTransporteTotal"
-          [source]="smartTransporteTotales"
+          [source]="smartTransportes"
           (userRowSelect)="agregarArreglo($event)"
         >
         </ng2-smart-table>
@@ -23,7 +23,7 @@
         (click)="guardar()"
         [disabled]="elementosSeleccionados.length == 0"
       >
-        Guardar seleccionados
+        Guardar como disponibles
       </button>
     </div>
   </nb-card-body>

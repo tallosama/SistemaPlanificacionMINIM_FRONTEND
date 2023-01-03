@@ -16,6 +16,7 @@ import {
 } from "@nebular/theme";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { AsignarTransporteComponent } from "./Asignacion/asignacion/Modales/asignar-transporte/asignar-transporte.component";
+import { TerminarRequerimientoComponent } from "./Asignacion/asignacion/Modales/terminar-requerimiento/terminar-requerimiento.component";
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { AsignarTransporteComponent } from "./Asignacion/asignacion/Modales/asig
     DetalleEventoHoraComponent,
     DetalleEventoFechaComponent,
     AsignarTransporteComponent,
+    TerminarRequerimientoComponent,
   ],
   imports: [
     CommonModule,

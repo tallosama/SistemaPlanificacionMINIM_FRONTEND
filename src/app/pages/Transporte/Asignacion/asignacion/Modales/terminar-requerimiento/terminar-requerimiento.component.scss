@@ -1,0 +1,29 @@
+@import '../../../../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  .buttons-row {
+    margin: -0.5rem;
+  }
+
+  button[nbButton] {
+    margin: 0.5rem;
+  }
+
+  .action-icon {
+    @include nb-ltr(margin-right, 0.5rem);
+    @include nb-rtl(margin-left, 0.5rem);
+  }
+
+  .actions-card {
+    height: 8rem;
+  }
+}
+
+ 
+//el ng-deep es para aplicar estilos en un estilo que ya viene con algún framework de estilo 
+::ng-deep.ng2-smart-action-multiple-select{ text-align: center; }
+::ng-deep.ng2-smart-action-multiple-select > input{ width:15px; height:15px; display: unset; }
+
+//el host sirve para aplicar los estilos a algún componente hijo
+//:host::ng-deep.ng2-smart-action-multiple-select{ text-align: center; }
+//:host::ng-deep.ng2-smart-action-multiple-select > input{ width:25px; height:25px; display: unset; }

@@ -7,6 +7,7 @@ import { RequerimientosService } from "../../../Requerimientos/requerimientos.se
 import { DetalleEventoFechaComponent } from "../Renders/detalle-evento-fecha/detalle-evento-fecha.component";
 import { DetalleEventoHoraComponent } from "../Renders/detalle-evento-hora/detalle-evento-hora.component";
 import { AsignarTransporteComponent } from "./Modales/asignar-transporte/asignar-transporte.component";
+import { TerminarRequerimientoComponent } from "./Modales/terminar-requerimiento/terminar-requerimiento.component";
 
 @Component({
   selector: "ngx-asignacion",
@@ -116,7 +117,7 @@ export class AsignacionComponent implements OnInit, OnDestroy {
     if (this.tipoSeleccionado === "Aprobado") {
       this.abrirModal(elemento.data, AsignarTransporteComponent);
     } else {
-      this.abrirModal(elemento.data, AsignarTransporteComponent);
+      this.abrirModal(elemento.data, TerminarRequerimientoComponent);
     }
   }
   private abrirModal(requerimientoSeleccionado, componenteAbrir) {
