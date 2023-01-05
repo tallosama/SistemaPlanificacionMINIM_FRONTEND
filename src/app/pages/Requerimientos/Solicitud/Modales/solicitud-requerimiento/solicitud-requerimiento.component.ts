@@ -5,10 +5,10 @@ import { LocalDataSource } from "ng2-smart-table";
 import { Subscription } from "rxjs-compat";
 import { authService } from "../../../../../auth/auth.service";
 import { ProductoService } from "../../../../Catalogos/Producto/producto.service";
-import { VehiculoService } from "../../../../Catalogos/Vehiculo/vehiculo.service";
 import { MensajeEntradaComponent } from "../../../../Globales/mensaje-entrada/mensaje-entrada.component";
 import { Util } from "../../../../Globales/Util";
 import { ShowcaseDialogComponent } from "../../../../modal-overlays/dialog/showcase-dialog/showcase-dialog.component";
+import { TransporteService } from "../../../../Transporte/transporte.service";
 import { RequerimientosService } from "../../../requerimientos.service";
 
 @Component({
@@ -85,8 +85,8 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
     private dialogService: NbDialogService,
     private requerimientosService: RequerimientosService,
     private productoService: ProductoService,
-    private vehiculoService: VehiculoService
-  ) {}
+    private transporteService: TransporteService
+  ) { }
 
   ngOnInit(): void {
     this.reiniciarForm();
@@ -227,7 +227,7 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
         Validators.compose([Validators.required, Validators.maxLength(32)]),
       ],
       anulacion: [false, Validators.required],
-      motivoAnulacion: [""],
+      motivoAnulacion: ["N. A."],
       detalleEventoId: [this.detalleEvento, Validators.required],
       usuarioCreacion: [user.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
@@ -272,7 +272,6 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
   public confirmacion(elemento): void {
     if (elemento.data.idRequerimiento == null) {
       this.smartRequerimientosAsignados.remove(elemento.data);
-
       this.smartRequerimientosAsignados.refresh();
       let indice = this.nuevosRequerimientos.indexOf(elemento.data);
       this.nuevosRequerimientos.splice(indice, 1);
@@ -292,12 +291,12 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
             if (res) {
               this.anular(
                 elemento.data,
-                "'" +
-                  res +
-                  "', por " +
-                  this.auth.getUserStorage().email +
-                  " el " +
-                  new Date().toLocaleString()
+
+                "'" + res +
+                "', por " +
+                this.auth.getUserStorage().email +
+                " el " +
+                new Date().toLocaleString()
               );
             }
           })
@@ -312,30 +311,56 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
         .subscribe(
           (res) => {
             let anulacion = res.anulacion;
-            let mensaje: string = anulacion
-              ? "Se ha anulado el registro"
-              : "Se ha reactivado el registro";
-            Util.showToast(
-              "success",
-              "Acción realizada",
-              mensaje,
-              4000,
-              this.toastrService
-            );
+            let mensaje: string = anulacion ? "Se ha anulado el registro" : "Se ha reactivado el registro";
+            Util.showToast("success", "Acción realizada", mensaje, 4000, this.toastrService);
             this.reconstruir(elemento, res);
+            if (res.estado === "Asignado" || res.estado === "Terminado") {
+              this.evaluacionTipoRequerimiento(elemento, motivoAnulacion);
+            }
           },
           (error) => {
             console.error(error);
-            Util.showToast(
-              "danger",
-              "Error " + error.status,
-              "Mientras se anulaba el registro" + error.error[0],
-              0,
-              this.toastrService
-            );
+            Util.showToast("danger", "Error " + error.status, "Mientras se anulaba el registro" + error.error[0], 0, this.toastrService);
           }
         )
     );
+  }
+  private evaluacionTipoRequerimiento(elementoAnulado: any, motivoAnulacion: string): void {
+    if (elementoAnulado.tipoRequerimiento === "Transporte") {
+      this.subscripciones.push(
+        this.transporteService.listarPorRequerimientoYMotivoAnulacion(elementoAnulado.idRequerimiento, elementoAnulado.motivoAnulacion).subscribe(
+          (lista) => {
+            this.anularDependenciaTransporte(lista, motivoAnulacion);
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast("danger", "Error " + error.status, "Mientras se cargaban los elementos pertecenientes al requerimiento a anular " + error.error[0], 0, this.toastrService);
+          }
+        )
+      );
+    } else if (elementoAnulado.tipoRequerimiento === "Equipo") {
+    } else {
+    }
+  }
+  private anularDependenciaTransporte(elementos: any, motivoAnulacion: string): void {
+    elementos.forEach((e) => {
+      this.subscripciones.push(
+        this.transporteService
+          .anular(e.idTransporte, motivoAnulacion)
+          .subscribe(
+            (res) => {
+              let anulacion = res.anulacion;
+              let mensaje: string = anulacion ? "Se ha anulado el registro" : "Se ha reactivado el registro";
+
+              Util.showToast("success", "Acción realizada", mensaje, 4000, this.toastrService);
+            },
+            (error) => {
+              console.error(error);
+              Util.showToast("danger", "Error " + error.status, "Mientras se anulaba la dependencia " + error.error[0], 0, this.toastrService);
+            }
+          )
+      );
+    });
   }
   reconstruir(elementoAnterior: any, elementoNuevo: any): void {
     this.smartRequerimientosAsignados.remove(elementoAnterior);

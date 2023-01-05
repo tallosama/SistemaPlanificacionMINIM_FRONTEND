@@ -65,17 +65,17 @@ export class AprobacionComponent implements OnInit, OnDestroy {
         type: "string",
       },
 
-      anulacion: {
-        title: "Estado",
-        valuePrepareFunction: (data) => {
-          return data ? "Anulado" : "Activo";
-        },
-      },
+      // anulacion: {
+      //   title: "Estado",
+      //   valuePrepareFunction: (data) => {
+      //     return data ? "Anulado" : "Activo";
+      //   },
+      // },
 
-      motivoAnulacion: {
-        title: "Motivo",
-        type: "string",
-      },
+      // motivoAnulacion: {
+      //   title: "Motivo",
+      //   type: "string",
+      // },
     },
   };
 
@@ -85,9 +85,7 @@ export class AprobacionComponent implements OnInit, OnDestroy {
     public fb: FormBuilder,
     private auth: authService,
     private dialogService: NbDialogService,
-    private requerimientosService: RequerimientosService,
-    private productoService: ProductoService,
-    private vehiculoService: VehiculoService
+    private requerimientosService: RequerimientosService
   ) {}
 
   ngOnInit(): void {
@@ -100,7 +98,10 @@ export class AprobacionComponent implements OnInit, OnDestroy {
   private llenadoTablaRequerimientos(): void {
     this.subscripciones.push(
       this.requerimientosService
-        .listarPorDetalle(this.detalleEvento.idDetalleEvento)
+        .requerimientoPorTipoActivoYEStados(
+          this.detalleEvento.idDetalleEvento,
+          ["Asignado", "Terminado"]
+        )
         .subscribe(
           (resp) => {
             this.smartRequerimientosAsignados.load(resp);

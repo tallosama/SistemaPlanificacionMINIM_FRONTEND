@@ -65,7 +65,7 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
     private toastrService: NbToastrService,
     private auth: authService,
     private requerimientoService: RequerimientosService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.usuario = this.auth.getUserStorage();
@@ -87,7 +87,7 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
   private cargarVehiculos(): void {
     this.subscripciones.push(
       this.transporteService
-        .listarPorRequerimiento(this.requerimiento.idRequerimiento)
+        .listarActivosPorRequerimiento(this.requerimiento.idRequerimiento)
         .subscribe(
           (resp) => {
             resp.forEach((r) => {
@@ -98,15 +98,7 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.error(error);
-            Util.showToast(
-              "danger",
-              "Error " + error.status,
-              "Mientras se listaban los transportes asignados " +
-                error.error[0],
-
-              0,
-              this.toastrService
-            );
+            Util.showToast("danger", "Error " + error.status, "Mientras se listaban los transportes asignados " + error.error[0], 0, this.toastrService);
           }
         )
     );
@@ -117,7 +109,7 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
 
     this.subscripciones.push(
       this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo).subscribe(
-        () => {},
+        () => { },
         (error) => {
           console.error(error);
           Util.showToast(
@@ -148,7 +140,7 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
               "danger",
               "Error " + error.status,
               "Mientras se cambiaba el estado al requerimiento " +
-                error.error[0],
+              error.error[0],
 
               0,
               this.toastrService

@@ -7,27 +7,46 @@ import { ApiServe } from "../Globales/ApiServe";
   providedIn: "root",
 })
 export class TransporteService {
-  constructor(public httpclient: HttpClient) {}
+  constructor(public httpclient: HttpClient) { }
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "transporte/");
   }
   listarActivos(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "transporte/activos");
   }
-  listarPorRequerimiento(idRequerimiento: number): Observable<any> {
+  listarActivosPorRequerimiento(idRequerimiento: number): Observable<any> {
     return this.httpclient.get(
-      ApiServe.API_SERVER + "transporte/requerimiento/" + idRequerimiento
+      ApiServe.API_SERVER +
+      "transporte/transporteActivosPorRequerimiento/" +
+      idRequerimiento
+    );
+  }
+  listarPorFechasActivos(
+    fechaInicio: string,
+    fechaFinal: string
+  ): Observable<any> {
+    return this.httpclient.get(
+      ApiServe.API_SERVER +
+      "transporte/porFechasActivos/" +
+      fechaInicio +
+      "/" +
+      fechaFinal
     );
   }
   listarPorFechas(fechaInicio: string, fechaFinal: string): Observable<any> {
     return this.httpclient.get(
       ApiServe.API_SERVER +
-        "transporte/porFechas/" +
-        fechaInicio +
-        "/" +
-        fechaFinal
+      "transporte/porFechas/" +
+      fechaInicio +
+      "/" +
+      fechaFinal
     );
   }
+  listarPorRequerimientoYMotivoAnulacion(idRequerimiento: number, motivoAnulacion: string): Observable<any> {
+    return this.httpclient.get(ApiServe.API_SERVER + "transporte/transportePorRequerimientoYMotivoAnulacion/" + idRequerimiento + "?motivoAnulacion=" + motivoAnulacion
+    );
+  }
+
   guardar(transporte: any): Observable<any> {
     return this.httpclient.post(
       ApiServe.API_SERVER + "transporte/",

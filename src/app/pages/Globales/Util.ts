@@ -99,4 +99,26 @@ export class Util {
     }
     return cadena;
   }
+
+  //4. Métodos para caché
+  //4.1 Almacenar en caché
+  public static saveInCache(
+    llave: string,
+    elemento: string | any,
+    isObject: boolean = false
+  ): void {
+    if (isObject) {
+      localStorage.setItem(llave, JSON.stringify(elemento));
+    } else {
+      localStorage.setItem(llave, elemento);
+    }
+  }
+  //4.2 Obtener de cache
+  public static getFromCache(llave: string) {
+    return localStorage.getItem(llave);
+  }
+  //4.3 Remover de cache
+  public static removeFromCache(llave: string) {
+    localStorage.removeItem(llave);
+  }
 }

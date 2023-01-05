@@ -52,4 +52,17 @@ export class RequerimientosService {
       ApiServe.API_SERVER + "requerimiento/tipoYEstado/" + tipo + "/" + estado
     );
   }
+  requerimientoPorTipoActivoYEStados(
+    idDetalle: number,
+    estados: Array<string>
+  ): Observable<any> {
+    return this.httpclient.get(
+      ApiServe.API_SERVER +
+        "requerimiento/detalleYEstados/" +
+        idDetalle +
+        "/" +
+        estados
+    );
+  }
+  //
 }

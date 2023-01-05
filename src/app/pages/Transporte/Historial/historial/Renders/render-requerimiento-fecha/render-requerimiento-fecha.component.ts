@@ -2,13 +2,11 @@ import { Component, OnInit, Input } from "@angular/core";
 import { ViewCell } from "ng2-smart-table";
 
 @Component({
-  selector: "ngx-render-requerimiento-cantidad-aprobada",
+  selector: "ngx-render-requerimiento-fecha",
   template: "{{cantidad}}",
-  styleUrls: ["./render-requerimiento-cantidad-aprobada.component.scss"],
+  styleUrls: ["./render-requerimiento-fecha.component.scss"],
 })
-export class RenderRequerimientoCantidadAprobadaComponent
-  implements ViewCell, OnInit
-{
+export class RenderRequerimientoFechaComponent implements ViewCell, OnInit {
   constructor() {}
 
   renderValue: string;
@@ -16,6 +14,6 @@ export class RenderRequerimientoCantidadAprobadaComponent
   @Input() rowData: any;
   cantidad: string;
   ngOnInit() {
-    this.cantidad = this.rowData.requerimientoId.cantidadAprobada;
+    this.cantidad = this.rowData.requerimientoId.detalleEventoId.fecha;
   }
 }

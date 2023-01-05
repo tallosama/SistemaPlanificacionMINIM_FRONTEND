@@ -12,6 +12,7 @@ import { map, takeUntil } from "rxjs/operators";
 import { Observable, Subject, Subscription } from "rxjs";
 import { authService } from "../../../auth/auth.service";
 import { Router } from "@angular/router";
+import { Util } from "../../../pages/Globales/Util";
 //import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
@@ -58,9 +59,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router,
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService
-  ) {}
+  ) { }
 
   async ngOnInit() {
+    let temaGuardado = Util.getFromCache("temaSeleccionado");
+    this.changeTheme(temaGuardado == null ? "default" : temaGuardado);
+
     this.currentTheme = this.themeService.currentTheme;
 
     this.user = this.auth.getUserStorage();
@@ -102,6 +106,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   changeTheme(themeName: string) {
+    Util.saveInCache("temaSeleccionado", themeName);
+
     this.themeService.changeTheme(themeName);
   }
 

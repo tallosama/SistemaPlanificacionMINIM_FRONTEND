@@ -1,9 +1,9 @@
 <nb-card>
   <nb-card-header>Aprobación de requerimientos</nb-card-header>
   <nb-card-body>
-    <form [formGroup]="requerimientoForm" *ngIf="requerimientoForm">
-      <div class="row">
-        <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <form [formGroup]="requerimientoForm" *ngIf="requerimientoForm">
           <div class="row">
             <div class="col-md-4">
               <div class="form-group">
@@ -13,6 +13,7 @@
                   placeholder="Estado"
                   class="col-md-12"
                   shape="semi-round"
+                  fullWidth
                 >
                   <nb-option *ngFor="let e of estado" [value]="e">{{
                     e
@@ -101,32 +102,34 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-6">
-          <ng2-smart-table
-            [settings]="settingsRequerimientos"
-            [source]="smartRequerimientosAsignados"
-            (edit)="aprobacion($event)"
-            (delete)="confirmacion($event)"
-          >
-          </ng2-smart-table>
-        </div>
+        </form>
       </div>
-      <div class="row">
-        <button nbButton status="warning" (click)="cargarForm()">
-          Cancelar
-        </button>
-
-        <button
-          [disabled]="requerimientoForm.invalid"
-          nbButton
-          status="info"
-          (click)="guardar()"
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-md-12">
+        <ng2-smart-table
+          [settings]="settingsRequerimientos"
+          [source]="smartRequerimientosAsignados"
+          (edit)="aprobacion($event)"
+          (delete)="confirmacion($event)"
         >
-          Guardar
-        </button>
+        </ng2-smart-table>
       </div>
-    </form>
+    </div>
+
+    <div class="row">
+      <button nbButton status="warning" (click)="cargarForm()">Cancelar</button>
+
+      <button
+        [disabled]="requerimientoForm.invalid"
+        nbButton
+        status="info"
+        (click)="guardar()"
+      >
+        Guardar
+      </button>
+    </div>
   </nb-card-body>
 
   <nb-card-footer>

@@ -12,7 +12,7 @@ export class authService {
     private fireStore: AngularFirestore,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   public login(correo: string, clave: string) {
     return this.authFire.signInWithEmailAndPassword(correo, clave);
