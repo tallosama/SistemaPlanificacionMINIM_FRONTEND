@@ -8,10 +8,10 @@ import { MensajeEntradaComponent } from "../../../Globales/mensaje-entrada/mensa
 import { Util } from "../../../Globales/Util";
 import { RequerimientosService } from "../../../Requerimientos/requerimientos.service";
 import { TransporteService } from "../../transporte.service";
+import { RenderDescripcionRequerimientoComponent } from "./Renders/render-descripcion-requerimiento/render-descripcion-requerimiento.component";
 import { RenderRequerimientoEventoComponent } from "./Renders/render-requerimiento-evento/render-requerimiento-evento.component";
 import { RenderRequerimientoFechaComponent } from "./Renders/render-requerimiento-fecha/render-requerimiento-fecha.component";
 import { RenderRequerimientoHoraComponent } from "./Renders/render-requerimiento-hora/render-requerimiento-hora.component";
-
 import { RenderVehiculoMarcaComponent } from "./Renders/render-vehiculo-marca/render-vehiculo-marca.component";
 import { RenderVehiculoPlacaComponent } from "./Renders/render-vehiculo-placa/render-vehiculo-placa.component";
 
@@ -60,6 +60,11 @@ export class HistorialComponent implements OnInit, OnDestroy {
         title: "Hora del evento",
         type: "custom",
         renderComponent: RenderRequerimientoHoraComponent,
+      },
+      descripcionRequerimiento: {
+        title: "Descripción de la solicitud",
+        type: "custom",
+        renderComponent: RenderDescripcionRequerimientoComponent,
       },
 
       vehiculoId: {
@@ -165,29 +170,24 @@ export class HistorialComponent implements OnInit, OnDestroy {
   }
 
   private evaluarVehiculo(transporte: any, motivoActivacion: string): void {
-
-    if (transporte.vehiculoId.estado) {
-      this.subscripciones.push(
-        this.transporteService.anular(transporte.idTransporte, motivoActivacion)
-          .subscribe(
-            (res) => {
-              Util.showToast("success", "Acción realizada", "Se ha reactivado el registro", 4000, this.toastrService);
-              this.reconstruir(transporte, res);
+    this.subscripciones.push(
+      this.vehiculoService.buscar(transporte.vehiculoId.idVehiculo)
+        .subscribe(
+          (res) => {
+            if (res.estado) {
               this.reactivarTransporte(transporte, motivoActivacion);
-            },
-            (error) => {
-              console.error(error);
-              Util.showToast("danger", "Error " + error.status, "Mientras se reactivabaa el registro " + error.error[0], 0, this.toastrService);
+              this.cambiarDisponibilidadVehiculo(res);
+            } else {
+              Util.showToast("warning", "Atención", "El vehículo asignado a este registro no se encuentra disponible", 8000, this.toastrService);
             }
-          )
-      );
-    } else {
-      Util.showToast("warning", "Atención", "El vehículo asignado a este registro no se encuentra disponible", 8000, this.toastrService);
-    }
-
-
+          },
+          (error) => {
+            console.error(error);
+            Util.showToast("danger", "Error " + error.status, "Mientras se buscaba el registro del vehículo " + error.error[0], 0, this.toastrService);
+          }
+        )
+    );
   }
-
   private cambiarEstadoRequerimiento(transporte: any, motivoActivacion: string): void {
     let requerimiento = transporte.requerimientoId;
     requerimiento["estado"] = "Terminado";
@@ -222,7 +222,6 @@ export class HistorialComponent implements OnInit, OnDestroy {
     );
   }
 
-
   /* This method is used to cancel the selected transport. */
   //Método que permite la anulación del transporte seleccionado
   private anular(elemento: any, motivoAnulacion: string): void {
@@ -230,13 +229,14 @@ export class HistorialComponent implements OnInit, OnDestroy {
       this.transporteService.anular(elemento.idTransporte, motivoAnulacion)
         .subscribe(
           (res) => {
-            let mensaje: string = res.anulacion ? "Se ha anulado el registro" : "Se ha reactivado el registro";
 
-            Util.showToast("success", "Acción realizada", mensaje, 4000, this.toastrService);
+            Util.showToast("success", "Acción realizada", "Se ha anulado el registro", 4000, this.toastrService);
             //Se evalúa el requerimiento al que pertenece el trasporte anulado
-            this.evaluacionRequerimientos(elemento);
-
             this.reconstruir(elemento, res);
+
+            this.evaluacionRequerimientos(res);
+
+
           },
           (error) => {
             console.error(error);
@@ -245,23 +245,32 @@ export class HistorialComponent implements OnInit, OnDestroy {
         )
     );
   }
+  //Método que cambia la disponibilidad del vehículo
+  private cambiarDisponibilidadVehiculo(vehiculo: any): void {
+    if (vehiculo.estado) {
+      vehiculo["estado"] = false;
+
+    } else {
+      vehiculo["estado"] = true;
+    }
+    this.subscripciones.push(
+      this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo).subscribe(
+        () => {
+          Util.showToast("success", "Acción realizada", "se ha cambiado el estado al vehículo", 4000, this.toastrService);
+        },
+        (error) => {
+          console.error(error);
+          Util.showToast("danger", "Error " + error.status, "Mientras se cambiaba el estado al vehículo " + error.error[0], 0, this.toastrService);
+        }
+      ));
+
+  }
+
   //Este método permite la evaluación del requerimiento al que pertenece el transporte anulado
   private evaluacionRequerimientos(elemento: any): void {
     //Si el vehículo solo ha sido asignado (No se ha desocupado el vehículo) se cambia el estado al vehículo a disponible
     if (elemento.requerimientoId.estado === "Asignado") {
-      let v = elemento.vehiculoId;
-      v["estado"] = true;
-
-      this.subscripciones.push(
-        this.vehiculoService.editar(v.idVehiculo, v).subscribe(
-          () => {
-            Util.showToast("success", "Acción realizada", "se ha cambiado el estado al vehículo", 4000, this.toastrService);
-          },
-          (error) => {
-            console.error(error);
-            Util.showToast("danger", "Error " + error.status, "Mientras se cambiaba el estado al vehículo " + error.error[0], 0, this.toastrService);
-          }
-        ));
+      this.cambiarDisponibilidadVehiculo(elemento.vehiculoId);
     }
     //Se evalúa cuantos registros pertenecientes al requerimiento del trasporte anulado activos existen 
     this.subscripciones.push(
@@ -270,7 +279,6 @@ export class HistorialComponent implements OnInit, OnDestroy {
           //Si no existe ninguno quere decir que el registro que fue anulado fue el último que pertenecía al requerimiento evaluado
           //Por lo tanto se cambia el estado al requerimiento a 'Aprobado'
           if (res.length == 0) {
-
             this.cambioEstadoRequerimiento(elemento.requerimientoId);
           }
         },

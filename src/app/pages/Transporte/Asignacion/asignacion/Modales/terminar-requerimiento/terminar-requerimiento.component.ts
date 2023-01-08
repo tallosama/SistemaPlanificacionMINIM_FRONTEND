@@ -19,7 +19,7 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
   subscripciones: Array<Subscription> = [];
   fecha = new Date().toISOString().slice(0, 10);
   usuario;
-  elementosSeleccionados = [];
+  //elementosSeleccionados = []; 
   smartTransportes: LocalDataSource = new LocalDataSource();
   settingsTransporteTotal = {
     mode: "external",
@@ -37,7 +37,7 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
       display: true,
       perPage: 5,
     },
-    selectMode: "multi",
+
     columns: {
       desVehiculo: {
         title: "Descripción",
@@ -75,14 +75,27 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
 
-  agregarArreglo(elementos) {
-    this.elementosSeleccionados = elementos.selected;
-  }
+  // agregarArreglo(elementos) {
+  //   this.elementosSeleccionados = elementos.selected;
+  // }
+  // public guardar() {
+  //   this.elementosSeleccionados.forEach((t) => {
+  //     this.cambiarEstadoVehiculo(t);
+  //   });
+  //   this.cambiarEstadoRequerimiento();
+  // }
   public guardar() {
-    this.elementosSeleccionados.forEach((t) => {
-      this.cambiarEstadoVehiculo(t);
-    });
-    this.cambiarEstadoRequerimiento();
+    this.smartTransportes.getAll().then(elementos => {
+
+      elementos.forEach((t) => {
+        this.cambiarEstadoVehiculo(t);
+      });
+      this.cambiarEstadoRequerimiento();
+    }).catch((error) => {
+      console.error(error);
+      Util.showToast("danger", "Error " + error.status, "Mientras se obtenian los vehículos asignados " + error, 0, this.toastrService);
+    })
+
   }
   private cargarVehiculos(): void {
     this.subscripciones.push(
@@ -90,6 +103,7 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
         .listarActivosPorRequerimiento(this.requerimiento.idRequerimiento)
         .subscribe(
           (resp) => {
+
             resp.forEach((r) => {
               this.smartTransportes.add(r.vehiculoId);
             });
@@ -106,8 +120,6 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
 
   private async cambiarEstadoVehiculo(vehiculo: any) {
     vehiculo["estado"] = true;
-
-
     await this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo)
       .toPromise().then(
         r => {

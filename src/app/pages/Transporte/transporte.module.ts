@@ -24,6 +24,7 @@ import { RenderVehiculoMarcaComponent } from "./Historial/historial/Renders/rend
 import { RenderRequerimientoFechaComponent } from "./Historial/historial/Renders/render-requerimiento-fecha/render-requerimiento-fecha.component";
 import { RenderRequerimientoHoraComponent } from './Historial/historial/Renders/render-requerimiento-hora/render-requerimiento-hora.component';
 import { RenderRequerimientoEventoComponent } from './Historial/historial/Renders/render-requerimiento-evento/render-requerimiento-evento.component';
+import { RenderDescripcionRequerimientoComponent } from './Historial/historial/Renders/render-descripcion-requerimiento/render-descripcion-requerimiento.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { RenderRequerimientoEventoComponent } from './Historial/historial/Render
     RenderRequerimientoFechaComponent,
     RenderRequerimientoHoraComponent,
     RenderRequerimientoEventoComponent,
+    RenderDescripcionRequerimientoComponent,
   ],
   imports: [
     CommonModule,

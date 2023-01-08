@@ -10,19 +10,24 @@
         <br />
         <br />
 
-        <ng2-smart-table
+        <!-- <ng2-smart-table
           [settings]="settingsTransporteTotal"
           [source]="smartTransportes"
           (userRowSelect)="agregarArreglo($event)"
         >
+        </ng2-smart-table> -->
+        <ng2-smart-table [settings]="settingsTransporteTotal" [source]="smartTransportes">
         </ng2-smart-table>
       </div>
-      <button
+      <!-- <button
         nbButton
         status="info"
         (click)="guardar()"
         [disabled]="elementosSeleccionados.length == 0"
       >
+        Guardar como disponibles
+      </button> -->
+      <button nbButton status="info" (click)="guardar()" [disabled]="smartTransportes.count()==0">
         Guardar como disponibles
       </button>
     </div>
