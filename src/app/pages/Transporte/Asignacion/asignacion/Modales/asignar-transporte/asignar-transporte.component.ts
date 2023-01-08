@@ -65,7 +65,7 @@ export class AsignarTransporteComponent implements OnInit, OnDestroy {
     private toastrService: NbToastrService,
     private auth: authService,
     private requerimientoService: RequerimientosService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.usuario = this.auth.getUserStorage();
@@ -79,50 +79,87 @@ export class AsignarTransporteComponent implements OnInit, OnDestroy {
     this.elementosSeleccionados = elementos.selected;
   }
   public guardar() {
-    try {
-      this.elementosSeleccionados.forEach((v) => {
-        this.subscripciones.push(
-          this.transporteService
-            .guardar({
-              anulacion: false,
-              motivoAnulacion: "",
-              vehiculoId: v,
-              requerimientoId: this.requerimiento,
-              usuarioCreacion: this.usuario.uid,
-              usuarioModificacion: this.usuario.uid,
-              fechaCreacion: this.fecha,
-              fechaModificacion: this.fecha,
-            })
-            .subscribe(
-              () => {
-                this.cambiarEstadoVehiculo(v);
-              },
-              (error) => {
-                console.error(error);
-                Util.showToast(
-                  "danger",
-                  "Error " + error.status,
-                  "Mientras se ingresaba el registro " + error.error[0],
 
-                  0,
-                  this.toastrService
-                );
-              }
-            )
-        );
-      });
-      this.cambiarEstadoRequerimiento();
-    } catch (e) {
-      console.error(e);
-      Util.showToast(
-        "danger",
-        "Error " + e.status,
-        "Mientras se ingresaban el/los registros " + e.error[0],
+    // this.elementosSeleccionados.forEach((v) => {
+    //   this.subscripciones.push(
+    //     this.transporteService
+    //       .guardar({
+    //         anulacion: false,
+    //         motivoAnulacion: "",
+    //         vehiculoId: v,
+    //         requerimientoId: this.requerimiento,
+    //         usuarioCreacion: this.usuario.uid,
+    //         usuarioModificacion: this.usuario.uid,
+    //         fechaCreacion: this.fecha,
+    //         fechaModificacion: this.fecha,
+    //       })
+    //       .subscribe(
+    //         (r) => {
+    //           // Util.showToast(
+    //           //   "success",
+    //           //   "Acción realizada",
+    //           //   "Se ha asignado el vehículo",
+    //           //   4000,
+    //           //   this.toastrService
+    //           // );
+    //           Util.showToast(
+    //             "success",
+    //             "Acción realizada",
+    //             "1",
+    //             4000,
+    //             this.toastrService
+    //           );
+    //           this.cambiarEstadoVehiculo(v);
+    //         },
+    //         (error) => {
+    //           console.error(error);
+    //           Util.showToast(
+    //             "danger",
+    //             "Error " + error.status,
+    //             "Mientras se ingresaban el/los registros " + error.error[0],
+    //             0,
+    //             this.toastrService
+    //           );
+    //         }
+    //       )
+    //   );
+    // });
+    //this.cambiarEstadoRequerimiento();
 
-        0,
-        this.toastrService
-      );
-    }
+    this.elementosSeleccionados.forEach(async (v) => {
+      await this.transporteService
+        .guardar({
+          anulacion: false,
+          motivoAnulacion: "",
+          vehiculoId: v,
+          requerimientoId: this.requerimiento,
+          usuarioCreacion: this.usuario.uid,
+          usuarioModificacion: this.usuario.uid,
+          fechaCreacion: this.fecha,
+          fechaModificacion: this.fecha,
+        }).toPromise().then(r => {
+          // Util.showToast(
+          //   "success",
+          //   "Acción realizada",
+          //   "Se ha asignado el vehículo",
+          //   4000,
+          //   this.toastrService
+          // );
+          this.cambiarEstadoVehiculo(v);
+        }
+        ).catch((error) => {
+          console.error(error);
+          Util.showToast(
+            "danger",
+            "Error " + error.status,
+            "Mientras se ingresaban el/los registros " + error.error[0],
+            0,
+            this.toastrService
+          );
+        });
+    });
+    this.cambiarEstadoRequerimiento();
+
   }
   private cargarVehiculos(): void {
     this.subscripciones.push(
@@ -146,25 +183,65 @@ export class AsignarTransporteComponent implements OnInit, OnDestroy {
     );
   }
 
-  private cambiarEstadoVehiculo(vehiculo: any) {
+  private async cambiarEstadoVehiculo(vehiculo: any) {
+
     vehiculo["estado"] = false;
 
-    this.subscripciones.push(
-      this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo).subscribe(
-        () => {},
-        (error) => {
-          console.error(error);
-          Util.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se cambiaba el estado al vehículo " + error.error[0],
 
-            0,
-            this.toastrService
-          );
-        }
-      )
-    );
+    await this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo)
+      .toPromise().then((r) => {
+
+        Util.showToast(
+          "success",
+          "Acción realizada",
+          "Se ha cambiado el estado al vehículo",
+          4000,
+          this.toastrService
+        );
+      },).catch((error) => {
+        console.error(error);
+        Util.showToast(
+          "danger",
+          "Error " + error.status,
+          "Mientras se cambiaba el estado al vehículo " + error.error[0],
+
+          0,
+          this.toastrService
+        );
+      });
+
+
+    // this.subscripciones.push(
+    //   this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo).subscribe(
+    //     (r) => {
+    //       Util.showToast(
+    //         "success",
+    //         "Acción realizada",
+    //         "2",
+    //         4000,
+    //         this.toastrService
+    //       );
+    //       // Util.showToast(
+    //       //   "success",
+    //       //   "Acción realizada",
+    //       //   "Se ha cambiado el estado al vehículo",
+    //       //   4000,
+    //       //   this.toastrService
+    //       // );
+    //     },
+    //     (error) => {
+    //       console.error(error);
+    //       Util.showToast(
+    //         "danger",
+    //         "Error " + error.status,
+    //         "Mientras se cambiaba el estado al vehículo " + error.error[0],
+
+    //         0,
+    //         this.toastrService
+    //       );
+    //     }
+    //   )
+    // );
   }
   private cambiarEstadoRequerimiento() {
     this.requerimiento["estado"] = "Asignado";
@@ -173,7 +250,7 @@ export class AsignarTransporteComponent implements OnInit, OnDestroy {
       this.requerimientoService
         .editar(this.requerimiento.idRequerimiento, this.requerimiento)
         .subscribe(
-          () => {
+          (r) => {
             this.cerrar(true);
           },
           (error) => {
@@ -182,7 +259,7 @@ export class AsignarTransporteComponent implements OnInit, OnDestroy {
               "danger",
               "Error " + error.status,
               "Mientras se cambiaba el estado al requerimiento " +
-                error.error[0],
+              error.error[0],
 
               0,
               this.toastrService

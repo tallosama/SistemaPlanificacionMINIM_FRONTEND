@@ -28,8 +28,7 @@
     <label class="label">Transportes asignados</label>
     <ng2-smart-table
       [settings]="settingsTransporte"
-      [source]="smartTransporte"
-      (edit)="modificarTransporte($event)"
+      [source]="smartTransporte" 
       (delete)="confirmacion($event)"
     >
     </ng2-smart-table>

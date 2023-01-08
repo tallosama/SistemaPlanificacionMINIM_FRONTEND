@@ -104,25 +104,52 @@ export class TerminarRequerimientoComponent implements OnInit, OnDestroy {
     );
   }
 
-  private cambiarEstadoVehiculo(vehiculo: any) {
+  private async cambiarEstadoVehiculo(vehiculo: any) {
     vehiculo["estado"] = true;
 
-    this.subscripciones.push(
-      this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo).subscribe(
-        () => { },
-        (error) => {
-          console.error(error);
-          Util.showToast(
-            "danger",
-            "Error " + error.status,
-            "Mientras se cambiaba el estado al vehículo " + error.error[0],
 
-            0,
+    await this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo)
+      .toPromise().then(
+        r => {
+          Util.showToast(
+            "success",
+            "Acción realizada",
+            "Se han cambiado el estado al vehículo",
+            4000,
             this.toastrService
           );
         }
-      )
-    );
+
+      ).catch((error) => {
+        console.error(error);
+        Util.showToast(
+          "danger",
+          "Error " + error.status,
+          "Mientras se cambiaba el estado al vehículo " + error.error[0],
+
+          0,
+          this.toastrService
+        );
+      })
+
+
+
+    // this.subscripciones.push(
+    //   this.vehiculoService.editar(vehiculo.idVehiculo, vehiculo).subscribe(
+    //     () => { },
+    //     (error) => {
+    //       console.error(error);
+    //       Util.showToast(
+    //         "danger",
+    //         "Error " + error.status,
+    //         "Mientras se cambiaba el estado al vehículo " + error.error[0],
+
+    //         0,
+    //         this.toastrService
+    //       );
+    //     }
+    //   )
+    // );
   }
   private cambiarEstadoRequerimiento() {
     this.requerimiento["estado"] = "Terminado";

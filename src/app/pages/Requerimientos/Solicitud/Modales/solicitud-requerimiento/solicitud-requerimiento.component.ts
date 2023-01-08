@@ -246,23 +246,11 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
       this.subscripciones.push(
         this.requerimientosService.guardar(r).subscribe(
           () => {
-            Util.showToast(
-              "success",
-              "Acción realizada",
-              "Se ha ingresado el registro",
-              4000,
-              this.toastrService
-            );
+            Util.showToast("success", "Acción realizada", "Se ha ingresado el registro", 4000, this.toastrService);
           },
           (error) => {
             console.error(error);
-            Util.showToast(
-              "danger",
-              "Error " + error.status,
-              "Mientras se realizaba un registro " + error.error[0],
-              0,
-              this.toastrService
-            );
+            Util.showToast("danger", "Error " + error.status, "Mientras se realizaba un registro " + error.error[0], 0, this.toastrService);
           }
         )
       );
@@ -276,10 +264,7 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
       let indice = this.nuevosRequerimientos.indexOf(elemento.data);
       this.nuevosRequerimientos.splice(indice, 1);
     } else {
-      let mensaje: string = elemento.data.anulacion
-        ? "¿Desea reactivar el registro?"
-        : "¿Desea anular el registro?";
-
+      let mensaje: string = elemento.data.anulacion ? "¿Desea reactivar el registro?" : "¿Desea anular el registro?";
       this.subscripciones.push(
         this.dialogService
           .open(MensajeEntradaComponent, {
@@ -289,15 +274,7 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
           })
           .onClose.subscribe((res) => {
             if (res) {
-              this.anular(
-                elemento.data,
-
-                "'" + res +
-                "', por " +
-                this.auth.getUserStorage().email +
-                " el " +
-                new Date().toLocaleString()
-              );
+              this.anular(elemento.data, "'" + res + "', por " + this.auth.getUserStorage().email + " el " + new Date().toLocaleString());
             }
           })
       );
@@ -310,9 +287,11 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
         .anular(elemento.idRequerimiento, motivoAnulacion)
         .subscribe(
           (res) => {
+            //Mensaje que se muestra al usuario dependiendo de la acción
             let anulacion = res.anulacion;
             let mensaje: string = anulacion ? "Se ha anulado el registro" : "Se ha reactivado el registro";
             Util.showToast("success", "Acción realizada", mensaje, 4000, this.toastrService);
+            //Se elimina el viejo elemento y se sustitye por el nuevo
             this.reconstruir(elemento, res);
             if (res.estado === "Asignado" || res.estado === "Terminado") {
               this.evaluacionTipoRequerimiento(elemento, motivoAnulacion);
@@ -325,6 +304,7 @@ export class SolicitudRequerimientoComponent implements OnInit, OnDestroy {
         )
     );
   }
+  //Se evalúan los distintos requerimientos que tenía asignados
   private evaluacionTipoRequerimiento(elementoAnulado: any, motivoAnulacion: string): void {
     if (elementoAnulado.tipoRequerimiento === "Transporte") {
       this.subscripciones.push(

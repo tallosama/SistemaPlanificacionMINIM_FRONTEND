@@ -10,11 +10,13 @@ import { Util } from "../Util";
 })
 export class MensajeEntradaComponent implements OnInit {
   @Input() titulo: string;
+  @Input() mensajeAdvertencia?: string;
+
   motivoAnulacionForm: FormGroup;
   constructor(
     protected ref: NbDialogRef<DialogNamePromptComponent>,
     public fb: FormBuilder
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.motivoAnulacionForm = this.fb.group({
       motivoAnulacion: [

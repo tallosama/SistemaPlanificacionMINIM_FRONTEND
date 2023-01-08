@@ -82,9 +82,9 @@ export class AsignacionComponent implements OnInit, OnDestroy {
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
     private requerimientosService: RequerimientosService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   ngOnDestroy(): void {
     this.subscripciones.forEach((s) => s.unsubscribe());
   }
@@ -132,7 +132,7 @@ export class AsignacionComponent implements OnInit, OnDestroy {
           Util.showToast(
             "success",
             "Acción realizada",
-            "Se han asignado los recursos",
+            "Se han actualizado los recursos",
             4000,
             this.toastrService
           );
