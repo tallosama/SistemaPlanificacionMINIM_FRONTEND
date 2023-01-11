@@ -19,6 +19,19 @@ export class ProductoService {
       producto
     );
   }
+  agregarStock(id: number, cantStock: number): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "producto/sumarCantidadStock/" + id,
+      cantStock
+    );
+  }
+  restarStock(id: number, cantStock: number): Observable<any> {
+    return this.httpclient.put(
+      ApiServe.API_SERVER + "producto/restarCantidadStock/" + id,
+      cantStock
+    );
+  }
+  //actualizarCantidadStock
   listar(): Observable<any> {
     return this.httpclient.get(ApiServe.API_SERVER + "producto/");
   }

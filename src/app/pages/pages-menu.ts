@@ -25,7 +25,37 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: "Materiales",
         icon: "umbrella-outline",
-        link: "/pages/Planificacion/ListarPlanificacion",
+        children: [
+          {
+            title: "Entradas",
+            icon: "file-add-outline",
+            children: [
+              {
+                title: "Nuevas entradas",
+                link: "/pages/Entrada/RegistrarEntrada",
+              },
+              {
+                title: "Historial de entradas",
+                link: "/pages/Entrada/ListarEntrada",
+              },
+            ],
+          },
+          {
+            title: "Salidas",
+            icon: "file-remove-outline",
+
+            children: [
+              {
+                title: "Nuevas salidas",
+                link: "/pages/Salida/RegistrarSalida",
+              },
+              {
+                title: "Historial de salidas",
+                link: "/pages/Salida/RegistrarSalida",
+              },
+            ],
+          },
+        ],
       },
       {
         title: "Transporte",

@@ -1,22 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import {
-  NbDialogService,
-  NbGlobalPhysicalPosition,
-  NbToastrConfig,
-  NbToastrService,
-} from "@nebular/theme";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NbToastrConfig, NbToastrService } from "@nebular/theme";
 import { LocalDataSource } from "ng2-smart-table";
 import { Subscription } from "rxjs";
 import { authService } from "../../../../../auth/auth.service";
 import { ProductoService } from "../../../../Catalogos/Producto/producto.service";
 import { Util } from "../../../../Globales/Util";
-import { DialogNamePromptComponent } from "../../../../modal-overlays/dialog/dialog-name-prompt/dialog-name-prompt.component";
 import { EntradaService } from "../../entrada.service";
 
 @Component({
@@ -33,7 +22,6 @@ export class CrearComponent implements OnInit, OnDestroy {
   productos = [];
   productoSeleccionado: any;
   smartEntrada: LocalDataSource = new LocalDataSource();
-
   settingsEntrada = {
     mode: "external",
 
@@ -41,7 +29,7 @@ export class CrearComponent implements OnInit, OnDestroy {
       editButtonContent: '<i class="nb-edit"></i>',
     },
     delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
+      deleteButtonContent: '<i class="nb-alert"></i>',
     },
     actions: {
       columnTitle: "Acción",
@@ -74,27 +62,105 @@ export class CrearComponent implements OnInit, OnDestroy {
       },
     },
   };
-
+  usuario: any;
   constructor(
     private toastrService: NbToastrService,
     private fb: FormBuilder,
     private productoService: ProductoService,
     private entradaService: EntradaService,
-    private auth: authService,
-
-    private dialogService: NbDialogService
+    private auth: authService
   ) {}
 
   ngOnInit(): void {
     this.llenadoComboBox();
-    this.cargarForm(this.auth.getUserStorage());
+    this.usuario = this.auth.getUserStorage();
+    this.cargarForm();
   }
-
   ngOnDestroy(): void {
     this.subscripciones.forEach((s) => s.unsubscribe);
   }
+  /**
+   * It gets all the entries from the database and then saves them to the server.
+   */
+  public guardar(): void {
+    this.smartEntrada
+      .getAll()
+      .then((lista) => {
+        return lista;
+      })
+      .then((elementos) => {
+        elementos.forEach((e) => {
+          this.guardarEntrada(e);
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        Util.showToast(
+          "danger",
+          "Error " + error.status,
+          "Mientras se obtenian las entradas " + error.error[0],
 
-  private llenadoComboBox() {
+          0,
+          this.toastrService
+        );
+      });
+  }
+  private guardarEntrada(nuevaEntrada: any) {
+    this.entradaService
+      .guardar(nuevaEntrada)
+      .toPromise()
+      .then((entrada) => {
+        Util.showToast(
+          "success",
+          "Acción realizada",
+          "Se ha ingresado la entrada",
+          4000,
+          this.toastrService
+        );
+        this.remover(nuevaEntrada);
+        return entrada;
+      })
+      .then((entrada) => {
+        this.actualizarProducto(entrada);
+      })
+      .catch((error) => {
+        console.error(error);
+        Util.showToast(
+          "danger",
+          "Error " + error.status,
+          "Mientras se guardaban las entradas " + error.error[0],
+
+          0,
+          this.toastrService
+        );
+      });
+  }
+  private actualizarProducto(entrada: any) {
+    this.productoService
+      .agregarStock(entrada.productoId.idProducto, entrada.cantTotal)
+      .toPromise()
+      .then((res) => {
+        Util.showToast(
+          "success",
+          "Acción realizada",
+          "Se ha actualizado la cantidad del producto",
+          4000,
+          this.toastrService
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        Util.showToast(
+          "danger",
+          "Error " + error.status,
+          "Mientras se actualizaba el producto " + error.error[0],
+
+          0,
+          this.toastrService
+        );
+      });
+  }
+  private llenadoComboBox(): void {
     this.subscripciones.push(
       this.productoService.listar().subscribe(
         (resp) => {
@@ -102,18 +168,20 @@ export class CrearComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showToast(
+          Util.showToast(
             "danger",
             "Error " + error.status,
             "Mientras se listaban los productos " + error.error[0],
 
-            0
+            0,
+            this.toastrService
           );
         }
       )
     );
   }
-  cargarForm(usuario): void {
+  private cargarForm(): void {
+    this.productoSeleccionado = null;
     this.entradaForm = this.fb.group({
       descripEntrada: [
         "",
@@ -126,74 +194,83 @@ export class CrearComponent implements OnInit, OnDestroy {
       cantTotal: ["", Validators.required],
       anulacion: [false, Validators.required],
       productoId: [
-        "",
+        this.productos[0],
         Validators.compose([Validators.required, Util.noObjeto]),
       ],
-
+      motivoAnulacion: ["", Validators.maxLength(255)],
       fechaEntrada: [
         new Date().toISOString().slice(0, 10),
         Validators.required,
       ],
-      usuarioCreacion: [usuario.uid, Validators.required],
+      usuarioCreacion: [this.usuario.uid, Validators.required],
       fechaCreacion: [this.fecha, Validators.required],
-      usuarioModificacion: [usuario.uid, Validators.required],
+      usuarioModificacion: [this.usuario.uid, Validators.required],
       fechaModificacion: [this.fecha, Validators.required],
     });
   }
-
-  public agregar() {
-    this.smartEntrada.add(this.entradaForm.value);
+  private cargarDataForm(data): void {
+    this.entradaForm = this.fb.group({
+      descripEntrada: [
+        data.descripEntrada,
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(128),
+          Util.esVacio,
+        ]),
+      ],
+      cantTotal: [data.cantTotal, Validators.required],
+      anulacion: [data.anulacion, Validators.required],
+      productoId: [
+        data.productoId,
+        Validators.compose([Validators.required, Util.noObjeto]),
+      ],
+      motivoAnulacion: [data.motivoAnulacion, Validators.maxLength(255)],
+      fechaEntrada: [data.fechaEntrada, Validators.required],
+      usuarioCreacion: [data.usuarioCreacion, Validators.required],
+      fechaCreacion: [data.fechaCreacion, Validators.required],
+      usuarioModificacion: [data.usuarioModificacion, Validators.required],
+      fechaModificacion: [data.fechaModificacion, Validators.required],
+    });
+  }
+  public agregarForm(): void {
+    this.agregar(this.entradaForm.value);
+    this.cargarForm();
+  }
+  public agregar(data: any): void {
+    this.smartEntrada.add(data);
     this.smartEntrada.refresh();
   }
-  public guardar() {}
   public editarEntrada(event) {
     if (this.productoSeleccionado == null) {
       this.productoSeleccionado = event.data;
-      this.smartEntrada.remove(event.data);
-      this.smartEntrada.refresh();
+      this.remover(this.productoSeleccionado);
+      this.cargarDataForm(this.productoSeleccionado);
     }
   }
-  public borrarEntrada(event) {
-    this.subscripciones.push(
-      this.dialogService
-        .open(DialogNamePromptComponent, {
-          context: {
-            titulo: "¿Desea eliminar el registro?",
-          },
-        })
-        .onClose.subscribe((res) => {
-          if (res) {
-            this.smartEntrada.remove(event.data);
-            this.smartEntrada.refresh();
-          }
-        })
-    );
+  public evaluarCancelacion(): void {
+    if (this.productoSeleccionado != null) {
+      this.agregar(this.productoSeleccionado);
+      this.productoSeleccionado = null;
+    }
+    this.cargarForm();
   }
-
-  public limpiar(): void {
-    this.entradaForm.get("descripEntrada").reset();
-    this.entradaForm.get("cantTotal").reset();
-    this.entradaForm.get("productoId").reset();
-    this.entradaForm
-      .get("fechaEntrada")
-      .setValue(new Date().toISOString().slice(0, 10));
+  public borrarEntrada(event): void {
+    // this.subscripciones.push(
+    //   this.dialogService
+    //     .open(DialogNamePromptComponent, {
+    //       context: {
+    //         titulo: "¿Desea eliminar el registro?",
+    //       },
+    //     })
+    //     .onClose.subscribe((res) => {
+    //       if (res) {
+    this.remover(event.data);
+    //       }
+    //     })
+    // );
   }
-
-  private showToast(
-    estado: string,
-    titulo: string,
-    cuerpo: string,
-    duracion: number
-  ) {
-    const config = {
-      status: estado,
-      destroyByClick: true,
-      duration: duracion,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: false,
-    };
-
-    this.toastrService.show(cuerpo, `${titulo}`, config);
+  private remover(elemento: any): void {
+    this.smartEntrada.remove(elemento);
+    this.smartEntrada.refresh();
   }
 }
